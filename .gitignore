@@ -1,0 +1,8 @@
+.groovy
+.project
+.classpath
+.settings/
+target/
+
+node_modules/
+out-tsc/

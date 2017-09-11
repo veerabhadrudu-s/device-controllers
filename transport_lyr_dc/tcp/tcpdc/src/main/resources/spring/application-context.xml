@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd				
+				http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.hpe.iot" />
+	<import resource="classpath:spring/tcp-plugin-service-monitor.xml" />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+
+			<list>				
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/iot-broker.properties
+				</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/activemq.properties
+				</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/kafka.properties
+				</value>
+			</list>
+
+		</property>
+	</bean>
+
+	<jee:jndi-lookup id="myManagedExecutorService"
+		jndi-name="java:jboss/ee/concurrency/executor/default" />
+	
+	<bean id="activeMQProducerService"
+		class="com.hpe.broker.service.producer.activemq.ActiveMQProducerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="kafkaProducerService"
+		class="com.hpe.broker.service.producer.kafka.KafkaProducerService">
+		<constructor-arg index="0" value="${kafka.brokerURL}" />
+		<constructor-arg index="1" value="${kafka.key.serializer}" />
+		<constructor-arg index="2" value="${kafka.value.serializer}" />
+		<constructor-arg index="3" value="${kafka.producerid}" />
+	</bean>
+
+	<util:list id="brokerProducerServices" list-class="java.util.ArrayList"
+		value-type="com.hpe.broker.service.producer.BrokerProducerService">
+		<ref bean="activeMQProducerService" />
+		<ref bean="kafkaProducerService" />
+	</util:list>
+
+	<bean id="brokerProducerServiceFactory"
+		class="com.hpe.broker.service.producer.factory.impl.BrokerProducerServiceFactoryImpl"
+		init-method="startAllServices" destroy-method="stopAllServices">
+		<constructor-arg index="0" ref="brokerProducerServices" />
+	</bean>
+
+	<bean id="activeMQConsumerService"
+		class="com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="kafkaConsumerService"
+		class="com.hpe.broker.service.consumer.kafka.KafkaConsumerService">
+		<constructor-arg index="0" value="${kafka.brokerURL}" />
+		<constructor-arg index="1" value="${kafka.key.deserializer}" />
+		<constructor-arg index="2" value="${kafka.value.deserializer}" />
+		<constructor-arg index="3" value="${kafka.consumerGroupId}" />
+		<constructor-arg index="4" ref="myManagedExecutorService" />
+	</bean>
+
+	<util:list id="brokerConsumerServices" list-class="java.util.ArrayList"
+		value-type="com.hpe.broker.service.consumer.BrokerConsumerService">
+		<ref bean="activeMQConsumerService" />
+		<ref bean="kafkaConsumerService" />
+	</util:list>
+
+	<bean id="brokerConsumerServiceFactory"
+		class="com.hpe.broker.service.consumer.factory.impl.BrokerConsumerServiceFactoryImpl"
+		init-method="startAllServices" destroy-method="stopAllServices">
+		<constructor-arg index="0" ref="brokerConsumerServices" />
+	</bean>
+
+	<bean id="iotPublisherHandler"
+		class="com.hpe.iot.dc.northbound.service.inflow.impl.IOTPublisherHandler">
+		<constructor-arg index="0" ref="brokerProducerServiceFactory" />
+		<constructor-arg index="1"
+			value="${iot.device.uplink.destination}" />
+		<constructor-arg index="2" value="${active.message.broker}" />
+	</bean>
+
+	<bean id="tcpServerSocketServiceProviderImpl"
+		class="com.hpe.iot.dc.tcp.southbound.socket.impl.TCPServerSocketServiceProviderImpl" />
+
+	<bean id="northBoundDownlinkComponentManager"
+		class="com.hpe.iot.dc.northbound.component.manager.outflow.NorthBoundDownlinkComponentManager" />
+
+	<bean id="northBoundDownlinkServiceManager"
+		class="com.hpe.iot.dc.northbound.service.manager.NorthBoundDownlinkServiceManager">
+		<constructor-arg index="0"
+			ref="northBoundDownlinkComponentManager" />
+	</bean>
+
+	<util:list id="socketChangeListeners" list-class="java.util.ArrayList"
+		value-type="com.hpe.iot.dc.tcp.southbound.socket.listener.SocketChangeListener">
+		<ref bean="socketChangePublisherService" />
+	</util:list>
+
+	<bean id="tcpServerClientSocketPoolFactory"
+		class="com.hpe.iot.dc.tcp.southbound.socketpool.factory.impl.TCPServerClientSocketPoolFactoryImpl">
+		<constructor-arg index="0" ref="socketChangeListeners" />
+	</bean>
+
+	<bean id="deviceDataProcessingTaskFactory"
+		class="com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.impl.DeviceDataProcessingTaskFactoryImpl" />
+
+	<bean id="tcpServerSocketServiceManager"
+		class="com.hpe.iot.dc.tcp.southbound.service.manager.TCPServerSocketServiceManager">
+		<constructor-arg index="0"
+			ref="northBoundDownlinkComponentManager" />
+		<constructor-arg index="1"
+			ref="tcpServerSocketServiceProviderImpl" />
+		<constructor-arg index="2"
+			ref="tcpServerClientSocketPoolFactory" />
+		<constructor-arg index="3"
+			ref="deviceDataProcessingTaskFactory" />
+		<constructor-arg index="4" ref="myManagedExecutorService" />
+	</bean>
+
+	<bean id="serverBeanPool" class="com.hpe.iot.dc.bean.pool.impl.ServerBeanPoolImpl" />
+
+	<bean id="groovyScriptTCPServiceActivator"
+		class="com.hpe.iot.dc.tcp.initializer.groovy.GroovyScriptTCPServiceActivator">
+		<constructor-arg index="0" ref="tcpServerSocketServiceManager" />
+		<constructor-arg index="1"
+			ref="tcpServerClientSocketPoolFactory" />
+		<constructor-arg index="2" ref="serverBeanPool" />
+	</bean>
+
+	<bean id="tcpDCInitializer" class="com.hpe.iot.dc.tcp.initializer.TCPDCInitializer"
+		init-method="startDC" destroy-method="stopDC">
+		<constructor-arg index="0"
+			value="{jboss.home.dir}/standalone/configuration/DC/tcpdc/script" />
+		<constructor-arg index="1"
+			ref="groovyScriptTCPServiceActivator" />
+	</bean>
+
+	<bean id="groovyFileEventListener"
+		class="com.hpe.iot.dc.tcp.groovy.watch.file.listener.GroovyFileEventListener">
+		<constructor-arg index="0"
+			ref="groovyScriptTCPServiceActivator" />
+	</bean>
+
+	<util:list id="watchServcieListners" list-class="java.util.ArrayList"
+		value-type="com.hpe.iot.dc.watch.file.listener.FileEventListener">
+		<ref bean="groovyFileEventListener" />
+	</util:list>
+
+	<bean id="directoryWatchService" class="com.hpe.iot.dc.watch.service.DirectoryWatchService">
+		<constructor-arg index="0"
+			value="{jboss.home.dir}/standalone/configuration/DC/tcpdc/script" />
+		<constructor-arg index="1" ref="watchServcieListners" />
+		<constructor-arg index="2" value="15" />
+	</bean>
+
+	<bean id="watchServiceExecutor"
+		class="com.hpe.iot.dc.tcp.groovy.watch.file.executor.WatchServiceExecutor"
+		init-method="startExecutor" destroy-method="stopExecutor">
+		<constructor-arg index="0" ref="directoryWatchService" />
+		<constructor-arg index="1" ref="myManagedExecutorService" />
+	</bean>
+
+</beans>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<devicemodels>
+	<devicemodel>
+		<manufacturer>MMI</manufacturer>
+		<modelId>streetlighting</modelId>
+		<deviceIdJsonPath>$.mmi_eventdetail[0].uniqueId</deviceIdJsonPath>
+		<messageTypeJsonPath></messageTypeJsonPath>
+	</devicemodel>
+	<devicemodel>
+		<manufacturer>MMI</manufacturer>
+		<modelId>wastemanagement</modelId>
+		<deviceIdJsonPath>$.mmi_eventdetail[0].uniqueId</deviceIdJsonPath>
+		<messageTypeJsonPath></messageTypeJsonPath>
+	</devicemodel>		
+</devicemodels>

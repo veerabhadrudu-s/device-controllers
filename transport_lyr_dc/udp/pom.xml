@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hpe.iot.dc</groupId>
+		<artifactId>transport_lyr_dc</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>udp</artifactId>
+	<packaging>pom</packaging>
+	<modules>
+		<module>udp-common</module>
+		<module>trinetradc</module>
+		<module>udpdc-client</module>
+	</modules>
+</project>
