@@ -12,6 +12,7 @@
 		<module>application-lyr-dc-common</module>
 		<module>http-dc-web</module>
 		<module>mqtt-dc-web</module>
-		<module>mqtt_dc_plugin_scripts</module>	
+		<module>mqtt_dc_plugin_scripts</module>
+		<module>http-dc-plugin-scripts</module>
 	</modules>	
 </project>

@@ -30,8 +30,8 @@ public class StandardMessageConverter implements ExtendedUplinkDeviceDataConvert
 		this.standardMessageCreator = standardMessageCreator;
 	}
 
-	private static final List<String> SUPPORTED_MESSAGE_TYPES = Arrays.<String> asList("$", "S", "D", "s", "H", "G",
-			"F", "_", "I", "i", "P", "L", "Z", "C", "b", "B", "a", "E", "m", "f", "e", "l");
+	private static final List<String> SUPPORTED_MESSAGE_TYPES = Arrays.<String>asList("$", "S", "D", "s", "H", "G", "F",
+			"_", "I", "i", "P", "L", "Z", "C", "b", "B", "a", "E", "m", "f", "e", "l");
 
 	@Override
 	public List<String> getMessageTypes() {
@@ -63,8 +63,8 @@ public class StandardMessageConverter implements ExtendedUplinkDeviceDataConvert
 	private void addMetaInformationForMessageTypes(DeviceInfo dataModel, byte[] input, String messageType) {
 		List<NotificationRecord> notificationRecords = new ArrayList<>();
 		Notification notification = new Notification(1, notificationRecords);
-		NotificationRecord notificationRecord = standardMessageCreator
-				.constructStandardMessage(Arrays.copyOfRange(input, 4, input.length - 2));
+		NotificationRecord notificationRecord = standardMessageCreator.constructStandardMessage(messageType,
+				Arrays.copyOfRange(input, 4, input.length - 2));
 		notificationRecords.add(notificationRecord);
 		dataModel.addDeviceData(notification.getDeviceDataInformation(), notification);
 	}

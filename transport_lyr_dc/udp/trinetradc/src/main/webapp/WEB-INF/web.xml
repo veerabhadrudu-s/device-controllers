@@ -8,7 +8,7 @@
 
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>webapp.root.TrinetraDC</param-value>
+		<param-value>webapp.root.trinetradc</param-value>
 	</context-param>
 
 	<context-param>

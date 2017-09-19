@@ -12,6 +12,6 @@ import com.hpe.iot.model.DeviceModel;
  */
 public interface PayloadDecipher {
 
-	JsonObject decipherPayload(DeviceModel deviceModel, JsonObject payload);
+	JsonObject decipherPayload(DeviceModel deviceModel, byte[] payload);
 
 }

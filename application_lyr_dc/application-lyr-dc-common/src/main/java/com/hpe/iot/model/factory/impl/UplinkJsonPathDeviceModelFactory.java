@@ -57,16 +57,18 @@ public class UplinkJsonPathDeviceModelFactory implements DeviceModelFactory {
 		JAXBContext jaxbContext = JAXBContext.newInstance(JsonPathDeviceMetaModels.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		JsonPathDeviceMetaModels deviceMetaModels = (JsonPathDeviceMetaModels) unmarshaller.unmarshal(file);
-		for (JsonPathDeviceMetaModel deviceMetaModel : deviceMetaModels.getDeviceMetaModels())
-			this.deviceMetaModels.put(
-					new DeviceModelImpl(deviceMetaModel.getManufacturer(), deviceMetaModel.getModelId()),
-					deviceMetaModel);
+		if (deviceMetaModels != null && deviceMetaModels.getDeviceMetaModels() != null)
+			for (JsonPathDeviceMetaModel deviceMetaModel : deviceMetaModels.getDeviceMetaModels())
+				this.deviceMetaModels.put(
+						new DeviceModelImpl(deviceMetaModel.getManufacturer(), deviceMetaModel.getModelId()),
+						deviceMetaModel);
 	}
 
 	private String findFullPath(String path) {
 		String[] pathParts = path.split("}");
 		return pathParts.length > 1
-				? System.getProperty(pathParts[0].substring(1, pathParts[0].length())) + pathParts[1] : pathParts[0];
+				? System.getProperty(pathParts[0].substring(1, pathParts[0].length())) + pathParts[1]
+				: pathParts[0];
 	}
 
 	@Override

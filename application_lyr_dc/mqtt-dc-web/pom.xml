@@ -145,7 +145,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>MQTTDC</finalName>
+		<finalName>mqttdc</finalName>
 		<plugins>
 			<!-- Adding below war plugin for creating both war and jar file with name 
 				ends with classifier name in configuration tag -->

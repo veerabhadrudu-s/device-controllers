@@ -14,20 +14,21 @@ import com.hpe.iot.dc.util.DataParserUtility;
 @Component
 public class StandardMessageCreator {
 
-	public NotificationRecord constructStandardMessage(byte[] input) {
+	public NotificationRecord constructStandardMessage(String messageType, byte[] input) {
 		String odometerReading = DataParserUtility.calculateUnsignedDecimalValFromSignedBytes(input[8], input[7],
 				input[6]);
 		String latitude = calculateLatituteInforamtion(input[11], input[12], input[13], input[14]);
 		String longitude = calculateLongitudeInforamtion(input[14], input[15], input[16], input[17]);
 		String date = calculateDateInforamtion(input[24], input[25]);
 		String time = calculateTimeInforamtion(input[21], input[22], input[23]);
-		NotificationRecord notificationRecord=new NotificationRecord(latitude, longitude, date, time, odometerReading);
-		Map<String,Object> customInfo=notificationRecord.getCustomInfo();
-		addCustomInfo(customInfo,input);		
+		String speed = calculateSpeed(messageType, input[18]);
+		NotificationRecord notificationRecord = new NotificationRecord(latitude, longitude, date, time, odometerReading,
+				speed);
+		Map<String, Object> customInfo = notificationRecord.getCustomInfo();
+		addCustomInfo(customInfo, input);
 		return notificationRecord;
 
 	}
-
 
 	private String calculateTimeInforamtion(byte byte25, byte byte26, byte byte27) {
 		int hrs = Integer.parseInt(DataParserUtility.calculateUnsignedDecimalValFromSignedBytes(byte25));
@@ -57,7 +58,24 @@ public class StandardMessageCreator {
 		byte18 &= 0X1F;
 		return DataParserUtility.calculateUnsignedDecimalValFromSignedBytes(byte21, byte20, byte19, byte18).concat("W");
 	}
-	
+
+	private String calculateSpeed(String messageType, byte byte22) {
+		String speed = null;
+		switch (messageType) {
+		case "I":
+		case "a":
+		case "E":
+			speed = "0Mph";
+			break;
+		case "H":
+			speed = DataParserUtility.calculateUnsignedDecimalValFromSignedByte(byte22) + "Kmh";
+			break;
+		default:
+			speed = DataParserUtility.calculateUnsignedDecimalValFromSignedByte(byte22) + "Mph";
+		};
+		return speed;
+	}
+
 	private void addCustomInfo(Map<String, Object> customInfo, byte[] input) {
 		addSensorInformation(customInfo, input);
 	}

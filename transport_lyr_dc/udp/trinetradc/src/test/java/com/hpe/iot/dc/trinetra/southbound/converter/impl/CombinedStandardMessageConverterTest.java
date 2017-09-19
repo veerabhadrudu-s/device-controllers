@@ -68,6 +68,7 @@ public class CombinedStandardMessageConverterTest {
 				notificationRecord.getLongitude());
 		Assert.assertEquals("Expected Time and Actual Time are not same", "01:01:46", notificationRecord.getTime());
 		Assert.assertEquals("Expected Date and Actual Date are not same", "03/03/2127", notificationRecord.getDate());
+		Assert.assertEquals("Expected and Actual Speed are not same", "0Mph", notificationRecord.getSpeed());
 	}
 
 	private byte[] getCombinedStandardMessage() {

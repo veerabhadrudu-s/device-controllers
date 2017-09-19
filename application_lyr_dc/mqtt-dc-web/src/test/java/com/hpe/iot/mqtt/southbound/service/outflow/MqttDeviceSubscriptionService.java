@@ -100,7 +100,7 @@ public class MqttDeviceSubscriptionService {
 		@Override
 		public void messageArrived(String topic, MqttMessage message) throws Exception {
 			mqttDevicePayloadHolder
-					.holdMqttDeviceData(new ReceivedMqttMessage(topic, new String(message.getPayload())));
+					.holdMqttDeviceData(new ReceivedMqttMessage(topic, message.getPayload()));
 		}
 
 		@Override

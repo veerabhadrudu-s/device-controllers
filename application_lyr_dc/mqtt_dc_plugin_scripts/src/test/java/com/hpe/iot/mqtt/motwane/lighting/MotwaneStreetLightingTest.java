@@ -70,8 +70,8 @@ public class MotwaneStreetLightingTest {
 				+ payload.get("deviceId").getAsString(), payload);
 		ReceivedMqttMessage receivedMqttMessage = mqttDevicePayloadHolder.getMqttDeviceData();
 		String mqttDownlinkTopic = receivedMqttMessage.getMqttTopic();
-		String mqttMessage = receivedMqttMessage.getMqttMessage();
-		JsonObject downlinkPayload = jsonParser.parse(mqttMessage).getAsJsonObject();
+		byte[] mqttMessage = receivedMqttMessage.getMqttMessage();
+		JsonObject downlinkPayload = jsonParser.parse(new String(mqttMessage)).getAsJsonObject();
 		logger.debug("Received downlink message is " + downlinkPayload.toString());
 		Assert.assertEquals(
 				"Expected downlink topic and actual downlink topic are not same", TestConstants.MOTWANE  + "/"
@@ -87,8 +87,8 @@ public class MotwaneStreetLightingTest {
 				+ payload.get("deviceId").getAsString(), payload);
 		ReceivedMqttMessage receivedMqttMessage = mqttDevicePayloadHolder.getMqttDeviceData();
 		String mqttDownlinkTopic = receivedMqttMessage.getMqttTopic();
-		String mqttMessage = receivedMqttMessage.getMqttMessage();
-		JsonObject downlinkPayload = jsonParser.parse(mqttMessage).getAsJsonObject();
+		byte[] mqttMessage = receivedMqttMessage.getMqttMessage();
+		JsonObject downlinkPayload = jsonParser.parse(new String(mqttMessage)).getAsJsonObject();
 		logger.debug("Received downlink message is " + downlinkPayload.toString());
 		Assert.assertEquals(
 				"Expected downlink topic and actual downlink topic are not same", TestConstants.MOTWANE  + "/"

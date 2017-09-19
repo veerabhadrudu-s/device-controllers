@@ -58,14 +58,14 @@ public class CombinedStandardMessageConverter implements UplinkDeviceDataConvert
 		List<NotificationRecord> notifications = new ArrayList<>();
 		int noOfRecords = input[5];
 		int eachRecordLength = input[6];
-		byte[] allRecordsData = Arrays.copyOfRange(input, 7, input.length-2);
+		byte[] allRecordsData = Arrays.copyOfRange(input, 7, input.length - 2);
 		byte[][] splittedRecords = DataParserUtility.splitArray(allRecordsData, eachRecordLength);
 		logger.debug("Total Number of Records found in bulk notification " + noOfRecords);
 		logger.debug("Each record length is " + eachRecordLength);
 		logger.trace("Length of All Records data is " + allRecordsData.length);
 		Notification notification = new Notification(noOfRecords, notifications);
 		for (byte[] eachRecord : splittedRecords)
-			notifications.add(standardMessageCreator.constructStandardMessage(eachRecord));
+			notifications.add(standardMessageCreator.constructStandardMessage(getMessageType(), eachRecord));
 		deviceData.put(notification.getDeviceDataInformation(), notification);
 	}
 

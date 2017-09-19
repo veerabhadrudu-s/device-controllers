@@ -129,8 +129,7 @@ public class MqttSubscriptionServiceAnnotation {
 		public void messageArrived(String topic, MqttMessage message) throws Exception {
 			String topicParts[] = topic.split("/");
 			String manufacturer = topicParts[0], modelId = topicParts[1];
-			JsonObject payload = (JsonObject) jsonParser.parse(new String(message.getPayload()));
-			southboundService.processPayload(manufacturer, modelId, payload);
+			southboundService.processPayload(manufacturer, modelId, message.getPayload());
 		}
 
 		@Override

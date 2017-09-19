@@ -105,7 +105,7 @@ public class MqttSubscriptionService {
 
 		@Override
 		public void messageArrived(String topic, MqttMessage message) throws Exception {
-			mqttMessageHandlerService.processMqttData(new ReceivedMqttMessage(topic, new String(message.getPayload())));
+			mqttMessageHandlerService.processMqttData(new ReceivedMqttMessage(topic, message.getPayload()));
 		}
 
 		@Override

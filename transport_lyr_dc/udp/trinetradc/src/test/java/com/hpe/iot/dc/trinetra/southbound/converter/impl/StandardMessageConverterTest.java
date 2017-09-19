@@ -3,6 +3,7 @@ package com.hpe.iot.dc.trinetra.southbound.converter.impl;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.IGNITION_OFF_DATA;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.IGNITION_ON_DATA;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.STANDARD_MSG_DATA;
+import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.STANDARD_MSG_DATA_1;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.TRINETRA;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.VEHICAL_TRACKING;
 
@@ -14,6 +15,8 @@ import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.model.DeviceData;
 import com.hpe.iot.dc.model.DeviceInfo;
@@ -28,6 +31,7 @@ import com.hpe.iot.dc.util.DataParserUtility;
  */
 public class StandardMessageConverterTest {
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private StandardMessageConverter standardMessageConverter;
 	private TrinetraDeviceModel deviceModel = new TrinetraDeviceModel();
 
@@ -43,7 +47,7 @@ public class StandardMessageConverterTest {
 
 	@Test
 	public void testSupportedMessageTypes() {
-		List<String> expectedSupportedMessageTypes = Arrays.<String> asList("$", "S", "D", "s", "H", "G", "F", "_", "I",
+		List<String> expectedSupportedMessageTypes = Arrays.<String>asList("$", "S", "D", "s", "H", "G", "F", "_", "I",
 				"i", "P", "L", "Z", "C", "b", "B", "a", "E", "m", "f", "e", "l");
 		Assert.assertSame("Expected and actual Operators are not same", expectedSupportedMessageTypes.size(),
 				standardMessageConverter.getMessageTypes().size());
@@ -57,8 +61,8 @@ public class StandardMessageConverterTest {
 	}
 
 	@Test
-	public void testCreateModel() {
-		byte[] ignitionOnData = getStandardMessage();
+	public void testCreateModelForStandardMsgType() {
+		byte[] ignitionOnData = getStandardMessage(STANDARD_MSG_DATA);
 		DeviceInfo dataModel = standardMessageConverter.createModel(deviceModel, ignitionOnData);
 		Map<String, DeviceData> deviceInformation = dataModel.getDeviceData();
 		Notification notification = (Notification) deviceInformation.get(Notification.NOTIF_MESS_TYP);
@@ -81,6 +85,14 @@ public class StandardMessageConverterTest {
 				notificationRecord.getLongitude());
 		Assert.assertEquals("Expected Time and Actual Time are not same", "10:49:08", notificationRecord.getTime());
 		Assert.assertEquals("Expected Date and Actual Date are not same", "11/17/2016", notificationRecord.getDate());
+		Assert.assertEquals("Expected and Actual Speed are not same", "0Mph", notificationRecord.getSpeed());
+	}
+
+	@Test
+	public void testCreateModelForStandardMsgType1() {
+		byte[] ignitionOnData = getStandardMessage(STANDARD_MSG_DATA_1);
+		DeviceInfo dataModel = standardMessageConverter.createModel(deviceModel, ignitionOnData);
+		logger.debug("Converted Data Model is " + dataModel);
 	}
 
 	@Test
@@ -110,6 +122,7 @@ public class StandardMessageConverterTest {
 		Assert.assertEquals("Expected Date and Actual Date are not same", "11/17/2016", notificationRecord.getDate());
 		Assert.assertEquals("Expected Ignition status and Actual status are not same", 1,
 				notificationRecord.getCustomInfo().get("Ignition"));
+		Assert.assertEquals("Expected and Actual Speed are not same", "0Mph", notificationRecord.getSpeed());
 	}
 
 	@Test
@@ -139,6 +152,7 @@ public class StandardMessageConverterTest {
 		Assert.assertEquals("Expected Date and Actual Date are not same", "11/17/2016", notificationRecord.getDate());
 		Assert.assertEquals("Expected Ignition status and Actual status are not same", 0,
 				notificationRecord.getCustomInfo().get("Ignition"));
+		Assert.assertEquals("Expected and Actual Speed are not same", "0Mph", notificationRecord.getSpeed());
 	}
 
 	private byte[] getIgnitionOnMessage() {
@@ -149,7 +163,7 @@ public class StandardMessageConverterTest {
 		return DataParserUtility.createBinaryPayloadFromHexaPayload(IGNITION_OFF_DATA, this.getClass());
 	}
 
-	private byte[] getStandardMessage() {
+	private byte[] getStandardMessage(String[] STANDARD_MSG_DATA) {
 		return DataParserUtility.createBinaryPayloadFromHexaPayload(STANDARD_MSG_DATA, this.getClass());
 	}
 

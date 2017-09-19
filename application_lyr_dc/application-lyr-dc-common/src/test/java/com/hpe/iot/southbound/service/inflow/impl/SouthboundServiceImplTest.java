@@ -101,7 +101,7 @@ public class SouthboundServiceImplTest {
 
 	@Test(expected = SouthboundServiceImpl.DeviceModelNotSuported.class)
 	public void testProcessDevicePayloadForInvalidDeviceModel() {
-		southboundService.processPayload("TestManufacturer", "TestModel", new JsonObject());
+		southboundService.processPayload("TestManufacturer", "TestModel", new byte[] {});
 		Assert.fail("Failed to execute Test case");
 	}
 
@@ -113,31 +113,31 @@ public class SouthboundServiceImplTest {
 	@Test
 	public void testProcessDevicePayloadForTrackimoMovingNotification() {
 		JsonObject payload = createPayloadForTrackimoMovingNotification();
-		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload);
+		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForTrackimoSpeedNotification() {
 		JsonObject payload = createPayloadForTrackimoSpeedNotification();
-		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload);
+		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForTrackimoFenceNotification() {
 		JsonObject payload = createPayloadForTrackimoFenceNotification();
-		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload);
+		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForSampleNotification() {
 		JsonObject payload = createPayloadForSampleNotification();
-		southboundService.processPayload(SAMPLE, SAMPLE_MODEL, payload);
+		southboundService.processPayload(SAMPLE, SAMPLE_MODEL, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForRexaWareBikeNotification() {
 		JsonObject payload = createPayloadForRexaWareBikeNotification();
-		southboundService.processPayload(REXAWARE, REXAWARE_MODEL, payload);
+		southboundService.processPayload(REXAWARE, REXAWARE_MODEL, payload.toString().getBytes());
 	}
 
 	private JsonObject createPayloadForTrackimoMovingNotification() {

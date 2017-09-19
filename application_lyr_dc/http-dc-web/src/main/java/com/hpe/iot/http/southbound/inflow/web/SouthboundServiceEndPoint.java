@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.hpe.iot.southbound.service.inflow.SouthboundService;
 
 /**
@@ -32,7 +30,6 @@ public class SouthboundServiceEndPoint {
 	private static final String MODEL_ID = "modelId";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private final JsonParser parser = new JsonParser();
 
 	private final SouthboundService southboundService;
 
@@ -46,9 +43,14 @@ public class SouthboundServiceEndPoint {
 	public String processDevicePayload(@RequestBody String deviceData,
 			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId) {
 		logger.trace("Received payload from the device : " + deviceData);
-		JsonObject payload = parser.parse(deviceData).getAsJsonObject();
-		southboundService.processPayload(manufacturer, modelId, payload);
+		southboundService.processPayload(manufacturer, modelId, deviceData.getBytes());
 		return new Gson().toJson(new RequestResult("SUCCESS"));
+	}
+
+	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}", method = RequestMethod.PUT)
+	public String processDevicePayloadForUpdate(@RequestBody String deviceData,
+			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId) {
+		return processDevicePayload(deviceData, manufacturer, modelId);
 	}
 
 	@RequestMapping(path = "/dcinfo", method = RequestMethod.GET)

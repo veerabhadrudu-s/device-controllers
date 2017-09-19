@@ -52,7 +52,8 @@ public class MotwaneLightingPayloadDecipher implements PayloadDecipher{
 	private final Decoder decoder=Base64.getMimeDecoder();
 	private final JsonParser jsonParser=new JsonParser();
 
-	public JsonObject decipherPayload(DeviceModel deviceModel, JsonObject payload){
+	public JsonObject decipherPayload(DeviceModel deviceModel, byte[] rawPayload){
+		JsonObject payload=jsonParser.parse(new String(rawPayload));
 		String messageType=payload.get("messageId").getAsString();
 		if(!messageType.equalsIgnoreCase("GSS"))
 			return payload;

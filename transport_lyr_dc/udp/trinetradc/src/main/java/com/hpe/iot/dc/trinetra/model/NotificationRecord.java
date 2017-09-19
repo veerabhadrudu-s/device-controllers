@@ -9,16 +9,18 @@ import java.util.Map;
  */
 public class NotificationRecord {
 
-	private final String latitude, longitude, date, time, odometer;
+	private final String latitude, longitude, date, time, odometer, speed;
 	private final Map<String, Object> customInfo = new HashMap<>();
 
-	public NotificationRecord(String latitude, String longitude, String date, String time, String odometer) {
+	public NotificationRecord(String latitude, String longitude, String date, String time, String odometer,
+			String speed) {
 		super();
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.date = date;
 		this.time = time;
 		this.odometer = odometer;
+		this.speed = speed;
 	}
 
 	public String getLatitude() {
@@ -41,6 +43,10 @@ public class NotificationRecord {
 		return odometer;
 	}
 
+	public String getSpeed() {
+		return speed;
+	}
+
 	public Map<String, Object> getCustomInfo() {
 		return customInfo;
 	}
@@ -54,6 +60,7 @@ public class NotificationRecord {
 		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
 		result = prime * result + ((odometer == null) ? 0 : odometer.hashCode());
+		result = prime * result + ((speed == null) ? 0 : speed.hashCode());
 		result = prime * result + ((time == null) ? 0 : time.hashCode());
 		return result;
 	}
@@ -92,6 +99,11 @@ public class NotificationRecord {
 				return false;
 		} else if (!odometer.equals(other.odometer))
 			return false;
+		if (speed == null) {
+			if (other.speed != null)
+				return false;
+		} else if (!speed.equals(other.speed))
+			return false;
 		if (time == null) {
 			if (other.time != null)
 				return false;
@@ -103,7 +115,7 @@ public class NotificationRecord {
 	@Override
 	public String toString() {
 		return "NotificationRecord [latitude=" + latitude + ", longitude=" + longitude + ", date=" + date + ", time="
-				+ time + ", odometer=" + odometer + ", customInfo=" + customInfo + "]";
+				+ time + ", odometer=" + odometer + ", speed=" + speed + ", customInfo=" + customInfo + "]";
 	}
 
 }

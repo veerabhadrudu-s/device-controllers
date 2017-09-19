@@ -33,7 +33,7 @@ public class SouthboundServiceImpl implements SouthboundService {
 	}
 
 	@Override
-	public void processPayload(String manufacturer, String modelId, JsonObject payload) {
+	public void processPayload(String manufacturer, String modelId, byte[] payload) {
 		DeviceModel deviceModel = deviceModelFactory.findDeviceModel(manufacturer, modelId);
 		if (deviceModel == null)
 			throw new DeviceModelNotSuported(manufacturer, modelId);
@@ -43,7 +43,7 @@ public class SouthboundServiceImpl implements SouthboundService {
 		uplinkPayloadProcessor.processPayload(deviceInfo);
 	}
 
-	private DeviceInfo constructDeviceInfo(DeviceModel deviceModel, JsonObject payload) {
+	private DeviceInfo constructDeviceInfo(DeviceModel deviceModel, byte[] payload) {
 		JsonObject deciperedPayload = deciperPaylaod(deviceModel, payload);
 		String deviceId = findDeviceId(deviceModel, deciperedPayload);
 		String messageType = findMessageType(deviceModel, deciperedPayload);
@@ -51,7 +51,7 @@ public class SouthboundServiceImpl implements SouthboundService {
 		return new DeviceInfo(device, messageType, deciperedPayload);
 	}
 
-	private JsonObject deciperPaylaod(DeviceModel deviceModel, JsonObject payload) {
+	private JsonObject deciperPaylaod(DeviceModel deviceModel, byte[] payload) {
 		PayloadDecipher payloadDecipher = payloadExtractorFactory.getPayloadDecipher(deviceModel.getManufacturer(),
 				deviceModel.getModelId());
 		return payloadDecipher.decipherPayload(deviceModel, payload);

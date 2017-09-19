@@ -9,9 +9,9 @@ package com.hpe.iot.mqtt.southbound.service.inflow;
 public class ReceivedMqttMessage {
 
 	private final String mqttTopic;
-	private final String mqttMessage;
+	private final byte[] mqttMessage;
 
-	public ReceivedMqttMessage(String mqttTopic, String mqttMessage) {
+	public ReceivedMqttMessage(String mqttTopic, byte[] mqttMessage) {
 		super();
 		this.mqttTopic = mqttTopic;
 		this.mqttMessage = mqttMessage;
@@ -21,7 +21,7 @@ public class ReceivedMqttMessage {
 		return mqttTopic;
 	}
 
-	public String getMqttMessage() {
+	public byte[] getMqttMessage() {
 		return mqttMessage;
 	}
 

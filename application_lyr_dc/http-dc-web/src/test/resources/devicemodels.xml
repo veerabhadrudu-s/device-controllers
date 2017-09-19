@@ -6,13 +6,7 @@
 		<modelId>TRKM002</modelId>
 		<deviceIdJsonPath>$.device_id</deviceIdJsonPath>
 		<messageTypeJsonPath>$.alarm_type</messageTypeJsonPath>
-	</devicemodel>
-	<devicemodel>
-		<manufacturer>Sample</manufacturer>
-		<modelId>SampleModel</modelId>
-		<deviceIdJsonPath>$.sample_id</deviceIdJsonPath>
-		<messageTypeJsonPath>$.message_type</messageTypeJsonPath>
-	</devicemodel>
+	</devicemodel>	
 	<devicemodel>
 		<manufacturer>rexaware</manufacturer>
 		<modelId>bikeevent</modelId>
