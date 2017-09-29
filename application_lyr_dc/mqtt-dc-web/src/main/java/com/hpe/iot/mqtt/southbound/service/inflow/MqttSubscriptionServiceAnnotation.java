@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hpe.iot.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;

@@ -65,7 +65,8 @@ public class StandardMessageConverter implements ExtendedUplinkDeviceDataConvert
 		Notification notification = new Notification(1, notificationRecords);
 		NotificationRecord notificationRecord = standardMessageCreator.constructStandardMessage(messageType,
 				Arrays.copyOfRange(input, 4, input.length - 2));
-		notificationRecords.add(notificationRecord);
+		if (notificationRecord != null)
+			notificationRecords.add(notificationRecord);
 		dataModel.addDeviceData(notification.getDeviceDataInformation(), notification);
 	}
 

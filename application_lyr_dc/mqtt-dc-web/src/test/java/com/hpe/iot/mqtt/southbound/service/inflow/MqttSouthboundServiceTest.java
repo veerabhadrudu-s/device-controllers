@@ -118,8 +118,5 @@ public class MqttSouthboundServiceTest {
 		Thread.sleep(3000);
 	}
 
-	private void waitForDCToCompletePayloadProcessing() throws InterruptedException {
-		Thread.sleep(3000);
-	}
 
 }

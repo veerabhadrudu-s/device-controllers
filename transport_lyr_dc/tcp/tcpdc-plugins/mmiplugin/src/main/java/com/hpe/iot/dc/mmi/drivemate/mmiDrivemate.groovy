@@ -485,7 +485,7 @@ public class UplinkNotificationMessageConverter extends SessionBasedUplinkDevice
 		String longitude=longitudeVal/Math.pow(10,longitudeDigits-2);
 		long latitudeVal=Long.parseLong(calculateUnsignedDecimalValFromSignedBytes(
 				Arrays.copyOfRange(notificationRecordData,TIMESTAMP_PAYLOAD_LEN+PRIORITY_BYTE+4,TIMESTAMP_PAYLOAD_LEN+PRIORITY_BYTE+8)));
-		int latitudeDigits=Math.log10(longitudeVal<0?latitudeVal*-1:latitudeVal) + 1;
+		int latitudeDigits=Math.log10(latitudeVal<0?latitudeVal*-1:latitudeVal) + 1;
 		String latitude=latitudeVal/Math.pow(10,latitudeDigits-2);
 		String altitude=calculateUnsignedDecimalValFromSignedBytes(
 				Arrays.copyOfRange(notificationRecordData,TIMESTAMP_PAYLOAD_LEN+PRIORITY_BYTE+8,TIMESTAMP_PAYLOAD_LEN+PRIORITY_BYTE+10));

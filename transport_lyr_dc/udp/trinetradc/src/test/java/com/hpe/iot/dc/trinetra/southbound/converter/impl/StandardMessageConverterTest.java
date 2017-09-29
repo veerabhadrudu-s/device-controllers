@@ -4,6 +4,8 @@ import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.IG
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.IGNITION_ON_DATA;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.STANDARD_MSG_DATA;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.STANDARD_MSG_DATA_1;
+import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.STANDARD_MSG_DATA_2;
+import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.STANDARD_MSG_DATA_3;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.TRINETRA;
 import static com.hpe.iot.dc.trinetra.southbound.converter.impl.test.TestData.VEHICAL_TRACKING;
 
@@ -79,9 +81,9 @@ public class StandardMessageConverterTest {
 				dataModel.getDevice().getDeviceId());
 		Assert.assertEquals("Expected Odometer reading and Actual reading are not same", "50",
 				notificationRecord.getOdometer());
-		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "94484526N",
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "94.807544",
 				notificationRecord.getLatitude());
-		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "1225468958W",
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "76.986372",
 				notificationRecord.getLongitude());
 		Assert.assertEquals("Expected Time and Actual Time are not same", "10:49:08", notificationRecord.getTime());
 		Assert.assertEquals("Expected Date and Actual Date are not same", "11/17/2016", notificationRecord.getDate());
@@ -93,6 +95,88 @@ public class StandardMessageConverterTest {
 		byte[] ignitionOnData = getStandardMessage(STANDARD_MSG_DATA_1);
 		DeviceInfo dataModel = standardMessageConverter.createModel(deviceModel, ignitionOnData);
 		logger.debug("Converted Data Model is " + dataModel);
+		Map<String, DeviceData> deviceInformation = dataModel.getDeviceData();
+		Notification notification = (Notification) deviceInformation.get(Notification.NOTIF_MESS_TYP);
+		NotificationRecord notificationRecord = notification.getNotifications().get(0);
+		Assert.assertEquals("Expected Number of records and Actual Number of records are not same", 1,
+				notification.getNoOfRecords());
+		Assert.assertEquals("Expected Message Type and Actual Message Type are not same", "i",
+				dataModel.getMessageType());
+		Assert.assertEquals("Expected Manufacturer and Actual Manufacturer are not Same", TRINETRA,
+				dataModel.getDevice().getManufacturer());
+		Assert.assertEquals("Expected Model ID and Actual Model ID are not Same", VEHICAL_TRACKING,
+				dataModel.getDevice().getModelId());
+		Assert.assertEquals("Expected Device Id and Actual Device Id are not same", "6945",
+				dataModel.getDevice().getDeviceId());
+		/*
+		 * Assert.
+		 * assertEquals("Expected Odometer reading and Actual reading are not same",
+		 * "50", notificationRecord.getOdometer());
+		 */
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "23.237887",
+				notificationRecord.getLatitude());
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "77.434077",
+				notificationRecord.getLongitude());
+		Assert.assertEquals("Expected Time and Actual Time are not same", "05:06:45", notificationRecord.getTime());
+		Assert.assertEquals("Expected Date and Actual Date are not same", "09/22/2017", notificationRecord.getDate());
+		// Assert.assertEquals("Expected and Actual Speed are not same", "0Mph",
+		// notificationRecord.getSpeed());
+	}
+
+	@Test
+	public void testCreateModelForStandardMsgType2() {
+		byte[] ignitionOnData = getStandardMessage(STANDARD_MSG_DATA_2);
+		DeviceInfo dataModel = standardMessageConverter.createModel(deviceModel, ignitionOnData);
+		logger.debug("Converted Data Model is " + dataModel);
+		Map<String, DeviceData> deviceInformation = dataModel.getDeviceData();
+		Notification notification = (Notification) deviceInformation.get(Notification.NOTIF_MESS_TYP);
+		NotificationRecord notificationRecord = notification.getNotifications().get(0);
+		Assert.assertEquals("Expected Number of records and Actual Number of records are not same", 1,
+				notification.getNoOfRecords());
+		Assert.assertEquals("Expected Message Type and Actual Message Type are not same", "$",
+				dataModel.getMessageType());
+		Assert.assertEquals("Expected Manufacturer and Actual Manufacturer are not Same", TRINETRA,
+				dataModel.getDevice().getManufacturer());
+		Assert.assertEquals("Expected Model ID and Actual Model ID are not Same", VEHICAL_TRACKING,
+				dataModel.getDevice().getModelId());
+		Assert.assertEquals("Expected Device Id and Actual Device Id are not same", "999992",
+				dataModel.getDevice().getDeviceId());
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "10.9974",
+				notificationRecord.getLatitude());
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "76.987119",
+				notificationRecord.getLongitude());
+		Assert.assertEquals("Expected Time and Actual Time are not same", "07:43:33", notificationRecord.getTime());
+		Assert.assertEquals("Expected Date and Actual Date are not same", "09/22/2017", notificationRecord.getDate());
+		// Assert.assertEquals("Expected and Actual Speed are not same", "0Mph",
+		// notificationRecord.getSpeed());
+	}
+	
+	@Test
+	public void testCreateModelForStandardMsgType3() {
+		byte[] ignitionOnData = getStandardMessage(STANDARD_MSG_DATA_3);
+		DeviceInfo dataModel = standardMessageConverter.createModel(deviceModel, ignitionOnData);
+		logger.debug("Converted Data Model is " + dataModel);
+		Map<String, DeviceData> deviceInformation = dataModel.getDeviceData();
+		Notification notification = (Notification) deviceInformation.get(Notification.NOTIF_MESS_TYP);
+		NotificationRecord notificationRecord = notification.getNotifications().get(0);
+		Assert.assertEquals("Expected Number of records and Actual Number of records are not same", 1,
+				notification.getNoOfRecords());
+		Assert.assertEquals("Expected Message Type and Actual Message Type are not same", "$",
+				dataModel.getMessageType());
+		Assert.assertEquals("Expected Manufacturer and Actual Manufacturer are not Same", TRINETRA,
+				dataModel.getDevice().getManufacturer());
+		Assert.assertEquals("Expected Model ID and Actual Model ID are not Same", VEHICAL_TRACKING,
+				dataModel.getDevice().getModelId());
+		Assert.assertEquals("Expected Device Id and Actual Device Id are not same", "6945",
+				dataModel.getDevice().getDeviceId());
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "23.235104",
+				notificationRecord.getLatitude());
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "77.435",
+				notificationRecord.getLongitude());
+		Assert.assertEquals("Expected Time and Actual Time are not same", "08:35:03", notificationRecord.getTime());
+		Assert.assertEquals("Expected Date and Actual Date are not same", "09/22/2017", notificationRecord.getDate());
+		// Assert.assertEquals("Expected and Actual Speed are not same", "0Mph",
+		// notificationRecord.getSpeed());
 	}
 
 	@Test
@@ -114,9 +198,9 @@ public class StandardMessageConverterTest {
 				dataModel.getDevice().getDeviceId());
 		Assert.assertEquals("Expected Odometer reading and Actual reading are not same", "50",
 				notificationRecord.getOdometer());
-		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "94484526N",
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "94.807544",
 				notificationRecord.getLatitude());
-		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "1225468958W",
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "76.986372",
 				notificationRecord.getLongitude());
 		Assert.assertEquals("Expected Time and Actual Time are not same", "10:49:08", notificationRecord.getTime());
 		Assert.assertEquals("Expected Date and Actual Date are not same", "11/17/2016", notificationRecord.getDate());
@@ -144,9 +228,9 @@ public class StandardMessageConverterTest {
 				dataModel.getDevice().getDeviceId());
 		Assert.assertEquals("Expected Odometer reading and Actual reading are not same", "50",
 				notificationRecord.getOdometer());
-		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "94484526N",
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "94.807544",
 				notificationRecord.getLatitude());
-		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "1225468958W",
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "76.986372",
 				notificationRecord.getLongitude());
 		Assert.assertEquals("Expected Time and Actual Time are not same", "10:49:08", notificationRecord.getTime());
 		Assert.assertEquals("Expected Date and Actual Date are not same", "11/17/2016", notificationRecord.getDate());

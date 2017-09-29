@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hpe.iot.dc</groupId>
 	<artifactId>device-controllers</artifactId>
@@ -6,8 +7,9 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>application_lyr_dc</module>
-		<module>transport_lyr_dc</module>	
-		<module>message-broker-common</module>	
+		<module>transport_lyr_dc</module>
+		<module>message-broker-common</module>
+		<module>device-controllers-ear</module>
 	</modules>
 	<properties>
 		<java-version>1.8</java-version>
@@ -23,7 +25,7 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
-				<version>${org.springframework-version}</version>				
+				<version>${org.springframework-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -34,7 +36,7 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
 				<version>${org.springframework-version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-websocket</artifactId>

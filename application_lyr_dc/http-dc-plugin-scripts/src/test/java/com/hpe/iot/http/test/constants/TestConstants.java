@@ -12,6 +12,6 @@ public class TestConstants {
 	public static final String AVANSEUS_MODEL = "videoanalytics";
 	public static final String STREAMCODE = "streamcode";
 	public static final String STREAMCODE_MODEL = "metering";
-	
-	
+	public static final String LIBELIUM = "libelium";
+	public static final String LIBELIUM_MODEL = "smartagricluturepro";
 }

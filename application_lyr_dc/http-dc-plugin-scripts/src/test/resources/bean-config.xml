@@ -124,7 +124,8 @@
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
 		<value>src/main/java/com/hpe/iot/http/avanseus/videoanalytics</value>
-		<value>src/main/java/com/hpe/iot/http/steamcode/metering</value>		
+		<value>src/main/java/com/hpe/iot/http/steamcode/metering</value>
+		<value>src/main/java/com/hpe/iot/http/libelium/smartagriculture</value>				
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"

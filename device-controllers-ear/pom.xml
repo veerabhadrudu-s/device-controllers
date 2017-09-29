@@ -11,14 +11,14 @@
 	<dependencies>
 		<!-- This ear is created by adding common jars (which doesn't depend up 
 			on slf4j as transitive dependency) under lib directory of ear. Remaining 
-			jars which depends on slf4j logging frameworks been added as under individual 
+			jars which depends on slf4j logging frameworks been added under individual 
 			wars. This approach is been taken to avoid issue of output logging is going 
 			to only one log file even though output log file configuration for each DC 
 			is configured separately . Above issue might be happening due to loading 
 			of log configuration using Spring from web.xml using org.springframework.web.util.Log4jConfigListener 
-			Class , same class loader for all war files or it might be inherited from 
-			parent class loader(EAR LEVEL CLASSLOADER) during war initialization. THIS 
-			ISSUE NEED TO FURTHER ANALIYZED. -->
+			Class and due to same class loader for all war files or it might be due to 
+			inherited parent class loader(EAR LEVEL CLASSLOADER) during war initialization. 
+			THIS ISSUE NEEDS TO FURTHER ANALIYZED. -->
 
 		<!-- Local common jars -->
 		<dependency>

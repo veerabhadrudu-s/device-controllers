@@ -126,6 +126,7 @@
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
 		<value>src/main/java/com/hpe/iot/mqtt/motwane/lighting</value>
+		<value>src/main/java/com/hpe/iot/mqtt/sensenuts/lighting</value>
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
@@ -203,6 +204,25 @@
 			ref="groovyScriptMetaModelServiceActivator" />
 		<constructor-arg index="2" ref="mqttSubscriptionService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
+	</bean>
+
+	<bean id="iotDevicePayloadHolder"
+		class="com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder" />
+
+	<bean id="activeMQConsumerService"
+		class="com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="mockNorthboundPayloadConsumerService"
+		class="com.hpe.iot.mqtt.northbound.sdk.handler.mock.MockNorthboundPayloadConsumerService"
+		init-method="startService" destroy-method="stopService">
+		<constructor-arg index="0"
+			value="${iot.device.uplink.destination}" />
+		<constructor-arg index="1" ref="activeMQConsumerService" />
+		<constructor-arg index="2" ref="iotDevicePayloadHolder" />
 	</bean>
 
 </beans>

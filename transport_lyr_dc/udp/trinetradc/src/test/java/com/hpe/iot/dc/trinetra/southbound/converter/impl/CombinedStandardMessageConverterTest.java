@@ -62,9 +62,9 @@ public class CombinedStandardMessageConverterTest {
 				dataModel.getDevice().getDeviceId());
 		Assert.assertEquals("Expected Odometer reading and Actual reading are not same", "1",
 				notificationRecord.getOdometer());
-		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "0N",
+		Assert.assertEquals("Expected Latitude and Actual Latitude are not same", "0.0",
 				notificationRecord.getLatitude());
-		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "0W",
+		Assert.assertEquals("Expected Longitude and Actual Longitude are not same", "0.0",
 				notificationRecord.getLongitude());
 		Assert.assertEquals("Expected Time and Actual Time are not same", "01:01:46", notificationRecord.getTime());
 		Assert.assertEquals("Expected Date and Actual Date are not same", "03/03/2127", notificationRecord.getDate());

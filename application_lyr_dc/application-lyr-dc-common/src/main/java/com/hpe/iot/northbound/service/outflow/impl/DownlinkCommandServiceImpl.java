@@ -30,7 +30,7 @@ public class DownlinkCommandServiceImpl implements DownlinkCommandService {
 		super();
 		this.downlinkCommandServiceHandler = downlinkCommandServiceHandler;
 		this.downlinkConsumerDestination = downlinkConsumerDestination;
-		brokerConsumerService = brokerConsumerServiceFactory.getBrokerConsumerService(activeMessageBroker);
+		this.brokerConsumerService = brokerConsumerServiceFactory.getBrokerConsumerService(activeMessageBroker);
 	}
 
 	@Override
