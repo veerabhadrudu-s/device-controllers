@@ -14,4 +14,6 @@ public interface SouthboundPublisherService {
 
 	void publishPayload(DeviceModel deviceModel, DeviceInfo decipheredPayload);
 
+	void publishPayload(DeviceModel deviceModel, String deviceId, byte[] decipheredPayload);
+
 }

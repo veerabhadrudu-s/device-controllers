@@ -3,6 +3,7 @@
  */
 package com.hpe.iot.mqtt.southbound.service.outflow;
 
+import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
 import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -42,14 +43,34 @@ public class DefaultMqttPublisherService implements SouthboundPublisherService {
 	@Override
 	public void publishPayload(DeviceModel deviceModel, DeviceInfo deviceInfo) {
 		Device device = deviceInfo.getDevice();
-		tryPublishingMessage(
-				device.getManufacturer() + "/" + device.getModelId() + "/" + "Down" + "/" + device.getDeviceId(),
+		publishJsonMessage(formDownlinkTopicName(device.getManufacturer(), device.getModelId(), device.getDeviceId()),
 				deviceInfo.getPayload());
 	}
 
-	private void tryPublishingMessage(String topicName, JsonObject payload) {
+	@Override
+	public void publishPayload(DeviceModel deviceModel, String deviceId, byte[] decipheredPayload) {
+		publishBinaryMessage(formDownlinkTopicName(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId),
+				decipheredPayload);
+	}
+
+	private String formDownlinkTopicName(String manufacturer, String modelId, String deviceId) {
+		return manufacturer + "/" + modelId + "/" + "Down" + "/" + deviceId;
+	}
+
+	private void publishJsonMessage(String topicName, JsonObject payload) {
 		logger.debug("Received MQTT message with topic name " + topicName + " is : " + payload.toString());
-		MqttMessage mqttMessage = new MqttMessage(payload.toString().getBytes());
+		byte[] payloadBytes = payload.toString().getBytes();
+		tryPublishingMessage(topicName, payloadBytes);
+	}
+
+	private void publishBinaryMessage(String topicName, byte[] payload) {
+		logger.debug(
+				"Received MQTT message with topic name " + topicName + " is : " + convertArrayOfByteToString(payload));
+		tryPublishingMessage(topicName, payload);
+	}
+
+	private void tryPublishingMessage(String topicName, byte[] payloadBytes) {
+		MqttMessage mqttMessage = new MqttMessage(payloadBytes);
 		try {
 			MqttClient mqttClient = connectToMqttBroker();
 			mqttClient.publish(topicName, mqttMessage);

@@ -5,8 +5,6 @@
 	<!-- Appenders -->	
 	<appender name="MQTT_DC" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<param name="Append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
 		</layout>

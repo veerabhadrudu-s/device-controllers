@@ -1,21 +1,30 @@
-/**
- * 
- */
-package com.hpe.iot.mqtt.sensenuts.lighting
+
+
+package com.hpe.iot.mqtt.sensenuts.lighting;
 
 import static com.hpe.iot.utility.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
 import static com.hpe.iot.utility.DataParserUtility.convertBytesToASCIIString
 import static com.hpe.iot.utility.DataParserUtility.convertHexaToFloatPoint
 import static java.util.Arrays.copyOfRange
 
+import java.util.ArrayList
+import java.util.Arrays
+import java.util.List
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.hpe.iot.model.DeviceInfo
 import com.hpe.iot.model.DeviceModel
+import com.hpe.iot.mqtt.southbound.service.holder.GroovyServicesHolder
+import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor
 import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher
-import com.hpe.iot.utility.DataParserUtility
+import com.hpe.iot.utility.UtilityLogger
 
 /**
  * @author sveera
@@ -178,5 +187,61 @@ public class SensenutsMessageTypeExtractor implements MessageTypeExtractor{
 	@Override
 	public String extractMessageType(DeviceModel deviceModel, JsonObject payload) {
 		return payload.get("messageType").getAsString();
+	}
+}
+
+public class SensenutsDownlinkPayloadProcessor implements DownlinkPayloadProcessor{
+
+	private final Logger logger=LoggerFactory.getLogger(this.getClass());
+	private final GroovyServicesHolder groovyServicesHolder;
+	private final Byte[] downlinkCommandByte = [0x64 ] as Byte[];
+
+	public SensenutsDownlinkPayloadProcessor(GroovyServicesHolder groovyServicesHolder) {
+		super();
+		this.groovyServicesHolder = groovyServicesHolder;
+	}
+
+	@Override
+	public void processPayload(DeviceModel deviceModel, DeviceInfo decipheredPayload) {
+		JsonObject downlinkCommand=decipheredPayload.getPayload();
+		String gatewayIdString=downlinkCommand.get("gatewayId").getAsString();
+		String lightIdString=downlinkCommand.get("lightId").getAsString();
+		String brightnessString=downlinkCommand.get("brightness").getAsString();
+		//logger.trace("Received Change Light brightness command with follwing parameters gatewayId:"+gatewayIdString+" lightId:"+lightIdString+" brightness:"+brightnessString);
+		byte[] downlinkCommandBytes=constructChangeLightBrightnessDownlinkCommandMessage(gatewayIdString, lightIdString, brightnessString);
+		groovyServicesHolder.getSouthboundPublisherService().publishPayload(deviceModel, decipheredPayload.getDevice().getDeviceId(), downlinkCommandBytes);
+	}
+
+	private byte[] constructChangeLightBrightnessDownlinkCommandMessage(String gatewayId,String lightId,String brightness) {
+		List<Byte> luminaireFailureMessage = new ArrayList<>();
+		luminaireFailureMessage.addAll(Arrays.asList(downlinkCommandByte));
+		luminaireFailureMessage.addAll(Arrays.asList(gatewayId.getBytes()));
+		luminaireFailureMessage.addAll(Arrays.asList(lightId.getBytes()));
+		luminaireFailureMessage.addAll(Arrays.asList(Byte.parseByte(brightness)));
+		Byte[] allDataBytes = convertObjectArrayToByteArray(luminaireFailureMessage.toArray());
+		int checksum = calculateChecksum(allDataBytes);
+		luminaireFailureMessage.add((byte) checksum);
+		return convertObjectArrayToPrimitiveByteArray(luminaireFailureMessage.toArray());
+	}
+
+	private int calculateChecksum(Byte[] allDataBytes) {
+		int checksum = 0x00;
+		for (Byte dataByte : allDataBytes)
+			checksum = checksum ^ dataByte.byteValue();
+		return checksum;
+	}
+
+	private Byte[] convertObjectArrayToByteArray(Object[] allObject) {
+		Byte[] byteData = new Byte[allObject.length];
+		for (int index = 0; index < allObject.length; index++)
+			byteData[index] = (Byte) allObject[index];
+		return byteData;
+	}
+
+	private byte[] convertObjectArrayToPrimitiveByteArray(Object[] allObject) {
+		byte[] byteData = new byte[allObject.length];
+		for (int index = 0; index < allObject.length; index++)
+			byteData[index] = (byte) allObject[index];
+		return byteData;
 	}
 }

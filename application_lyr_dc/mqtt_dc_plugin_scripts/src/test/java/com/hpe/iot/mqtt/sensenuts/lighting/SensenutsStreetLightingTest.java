@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.model.Device;
 import com.hpe.iot.model.DeviceInfo;
+import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
 import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
+import com.hpe.iot.utility.UtilityLogger;
 
 /**
  * @author sveera
@@ -28,6 +30,9 @@ import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
 public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final String DEVICE_ID = "1234";
+
+	// Uplink Test Data.
 	private final Byte[] notificationByte = new Byte[] { 0x62 };
 	private final Byte[] gatewayId = new Byte[] { 0x31, 0x32, 0x33, 0x34 };
 	private final Byte[] noOfLights = new Byte[] { 0x02 };
@@ -54,7 +59,10 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 	private final Byte[] lightId = new Byte[] { 0x30, 0x30, 0x30, 0x31 };
 	private final Byte[] powerOutageAlertByte = new Byte[] { 0x01 };
 	private final Byte[] luminaireFailureAlertByte = new Byte[] { 0x02 };
-	private static final String DEVICE_ID = "1234";
+
+	// Downlink Test Data.
+	private final Byte[] commandByte = new Byte[] { 0x64 };
+	private final Byte[] brightnessByte = new Byte[] { 0x32 };
 
 	@Test
 	public void testSensenutsStreetLightingForUplinkNotification() throws InterruptedException {
@@ -86,6 +94,20 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
 		validateDeviceModel(deviceInfo.getDevice());
 		logger.debug("Received Device Info is " + deviceInfo);
+	}
+
+	@Test
+	public void testSensenutsStreetLightingChangeBrightnessOfLight_DownlinkCommand() throws InterruptedException {
+		mockNorthboundDownlinkProducerService
+				.publishDownlinkData(createNorthboundOneM2MDownlinkCommandForSensenutsChangeBrightness());
+		waitForDCToCompletePayloadProcessing();
+		ReceivedMqttMessage downlinkCommand = mqttDevicePayloadHolder.getMqttDeviceData();
+		logger.trace("Expected downlinkCommand bytes are "
+				+ UtilityLogger.convertArrayOfByteToString(constructChangeLightBrightnessDownlinkCommandMessage()));
+		logger.trace("Actual downlinkCommand bytes are "
+				+ UtilityLogger.convertArrayOfByteToString(downlinkCommand.getMqttMessage()));
+		Assert.assertArrayEquals("Expected and actual downlink commands are not same",
+				constructChangeLightBrightnessDownlinkCommandMessage(), downlinkCommand.getMqttMessage());
 	}
 
 	private void validateDeviceModel(Device device) {
@@ -141,6 +163,27 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 		luminaireFailureMessage.addAll(Arrays.asList(gatewayId));
 		luminaireFailureMessage.addAll(Arrays.asList(lightId));
 		luminaireFailureMessage.addAll(Arrays.asList(luminaireFailureAlertByte));
+		Byte[] allDataBytes = convertObjectArrayToByteArray(luminaireFailureMessage.toArray());
+		int checksum = calculateChecksum(allDataBytes);
+		luminaireFailureMessage.add((byte) checksum);
+		return convertObjectArrayToPrimitiveByteArray(luminaireFailureMessage.toArray());
+	}
+
+	private String createNorthboundOneM2MDownlinkCommandForSensenutsChangeBrightness() {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><?xml-oneM2m oneM2M=\"1.10\"?><ns2:requestPrimitive xmlns:ns2=\"http://www.onem2m.org/xml/protocols\">"
+				+ "<operation>5</operation><to>HPE_IoT/Light-1234</to><from>/CSE1000</from><requestIdentifier>45f440d7b169453f8e5f00e15046444b</requestIdentifier><primitiveContent><ns2:notification><notificationEvent><representation xsi:type=\"xs:string\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+				+ "{\"m2m:cin\":{\"ty\":4,\"ri\":\"HPE_IoT/Light-1234/downlinkCommand/8969087f43c\",\"pi\":\"HPE_IoT/Light-1234/downlinkCommand\",\"ct\":\"20171009T084338,000232\",\"lt\":\"20171009T084338,000232\",\"rn\":\"8969087f43c\",\"et\":\"20271007T084338,000220\",\"st\":1,\"cr\":\"C070878C6-85f18dc6\",\"cnf\":\"text/plain:0\",\"cs\":352,"
+				+ "\"con\":\"{\\\"device\\\":{\\\"manufacturer\\\":\\\"sensenuts\\\",\\\"modelId\\\":\\\"lighting\\\",\\\"deviceId\\\":\\\"1234\\\"},\\\"messageType\\\":\\\"downlinkCommand\\\",\\\"payload\\\":{\\\"gatewayId\\\":\\\"1234\\\",\\\"lightId\\\":\\\"0001\\\",\\\"brightness\\\":\\\"50\\\"}}\"}}</representation><operationMonitor>"
+				+ "<operation>5</operation><originator>C070878C6-c4c0c7c1</originator></operationMonitor><notificationEventType>1</notificationEventType></notificationEvent><verificationRequest>false</verificationRequest><subscriptionReference>7524845195623549720</subscriptionReference><creator>C070878C6-c4c0c7c1</creator></ns2:notification>"
+				+ "</primitiveContent><responseType><responseTypeValue>2</responseTypeValue></responseType></ns2:requestPrimitive>";
+	}
+
+	private byte[] constructChangeLightBrightnessDownlinkCommandMessage() {
+		List<Byte> luminaireFailureMessage = new ArrayList<>();
+		luminaireFailureMessage.addAll(Arrays.asList(commandByte));
+		luminaireFailureMessage.addAll(Arrays.asList(gatewayId));
+		luminaireFailureMessage.addAll(Arrays.asList(lightId));
+		luminaireFailureMessage.addAll(Arrays.asList(brightnessByte));
 		Byte[] allDataBytes = convertObjectArrayToByteArray(luminaireFailureMessage.toArray());
 		int checksum = calculateChecksum(allDataBytes);
 		luminaireFailureMessage.add((byte) checksum);

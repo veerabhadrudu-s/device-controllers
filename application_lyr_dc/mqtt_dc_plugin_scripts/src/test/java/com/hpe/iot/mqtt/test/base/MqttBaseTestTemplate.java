@@ -22,6 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.google.gson.JsonParser;
 import com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
+import com.hpe.iot.mqtt.northbound.sdk.handler.mock.MockNorthboundDownlinkProducerService;
 import com.hpe.iot.mqtt.southbound.service.outflow.MqttDevicePayloadHolder;
 import com.hpe.iot.utility.UtilityLogger;
 
@@ -45,6 +46,8 @@ public abstract class MqttBaseTestTemplate {
 	protected MqttDevicePayloadHolder mqttDevicePayloadHolder;
 	@Autowired
 	protected IOTDevicePayloadHolder iotDevicePayloadHolder;
+	@Autowired
+	protected MockNorthboundDownlinkProducerService mockNorthboundDownlinkProducerService;
 
 	@Before
 	public void beforeTest() throws InterruptedException, MqttException {
@@ -82,7 +85,7 @@ public abstract class MqttBaseTestTemplate {
 		Thread.sleep(5000);
 	}
 
-	private void waitForDCToCompletePayloadProcessing() throws InterruptedException {
+	protected void waitForDCToCompletePayloadProcessing() throws InterruptedException {
 		Thread.sleep(5000);
 	}
 }

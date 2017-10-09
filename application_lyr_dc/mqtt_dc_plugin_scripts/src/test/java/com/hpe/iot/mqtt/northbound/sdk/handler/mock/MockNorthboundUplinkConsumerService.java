@@ -26,14 +26,14 @@ import com.hpe.iot.model.DeviceInfo;
  * @author sveera
  *
  */
-public class MockNorthboundPayloadConsumerService {
+public class MockNorthboundUplinkConsumerService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final String destination;
 	private final BrokerConsumerService<String> brokerConsumerService;
 	private final IOTDevicePayloadHolder iotDevicePayloadHolder;
 
-	public MockNorthboundPayloadConsumerService(String destination, BrokerConsumerService<String> brokerConsumerService,
+	public MockNorthboundUplinkConsumerService(String destination, BrokerConsumerService<String> brokerConsumerService,
 			IOTDevicePayloadHolder iotDevicePayloadHolder) {
 		super();
 		this.destination = destination;

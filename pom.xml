@@ -10,6 +10,7 @@
 		<module>transport_lyr_dc</module>
 		<module>message-broker-common</module>
 		<module>device-controllers-ear</module>
+		<module>websocket-logger</module>
 	</modules>
 	<properties>
 		<java-version>1.8</java-version>
