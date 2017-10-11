@@ -207,7 +207,7 @@ public class SensenutsDownlinkPayloadProcessor implements DownlinkPayloadProcess
 		String gatewayIdString=downlinkCommand.get("gatewayId").getAsString();
 		String lightIdString=downlinkCommand.get("lightId").getAsString();
 		String brightnessString=downlinkCommand.get("brightness").getAsString();
-		//logger.trace("Received Change Light brightness command with follwing parameters gatewayId:"+gatewayIdString+" lightId:"+lightIdString+" brightness:"+brightnessString);
+		logger.trace("Received Change Light brightness command with following parameters gatewayId:"+gatewayIdString+" lightId:"+lightIdString+" brightness:"+brightnessString);
 		byte[] downlinkCommandBytes=constructChangeLightBrightnessDownlinkCommandMessage(gatewayIdString, lightIdString, brightnessString);
 		groovyServicesHolder.getSouthboundPublisherService().publishPayload(deviceModel, decipheredPayload.getDevice().getDeviceId(), downlinkCommandBytes);
 	}

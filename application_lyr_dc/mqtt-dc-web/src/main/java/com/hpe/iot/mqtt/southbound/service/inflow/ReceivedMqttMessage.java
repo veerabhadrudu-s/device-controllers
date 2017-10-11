@@ -3,6 +3,8 @@
  */
 package com.hpe.iot.mqtt.southbound.service.inflow;
 
+import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
+
 /**
  * @author sveera 
  */
@@ -27,6 +29,6 @@ public class ReceivedMqttMessage {
 
 	@Override
 	public String toString() {
-		return "ReceivedMqttMessage [mqttTopic=" + mqttTopic + ", mqttMessage=" + mqttMessage + "]";
+		return "ReceivedMqttMessage [mqttTopic=" + mqttTopic + ", mqttMessage=" + convertArrayOfByteToString(mqttMessage) + "]";
 	}
 }

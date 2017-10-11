@@ -16,9 +16,8 @@ import com.hpe.iot.southbound.service.inflow.SouthboundService;
  */
 public class MqttMessageHandler {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final SouthboundService southboundService;
-	
 
 	public MqttMessageHandler(SouthboundService southboundService) {
 		super();
