@@ -57,11 +57,11 @@ class UplinkNotificationMessageConverterTest {
 				DataParserUtility.createBinaryPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,getClass()));
 		List<NotificationRecord> notificationRecords=new ArrayList<>();
 		String eventType="Regular Update";
-		GPSInfo gpsInfoOne=new GPSInfo("Wed, 29 Apr 2015 13:02:13 IST", 0, "546895610","252509005", "96", "0", 14, 0);
+		GPSInfo gpsInfoOne=new GPSInfo("Wed, 29 Apr 2015 13:02:13", 0, "546895610","252509005", "96", "0", 14, 0);
 		Map<String,String> events=new HashMap<>();
 		events.put("Ignition","0");
 		NotificationRecord recordOne=new NotificationRecord(gpsInfoOne, eventType, events);
-		GPSInfo gpsInfoTwo=new GPSInfo("Wed, 29 Apr 2015 13:01:53 IST", 0, "546895598","252509058", "97", "0", 15, 0);
+		GPSInfo gpsInfoTwo=new GPSInfo("Wed, 29 Apr 2015 13:01:53", 0, "546895598","252509058", "97", "0", 15, 0);
 		NotificationRecord recordTwo=new NotificationRecord(gpsInfoTwo, eventType, events);
 		notificationRecords.add(recordOne);
 		notificationRecords.add(recordTwo);

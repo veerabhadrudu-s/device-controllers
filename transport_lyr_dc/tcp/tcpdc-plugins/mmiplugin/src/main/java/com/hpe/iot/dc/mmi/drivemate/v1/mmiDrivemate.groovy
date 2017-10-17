@@ -526,7 +526,7 @@ public class UplinkNotificationMessageConverter extends SessionBasedUplinkDevice
 
 	private NotificationRecord createNotificationRecord(byte[] notificationRecordData){
 		long timeStampEpochTime=Long.parseLong(calculateUnsignedDecimalValFromSignedBytes(Arrays.copyOf(notificationRecordData,TIMESTAMP_PAYLOAD_LEN)));
-		SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+		SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
 		String timeStamp = formatter.format(new Date(timeStampEpochTime));
 		int priority=notificationRecordData[TIMESTAMP_PAYLOAD_LEN];
 		String longitude=calculateUnsignedDecimalValFromSignedBytes(
