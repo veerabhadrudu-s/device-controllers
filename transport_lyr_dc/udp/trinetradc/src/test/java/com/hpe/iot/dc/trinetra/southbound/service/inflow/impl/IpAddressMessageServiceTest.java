@@ -43,8 +43,8 @@ public class IpAddressMessageServiceTest {
 
 	@Test
 	public void testExecuteService() {
-		DeviceInfo dataModel = new DeviceInfo(new DeviceImpl(TestData.TRINETRA, TestData.VEHICAL_TRACKING, "006945"),
-				"#", new byte[10]);
+		DeviceInfo dataModel = new DeviceInfo(
+				new DeviceImpl(TestData.TRINETRA, TestData.VEHICAL_TRACKING, "006945", "1.0"), "#", new byte[10]);
 		DeviceAddress deviceAddress = new DeviceAddress("100.72.84.192", "4038");
 		dataModel.getDeviceData().put(DeviceAddress.DEVICE_ADDRESS, deviceAddress);
 		ipAddressOperationService.executeService(dataModel);

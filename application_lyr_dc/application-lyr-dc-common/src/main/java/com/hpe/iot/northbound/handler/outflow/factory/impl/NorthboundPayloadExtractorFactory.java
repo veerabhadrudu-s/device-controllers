@@ -21,23 +21,23 @@ public class NorthboundPayloadExtractorFactory implements PayloadExtractorFactor
 	private Map<DeviceModel, PayloadCipher> payloadCiphers = new ConcurrentHashMap<>();
 	private Map<DeviceModel, DownlinkPayloadProcessor> downlinkPayloadProcessors = new ConcurrentHashMap<>();
 
-	public void addPayloadCipher(String manufacturer, String modelId, PayloadCipher payloadCipher) {
-		payloadCiphers.put(new DeviceModelImpl(manufacturer, modelId), payloadCipher);
+	public void addPayloadCipher(String manufacturer, String modelId, String version, PayloadCipher payloadCipher) {
+		payloadCiphers.put(new DeviceModelImpl(manufacturer, modelId, version), payloadCipher);
 	}
 
-	public void addDownlinkPayloadProcessor(String manufacturer, String modelId,
+	public void addDownlinkPayloadProcessor(String manufacturer, String modelId, String version,
 			DownlinkPayloadProcessor downlinkPayloadProcessor) {
-		downlinkPayloadProcessors.put(new DeviceModelImpl(manufacturer, modelId), downlinkPayloadProcessor);
+		downlinkPayloadProcessors.put(new DeviceModelImpl(manufacturer, modelId, version), downlinkPayloadProcessor);
 	}
 
 	@Override
-	public PayloadCipher getPayloadCipher(String manufacturer, String modelId) {
-		return payloadCiphers.get(new DeviceModelImpl(manufacturer, modelId));
+	public PayloadCipher getPayloadCipher(String manufacturer, String modelId, String version) {
+		return payloadCiphers.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override
-	public DownlinkPayloadProcessor getDownlinkPayloadProcessor(String manufacturer, String modelId) {
-		return downlinkPayloadProcessors.get(new DeviceModelImpl(manufacturer, modelId));
+	public DownlinkPayloadProcessor getDownlinkPayloadProcessor(String manufacturer, String modelId, String version) {
+		return downlinkPayloadProcessors.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override

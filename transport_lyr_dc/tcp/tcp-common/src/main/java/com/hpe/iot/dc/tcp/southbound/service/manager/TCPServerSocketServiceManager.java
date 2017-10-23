@@ -60,7 +60,7 @@ public class TCPServerSocketServiceManager {
 		TCPServerSocketService tcpServerSocketService = tcpServerSocketServices.get(serverSocketToDeviceModel);
 		if (tcpServerSocketService != null) {
 			logger.warn("Port already in use " + serverSocketToDeviceModel);
-			throw new RuntimeException("Port already under usage : "+serverSocketToDeviceModel);
+			throw new RuntimeException("Port already under usage : " + serverSocketToDeviceModel);
 		}
 		ServerSocketChannel serverSocketChannel = tcpServerSocketServiceProvider.getServerSocketChannel(
 				serverSocketToDeviceModel.getPortNumber(), serverSocketToDeviceModel.getBoundLocalAddress(),
@@ -105,8 +105,8 @@ public class TCPServerSocketServiceManager {
 		logger.info("Stopping TCPServerSocketServcie for [ " + portToDeviceModel.getManufacturer() + ":"
 				+ portToDeviceModel.getModelId() + ":" + portToDeviceModel.getBoundLocalAddress() + ":"
 				+ portToDeviceModel.getPortNumber() + " ]");
-		northBoundDownlinkComponentManager.removeNorthBoundDCComponentModel(
-				new DeviceModelImpl(portToDeviceModel.getManufacturer(), portToDeviceModel.getModelId()));
+		northBoundDownlinkComponentManager.removeNorthBoundDCComponentModel(new DeviceModelImpl(
+				portToDeviceModel.getManufacturer(), portToDeviceModel.getModelId(), portToDeviceModel.getVersion()));
 		tcpServerClientSocketPoolFactory.removeServerClientSocketPool(portToDeviceModel);
 		tcpServerSocketService.stopTCPServerSocketService();
 		logger.info("Stopped TCPServerSocketServcie for [ " + portToDeviceModel.getManufacturer() + ":"

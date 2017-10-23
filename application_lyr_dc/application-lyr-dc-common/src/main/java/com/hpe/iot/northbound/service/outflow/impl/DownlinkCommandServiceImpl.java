@@ -32,8 +32,6 @@ import com.hpe.iot.northbound.service.outflow.DownlinkCommandServiceHandler;
  */
 public class DownlinkCommandServiceImpl implements DownlinkCommandService {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	private final DownlinkCommandServiceHandler downlinkCommandServiceHandler;
 	private final BrokerConsumerService<String> brokerConsumerService;
 	private final String downlinkConsumerDestination;
@@ -122,7 +120,7 @@ public class DownlinkCommandServiceImpl implements DownlinkCommandService {
 			JsonObject device = downlinkPayload.get("device").getAsJsonObject();
 			return new DeviceInfo(
 					new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(),
-							device.get("deviceId").getAsString()),
+							device.get("version").getAsString(), device.get("deviceId").getAsString()),
 					downlinkPayload.get("messageType").getAsString(), downlinkPayload.get("payload").getAsJsonObject());
 		}
 

@@ -89,8 +89,8 @@ public class MqttDeviceSubscriptionService {
 		List<DeviceModel> deviceModels = deviceModelFactory.getAllDeviceModels();
 		String[] topics = new String[deviceModels.size()];
 		for (int i = 0; i < deviceModels.size(); i++)
-			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/" + "Down"
-					+ "/+";
+			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/"
+					+ deviceModels.get(i).getVersion() + "/" + "Down" + "/+";
 		return topics;
 	}
 
@@ -99,8 +99,7 @@ public class MqttDeviceSubscriptionService {
 
 		@Override
 		public void messageArrived(String topic, MqttMessage message) throws Exception {
-			mqttDevicePayloadHolder
-					.holdMqttDeviceData(new ReceivedMqttMessage(topic, message.getPayload()));
+			mqttDevicePayloadHolder.holdMqttDeviceData(new ReceivedMqttMessage(topic, message.getPayload()));
 		}
 
 		@Override

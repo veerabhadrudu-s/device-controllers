@@ -5,6 +5,7 @@ package com.hpe.iot.mqtt.southbound.service.inflow;
 
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SAMPLE;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SAMPLE_MODEL;
+import static com.hpe.iot.mqtt.test.constants.TestConstants.SAMPLE_VERSION;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
@@ -24,7 +25,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
-import com.hpe.iot.mqtt.test.constants.TestConstants;
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
 import com.hpe.iot.northbound.handler.outflow.factory.impl.NorthboundPayloadExtractorFactory;
@@ -54,7 +54,6 @@ public class MqttSouthboundServiceTest {
 	private SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory;
 	@Autowired
 	private NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory;
-	
 
 	@Before
 	public void beforeTest() throws InterruptedException, MqttException {
@@ -65,8 +64,10 @@ public class MqttSouthboundServiceTest {
 
 	@Test
 	@Ignore
-	//Below Unit test is failing to compile as Groovy classes are compiled after java class are compiled.
+	// Below Unit test is failing to compile as Groovy classes are compiled after
+	// java class are compiled.
 	public void verifyDCSamplePluginScriptWithScriptClassTypes() {
+
 		/*DeviceModel actualDeviceModel = deviceModelFactory.findDeviceModel(SAMPLE, SAMPLE_MODEL);
 		DeviceIdExtractor deviceIdExtractor = payloadExtractorFactory.getDeviceIdExtractor(SAMPLE, SAMPLE_MODEL);
 		MessageTypeExtractor messageTypeExtractor = payloadExtractorFactory.getMessageTypeExtractor(SAMPLE,
@@ -84,21 +85,26 @@ public class MqttSouthboundServiceTest {
 				payloadDecipher.getClass().getName().equals(SampleModelPayloadDecipher.class.getName()));
 		Assert.assertTrue("Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same",
 				uplinkPayloadProcessor.getClass().getName().equals(SampleModelPayloadProcessor.class.getName()));*/
+
 	}
 
 	@Test
 	public void verifyDCSamplePluginScrip() {
-		DeviceModel actualDeviceModel = deviceModelFactory.findDeviceModel(SAMPLE, SAMPLE_MODEL);
-		DeviceIdExtractor deviceIdExtractor = southboundPayloadExtractorFactory.getDeviceIdExtractor(SAMPLE, SAMPLE_MODEL);
+		DeviceModel actualDeviceModel = deviceModelFactory.findDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
+		DeviceIdExtractor deviceIdExtractor = southboundPayloadExtractorFactory.getDeviceIdExtractor(SAMPLE,
+				SAMPLE_MODEL, SAMPLE_VERSION);
 		MessageTypeExtractor messageTypeExtractor = southboundPayloadExtractorFactory.getMessageTypeExtractor(SAMPLE,
-				SAMPLE_MODEL);
-		PayloadDecipher payloadDecipher = southboundPayloadExtractorFactory.getPayloadDecipher(SAMPLE, SAMPLE_MODEL);
-		UplinkPayloadProcessor uplinkPayloadProcessor = southboundPayloadExtractorFactory.getUplinkPayloadProcessor(SAMPLE,
-				SAMPLE_MODEL);
-		PayloadCipher payloadCipher=northboundPayloadExtractorFactory.getPayloadCipher(SAMPLE, SAMPLE_MODEL);
-		DownlinkPayloadProcessor downlinkPayloadProcessor=northboundPayloadExtractorFactory.getDownlinkPayloadProcessor(SAMPLE, SAMPLE_MODEL);
+				SAMPLE_MODEL, SAMPLE_VERSION);
+		PayloadDecipher payloadDecipher = southboundPayloadExtractorFactory.getPayloadDecipher(SAMPLE, SAMPLE_MODEL,
+				SAMPLE_VERSION);
+		UplinkPayloadProcessor uplinkPayloadProcessor = southboundPayloadExtractorFactory
+				.getUplinkPayloadProcessor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
+		PayloadCipher payloadCipher = northboundPayloadExtractorFactory.getPayloadCipher(SAMPLE, SAMPLE_MODEL,
+				SAMPLE_VERSION);
+		DownlinkPayloadProcessor downlinkPayloadProcessor = northboundPayloadExtractorFactory
+				.getDownlinkPayloadProcessor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
 		Assert.assertEquals("Expected Device Model and Actual Device Models are not same",
-				new GroovyScriptDeviceModel(TestConstants.SAMPLE, TestConstants.SAMPLE_MODEL), actualDeviceModel);
+				new GroovyScriptDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION), actualDeviceModel);
 		Assert.assertTrue("Expected DeviceIdExtractor and DeviceIdExtractor are not same",
 				deviceIdExtractor instanceof DeviceIdExtractor);
 		Assert.assertTrue("Expected MessageTypeExtractor and MessageTypeExtractor are not same",
@@ -111,12 +117,11 @@ public class MqttSouthboundServiceTest {
 				payloadCipher instanceof PayloadCipher);
 		Assert.assertTrue("Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same",
 				downlinkPayloadProcessor instanceof DownlinkPayloadProcessor);
-		
+
 	}
 
 	private void waitForDCInitialization() throws InterruptedException {
 		Thread.sleep(3000);
 	}
-
 
 }

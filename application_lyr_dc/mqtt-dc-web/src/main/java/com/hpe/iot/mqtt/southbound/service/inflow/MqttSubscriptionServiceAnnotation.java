@@ -78,7 +78,8 @@ public class MqttSubscriptionServiceAnnotation {
 		List<DeviceModel> deviceModels = deviceModelFactory.getAllDeviceModels();
 		String[] topics = new String[deviceModels.size()];
 		for (int i = 0; i < deviceModels.size(); i++)
-			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/Up" + "/+";
+			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/"
+					+ deviceModels.get(i).getVersion() + "/Up" + "/+";
 		mqttClient.subscribe(topics);
 		logger.info("Mqtt Client in subscription service connected successfully for topics " + Arrays.toString(topics));
 	}
@@ -127,8 +128,8 @@ public class MqttSubscriptionServiceAnnotation {
 		@Override
 		public void messageArrived(String topic, MqttMessage message) throws Exception {
 			String topicParts[] = topic.split("/");
-			String manufacturer = topicParts[0], modelId = topicParts[1];
-			southboundService.processPayload(manufacturer, modelId, message.getPayload());
+			String manufacturer = topicParts[0], modelId = topicParts[1], version = topicParts[2];
+			southboundService.processPayload(manufacturer, modelId, version, message.getPayload());
 		}
 
 		@Override

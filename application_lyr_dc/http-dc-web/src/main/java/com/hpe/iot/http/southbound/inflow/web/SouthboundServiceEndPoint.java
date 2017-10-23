@@ -28,6 +28,7 @@ public class SouthboundServiceEndPoint {
 
 	private static final String MANUFACTURER = "manufacturer";
 	private static final String MODEL_ID = "modelId";
+	private static final String VERSION = "version";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -39,18 +40,22 @@ public class SouthboundServiceEndPoint {
 		this.southboundService = southboundService;
 	}
 
-	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}", method = RequestMethod.POST)
+	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}/{" + VERSION + "}"
+			+ "/", method = RequestMethod.POST)
 	public String processDevicePayload(@RequestBody String deviceData,
-			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId) {
+			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId,
+			@PathVariable(value = VERSION) String version) {
 		logger.trace("Received payload from the device : " + deviceData);
-		southboundService.processPayload(manufacturer, modelId, deviceData.getBytes());
+		southboundService.processPayload(manufacturer, modelId, version, deviceData.getBytes());
 		return new Gson().toJson(new RequestResult("SUCCESS"));
 	}
 
-	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}/{" + VERSION + "}"
+			+ "/", method = RequestMethod.PUT)
 	public String processDevicePayloadForUpdate(@RequestBody String deviceData,
-			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId) {
-		return processDevicePayload(deviceData, manufacturer, modelId);
+			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId,
+			@PathVariable(value = VERSION) String version) {
+		return processDevicePayload(deviceData, manufacturer, modelId, version);
 	}
 
 	@RequestMapping(path = "/dcinfo", method = RequestMethod.GET)

@@ -26,17 +26,17 @@ public class GroovyAndUplinkJsonPathDeviceModelFactory implements GroovyDeviceMo
 	}
 
 	@Override
-	public void addGroovyDeviceModel(String manufacturer, String modelId,
+	public void addGroovyDeviceModel(String manufacturer, String modelId, String version,
 			GroovyScriptDeviceModel groovyScriptDeviceMetaModel) {
-		DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId);
+		DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId, version);
 		groovyDeviceMetaModels.put(deviceModel, groovyScriptDeviceMetaModel);
 	}
 
 	@Override
-	public DeviceModel findDeviceModel(String manufacturer, String modelId) {
-		DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId);
+	public DeviceModel findDeviceModel(String manufacturer, String modelId, String version) {
+		DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId, version);
 		return groovyDeviceMetaModels.get(deviceModel) == null
-				? uplinkJsonPathDeviceModelFactory.findDeviceModel(manufacturer, modelId)
+				? uplinkJsonPathDeviceModelFactory.findDeviceModel(manufacturer, modelId, version)
 				: groovyDeviceMetaModels.get(deviceModel);
 	}
 

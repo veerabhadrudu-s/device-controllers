@@ -11,14 +11,14 @@ import com.hpe.iot.dc.model.DeviceModelImpl;
  */
 public class GroovyScriptDeviceModel extends DeviceModelImpl {
 
-	public GroovyScriptDeviceModel(String manufacturer, String modelId) {
-		super(manufacturer, modelId);
+	public GroovyScriptDeviceModel(String manufacturer, String modelId, String version) {
+		super(manufacturer, modelId, version);
 	}
 
 	@Override
 	public String toString() {
 		return "GroovyScriptDeviceModel [getManufacturer()=" + getManufacturer() + ", getModelId()=" + getModelId()
-				+ "]";
+				+ ", getVersion()=" + getVersion() + "]";
 	}
 
 }

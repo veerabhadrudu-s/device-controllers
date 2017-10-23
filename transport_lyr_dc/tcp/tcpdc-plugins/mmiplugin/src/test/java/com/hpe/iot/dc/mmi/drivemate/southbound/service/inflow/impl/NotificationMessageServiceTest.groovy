@@ -45,7 +45,7 @@ public class NotificationMessageServiceTest {
 
 	public static final String MSG_TYPE = "notification";
 	private static final DeviceImpl DEVICE_UNDER_TEST = new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
-	MMIDrivemateTestDataCollection.MODEL_ID,"123456789012345");
+	MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2,"123456789012345");
 
 	private NotificationMessageService notificationMessageService;
 	private ServerClientSocketPool tcpServerClientSocketPool;
@@ -68,7 +68,7 @@ public class NotificationMessageServiceTest {
 				.sendDataToIot(Mockito.any(RequestPrimitive.class));
 		ServerSocketToDeviceModel serverSocketToDeviceModel=new MMIDrivemateServerSocketToDeviceModel();
 		IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService = new IOTPublisherServiceImpl(
-				iotPublisherHandler, new DefaultIOTModelConverterImpl(new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),serverSocketToDeviceModel.getModelId())));
+				iotPublisherHandler, new DefaultIOTModelConverterImpl(new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),serverSocketToDeviceModel.getModelId(),serverSocketToDeviceModel.getVersion())));
 		tcpServerClientSocketPool=new DefaultTCPServerClientSocketPool();
 		TCPServerSocketWriter tcpServerSocketSender = new TCPServerSocketWriter(tcpServerClientSocketPool);
 		notificationMessageService = new NotificationMessageService(iotPublisherService,tcpServerSocketSender);

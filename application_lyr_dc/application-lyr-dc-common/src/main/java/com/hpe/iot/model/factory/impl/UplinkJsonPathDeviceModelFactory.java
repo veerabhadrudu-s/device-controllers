@@ -59,9 +59,8 @@ public class UplinkJsonPathDeviceModelFactory implements DeviceModelFactory {
 		JsonPathDeviceMetaModels deviceMetaModels = (JsonPathDeviceMetaModels) unmarshaller.unmarshal(file);
 		if (deviceMetaModels != null && deviceMetaModels.getDeviceMetaModels() != null)
 			for (JsonPathDeviceMetaModel deviceMetaModel : deviceMetaModels.getDeviceMetaModels())
-				this.deviceMetaModels.put(
-						new DeviceModelImpl(deviceMetaModel.getManufacturer(), deviceMetaModel.getModelId()),
-						deviceMetaModel);
+				this.deviceMetaModels.put(new DeviceModelImpl(deviceMetaModel.getManufacturer(),
+						deviceMetaModel.getModelId(), deviceMetaModel.getVersion()), deviceMetaModel);
 	}
 
 	private String findFullPath(String path) {
@@ -72,8 +71,8 @@ public class UplinkJsonPathDeviceModelFactory implements DeviceModelFactory {
 	}
 
 	@Override
-	public DeviceModel findDeviceModel(String manufacturer, String modelId) {
-		return deviceMetaModels.get(new DeviceModelImpl(manufacturer, modelId));
+	public DeviceModel findDeviceModel(String manufacturer, String modelId, String version) {
+		return deviceMetaModels.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override

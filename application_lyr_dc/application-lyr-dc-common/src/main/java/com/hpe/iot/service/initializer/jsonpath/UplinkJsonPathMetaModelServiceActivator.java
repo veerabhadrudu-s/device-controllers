@@ -51,13 +51,13 @@ public class UplinkJsonPathMetaModelServiceActivator implements ServiceActivator
 		PayloadDecipher payloadDecipher = new DefaultPayloadDecipher();
 		for (DeviceModel deviceModel : jsonPathDeviceModels) {
 			payloadExtractorFactoryImpl.addDeviceIdExtractor(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					jsonPathDeviceIdExtractor);
+					deviceModel.getVersion(), jsonPathDeviceIdExtractor);
 			payloadExtractorFactoryImpl.addMessageTypeExtractor(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					jsonPathMessageTypeExtractor);
+					deviceModel.getVersion(), jsonPathMessageTypeExtractor);
 			payloadExtractorFactoryImpl.addPayloadDecipher(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					payloadDecipher);
+					deviceModel.getVersion(), payloadDecipher);
 			payloadExtractorFactoryImpl.addUplinkPayloadProcessor(deviceModel.getManufacturer(),
-					deviceModel.getModelId(), defaultUplinkPayloadProcessor);
+					deviceModel.getModelId(), deviceModel.getVersion(), defaultUplinkPayloadProcessor);
 		}
 	}
 

@@ -76,7 +76,8 @@ public class MqttSubscriptionService {
 		List<DeviceModel> deviceModels = deviceModelFactory.getAllDeviceModels();
 		String[] topics = new String[deviceModels.size()];
 		for (int i = 0; i < deviceModels.size(); i++)
-			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/Up" + "/+";
+			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/"
+					+ deviceModels.get(i).getVersion() + "/Up" + "/+";
 		return topics;
 	}
 

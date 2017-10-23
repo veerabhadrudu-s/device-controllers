@@ -55,7 +55,7 @@ public class DownlinkController {
 		JsonObject device = downlinkPayload.get("device").getAsJsonObject();
 		DeviceInfo deviceInfo = new DeviceInfo(
 				new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(),
-						device.get("deviceId").getAsString()),
+						device.get("version").getAsString(), device.get("deviceId").getAsString()),
 				downlinkPayload.get("messageType").getAsString(), downlinkPayload.get("payload").getAsJsonObject());
 		downlinkCommandServiceHandler.processPayload(deviceInfo);
 		return "Downlink Request Received";

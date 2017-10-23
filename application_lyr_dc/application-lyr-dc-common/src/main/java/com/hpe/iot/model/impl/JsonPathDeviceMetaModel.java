@@ -18,8 +18,9 @@ public class JsonPathDeviceMetaModel extends DeviceModelImpl {
 	private final String deviceIdJsonPath;
 	private final String messageTypeJsonPath;
 
-	public JsonPathDeviceMetaModel(String manufacturer, String modelId, String deviceIdJsonPath, String messageTypeJsonPath) {
-		super(manufacturer, modelId);
+	public JsonPathDeviceMetaModel(String manufacturer, String modelId, String version, String deviceIdJsonPath,
+			String messageTypeJsonPath) {
+		super(manufacturer, modelId, version);
 		this.deviceIdJsonPath = deviceIdJsonPath;
 		this.messageTypeJsonPath = messageTypeJsonPath;
 	}
@@ -71,14 +72,20 @@ public class JsonPathDeviceMetaModel extends DeviceModelImpl {
 				return false;
 		} else if (!this.getModelId().equals(other.getModelId()))
 			return false;
+		if (this.getVersion() == null) {
+			if (other.getVersion() != null)
+				return false;
+		} else if (!this.getVersion().equals(other.getVersion()))
+			return false;
 
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "DeviceMetaModel [deviceIdJsonPath=" + deviceIdJsonPath + ", messageTypeJsonPath=" + messageTypeJsonPath
-				+ ", getManufacturer()=" + getManufacturer() + ", getModelId()=" + getModelId() + "]";
+		return "JsonPathDeviceMetaModel [getDeviceIdJsonPath()=" + getDeviceIdJsonPath() + ", getMessageTypeJsonPath()="
+				+ getMessageTypeJsonPath() + ", getManufacturer()=" + getManufacturer() + ", getModelId()="
+				+ getModelId() + ", getVersion()=" + getVersion() + "]";
 	}
 
 }

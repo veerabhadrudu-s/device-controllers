@@ -33,13 +33,13 @@ public class SouthboundServiceImpl implements SouthboundService {
 	}
 
 	@Override
-	public void processPayload(String manufacturer, String modelId, byte[] payload) {
-		DeviceModel deviceModel = deviceModelFactory.findDeviceModel(manufacturer, modelId);
+	public void processPayload(String manufacturer, String modelId, String version, byte[] payload) {
+		DeviceModel deviceModel = deviceModelFactory.findDeviceModel(manufacturer, modelId, version);
 		if (deviceModel == null)
-			throw new DeviceModelNotSuported(manufacturer, modelId);
+			throw new DeviceModelNotSuported(manufacturer, modelId, version);
 		DeviceInfo deviceInfo = constructDeviceInfo(deviceModel, payload);
 		UplinkPayloadProcessor uplinkPayloadProcessor = payloadExtractorFactory.getUplinkPayloadProcessor(manufacturer,
-				modelId);
+				modelId, version);
 		uplinkPayloadProcessor.processPayload(deviceInfo);
 	}
 
@@ -47,25 +47,26 @@ public class SouthboundServiceImpl implements SouthboundService {
 		JsonObject deciperedPayload = deciperPaylaod(deviceModel, payload);
 		String deviceId = findDeviceId(deviceModel, deciperedPayload);
 		String messageType = findMessageType(deviceModel, deciperedPayload);
-		Device device = new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId);
+		Device device = new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),
+				deviceModel.getVersion(), deviceId);
 		return new DeviceInfo(device, messageType, deciperedPayload);
 	}
 
 	private JsonObject deciperPaylaod(DeviceModel deviceModel, byte[] payload) {
 		PayloadDecipher payloadDecipher = payloadExtractorFactory.getPayloadDecipher(deviceModel.getManufacturer(),
-				deviceModel.getModelId());
+				deviceModel.getModelId(), deviceModel.getVersion());
 		return payloadDecipher.decipherPayload(deviceModel, payload);
 	}
 
 	private String findDeviceId(DeviceModel deviceModel, JsonObject payload) {
-		DeviceIdExtractor deviceIdExtractor = payloadExtractorFactory
-				.getDeviceIdExtractor(deviceModel.getManufacturer(), deviceModel.getModelId());
+		DeviceIdExtractor deviceIdExtractor = payloadExtractorFactory.getDeviceIdExtractor(
+				deviceModel.getManufacturer(), deviceModel.getModelId(), deviceModel.getVersion());
 		return deviceIdExtractor.extractDeviceId(deviceModel, payload);
 	}
 
 	private String findMessageType(DeviceModel deviceModel, JsonObject payload) {
-		MessageTypeExtractor messageTypeExtractor = payloadExtractorFactory
-				.getMessageTypeExtractor(deviceModel.getManufacturer(), deviceModel.getModelId());
+		MessageTypeExtractor messageTypeExtractor = payloadExtractorFactory.getMessageTypeExtractor(
+				deviceModel.getManufacturer(), deviceModel.getModelId(), deviceModel.getVersion());
 		return messageTypeExtractor.extractMessageType(deviceModel, payload);
 	}
 
@@ -73,8 +74,9 @@ public class SouthboundServiceImpl implements SouthboundService {
 
 		private static final long serialVersionUID = 1L;
 
-		public DeviceModelNotSuported(String manufacturer, String modelId) {
-			super("Device Model with manufacturer: " + manufacturer + " with modelId : " + modelId + " not supported.");
+		public DeviceModelNotSuported(String manufacturer, String modelId, String version) {
+			super("Device Model with manufacturer: " + manufacturer + " with modelId : " + modelId + " with version :"
+					+ version + " not supported.");
 		}
 
 	}

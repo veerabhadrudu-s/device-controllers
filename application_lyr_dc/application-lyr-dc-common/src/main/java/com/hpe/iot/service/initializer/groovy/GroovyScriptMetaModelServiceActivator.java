@@ -118,9 +118,9 @@ public class GroovyScriptMetaModelServiceActivator implements ServiceActivator {
 		validateGroovyScriptModel(groovyScriptModel, groovyScriptFullPath);
 		DeviceModel deviceModel = groovyScriptModel.getDeviceModel();
 		GroovyScriptDeviceModel groovyScriptDeviceMetaModel = new GroovyScriptDeviceModel(deviceModel.getManufacturer(),
-				deviceModel.getModelId());
+				deviceModel.getModelId(), deviceModel.getVersion());
 		groovyDeviceModelFactory.addGroovyDeviceModel(deviceModel.getManufacturer(), deviceModel.getModelId(),
-				groovyScriptDeviceMetaModel);
+				deviceModel.getVersion(), groovyScriptDeviceMetaModel);
 		loadSouthboundPayloadExtractorFactory(deviceModel, groovyScriptModel.getSouthboundGroovyScriptModel());
 		loadNorthboundPayloadExtractorFactory(deviceModel, groovyScriptModel.getNorthboundGroovyScriptModel());
 	}
@@ -138,13 +138,13 @@ public class GroovyScriptMetaModelServiceActivator implements ServiceActivator {
 		if (uplinkPayloadProcessor == null)
 			uplinkPayloadProcessor = defaultPayloadExtractorFactoryComponentHolder.getDefaultUplinkPayloadProcessor();
 		southboundPayloadExtractorFactory.addDeviceIdExtractor(deviceModel.getManufacturer(), deviceModel.getModelId(),
-				deviceIdExtractor);
+				deviceModel.getVersion(), deviceIdExtractor);
 		southboundPayloadExtractorFactory.addMessageTypeExtractor(deviceModel.getManufacturer(),
-				deviceModel.getModelId(), messageTypeExtractor);
+				deviceModel.getModelId(), deviceModel.getVersion(), messageTypeExtractor);
 		southboundPayloadExtractorFactory.addPayloadDecipher(deviceModel.getManufacturer(), deviceModel.getModelId(),
-				payloadDecipher);
+				deviceModel.getVersion(), payloadDecipher);
 		southboundPayloadExtractorFactory.addUplinkPayloadProcessor(deviceModel.getManufacturer(),
-				deviceModel.getModelId(), uplinkPayloadProcessor);
+				deviceModel.getModelId(), deviceModel.getVersion(), uplinkPayloadProcessor);
 	}
 
 	private void loadNorthboundPayloadExtractorFactory(DeviceModel deviceModel,
@@ -153,10 +153,11 @@ public class GroovyScriptMetaModelServiceActivator implements ServiceActivator {
 		if (payloadCipher == null)
 			payloadCipher = defaultPayloadExtractorFactoryComponentHolder.getDefaultpayloadCipher();
 		northboundPayloadExtractorFactory.addPayloadCipher(deviceModel.getManufacturer(), deviceModel.getModelId(),
-				payloadCipher);
+				deviceModel.getVersion(), payloadCipher);
 		if (northboundGroovyScriptModel.getDownlinkPayloadProcessor() != null)
 			northboundPayloadExtractorFactory.addDownlinkPayloadProcessor(deviceModel.getManufacturer(),
-					deviceModel.getModelId(), northboundGroovyScriptModel.getDownlinkPayloadProcessor());
+					deviceModel.getModelId(), deviceModel.getVersion(),
+					northboundGroovyScriptModel.getDownlinkPayloadProcessor());
 	}
 
 	private void validateGroovyScriptModel(GroovyScriptModel groovyScriptModel, String groovyScriptFullPath) {

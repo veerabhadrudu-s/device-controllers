@@ -10,6 +10,8 @@ package com.hpe.iot.mqtt.test.constants;
 public class TestConstants {
 	public static final String MOTWANE = "Motwane";
 	public static final String MOTWANE_MODEL = "Lighting";
-	public static final String SENSENUTS="sensenuts";
-	public static final String SENSENUTS_MODEL="lighting";
+	public static final String MOTWANE_VERSION = "1";
+	public static final String SENSENUTS = "sensenuts";
+	public static final String SENSENUTS_MODEL = "lighting";
+	public static final String SENSENUTS_VERSION = "1.0";
 }

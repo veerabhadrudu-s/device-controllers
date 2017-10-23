@@ -94,7 +94,7 @@ public class UDPDataReceiver {
 			logger.trace("Datagram Packet received from port " + datagramPacket.getPort());
 			byte[] readData = datagramPacket.getData();
 			UDPDevice udpDevice = new UDPDeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					datagramPacket.getAddress(), datagramPacket.getPort());
+					deviceModel.getVersion(), datagramPacket.getAddress(), datagramPacket.getPort());
 			List<DeviceInfo> dataFrames = dataModelTransformer.convertToModel(udpDevice, readData);
 			for (DeviceInfo dataFrame : dataFrames)
 				serviceActivator.processMessage(dataFrame);

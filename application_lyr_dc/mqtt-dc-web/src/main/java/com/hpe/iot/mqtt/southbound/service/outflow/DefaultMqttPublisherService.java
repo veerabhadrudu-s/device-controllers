@@ -43,18 +43,18 @@ public class DefaultMqttPublisherService implements SouthboundPublisherService {
 	@Override
 	public void publishPayload(DeviceModel deviceModel, DeviceInfo deviceInfo) {
 		Device device = deviceInfo.getDevice();
-		publishJsonMessage(formDownlinkTopicName(device.getManufacturer(), device.getModelId(), device.getDeviceId()),
-				deviceInfo.getPayload());
+		publishJsonMessage(formDownlinkTopicName(device.getManufacturer(), device.getModelId(), device.getVersion(),
+				device.getDeviceId()), deviceInfo.getPayload());
 	}
 
 	@Override
 	public void publishPayload(DeviceModel deviceModel, String deviceId, byte[] decipheredPayload) {
-		publishBinaryMessage(formDownlinkTopicName(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId),
-				decipheredPayload);
+		publishBinaryMessage(formDownlinkTopicName(deviceModel.getManufacturer(), deviceModel.getModelId(),
+				deviceModel.getVersion(), deviceId), decipheredPayload);
 	}
 
-	private String formDownlinkTopicName(String manufacturer, String modelId, String deviceId) {
-		return manufacturer + "/" + modelId + "/" + "Down" + "/" + deviceId;
+	private String formDownlinkTopicName(String manufacturer, String modelId, String version, String deviceId) {
+		return manufacturer + "/" + modelId + "/" + version + "/" + "Down" + "/" + deviceId;
 	}
 
 	private void publishJsonMessage(String topicName, JsonObject payload) {

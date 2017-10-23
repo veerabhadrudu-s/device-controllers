@@ -37,7 +37,8 @@ public class NorthBoundDownlinkServiceManager {
 		JsonObject deviceJson = (JsonObject) jsonObject.get(ModelConstants.DEVICE_KEY);
 		Gson gson = new Gson();
 		Device device = gson.fromJson(deviceJson, DeviceImpl.class);
-		DeviceModel deviceModel = new DeviceModelImpl(device.getManufacturer(), device.getModelId());
+		DeviceModel deviceModel = new DeviceModelImpl(device.getManufacturer(), device.getModelId(),
+				device.getVersion());
 		NorthBoundDCComponentModel northBoundDCComponentModel = northBoundDownlinkComponentManager
 				.getNorthBoundDCComponentModel(deviceModel);
 		if (northBoundDCComponentModel == null) {

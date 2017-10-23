@@ -49,8 +49,8 @@ public class StandardMessageConverter implements ExtendedUplinkDeviceDataConvert
 				input[1]);
 		String messageType = identifyMessageType(input);
 		DeviceInfo dataModel = new DeviceInfo(
-				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceIdString), messageType,
-				input);
+				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), "1.0", deviceIdString),
+				messageType, input);
 		addMetaInformationForMessageTypes(dataModel, input, messageType);
 		return dataModel;
 	}

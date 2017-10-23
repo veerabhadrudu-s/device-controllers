@@ -14,12 +14,12 @@ import com.hpe.iot.southbound.handler.inflow.UplinkPayloadProcessor;
  */
 public interface PayloadExtractorFactory {
 
-	DeviceIdExtractor getDeviceIdExtractor(String manufacturer, String modelId);
+	DeviceIdExtractor getDeviceIdExtractor(String manufacturer, String modelId, String version);
 
-	MessageTypeExtractor getMessageTypeExtractor(String manufacturer, String modelId);
+	MessageTypeExtractor getMessageTypeExtractor(String manufacturer, String modelId, String version);
 
-	PayloadDecipher getPayloadDecipher(String manufacturer, String modelId);
+	PayloadDecipher getPayloadDecipher(String manufacturer, String modelId, String version);
 
-	UplinkPayloadProcessor getUplinkPayloadProcessor(String manufacturer, String modelId);
+	UplinkPayloadProcessor getUplinkPayloadProcessor(String manufacturer, String modelId, String version);
 
 }

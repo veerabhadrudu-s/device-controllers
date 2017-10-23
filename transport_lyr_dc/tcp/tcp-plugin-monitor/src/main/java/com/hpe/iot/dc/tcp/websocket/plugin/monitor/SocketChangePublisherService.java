@@ -36,7 +36,8 @@ public class SocketChangePublisherService implements WebSocketSessionPublisher, 
 		logger.trace("Connected Device's modified for device model " + serverSocketToDeviceModel + " with count "
 				+ deviceCount);
 		ScriptPlugin scriptPlugin = new ScriptPlugin(serverSocketToDeviceModel.getManufacturer(),
-				serverSocketToDeviceModel.getModelId(), deviceCount, serverSocketToDeviceModel.getDescription());
+				serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion(), deviceCount,
+				serverSocketToDeviceModel.getDescription());
 		String jsonString = new Gson().toJson(scriptPlugin);
 		for (Session webSocketSession : connectedClientSessions) {
 			if (webSocketSession.isOpen())

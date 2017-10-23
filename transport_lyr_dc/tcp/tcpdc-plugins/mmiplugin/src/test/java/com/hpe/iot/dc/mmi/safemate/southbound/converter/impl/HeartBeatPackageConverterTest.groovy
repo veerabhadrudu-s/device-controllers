@@ -3,7 +3,9 @@ package com.hpe.iot.dc.mmi.safemate.southbound.converter.impl;
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.HEART_BEAT_DATA_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
+import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.VERSION
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +13,9 @@ import org.junit.Test;
 import com.hpe.iot.dc.mmi.safemate.HeartBeatPackageConverter
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm
 import com.hpe.iot.dc.mmi.safemate.MMIServerSocketToDeviceModel
+import com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection
 import com.hpe.iot.dc.model.DeviceImpl
 import com.hpe.iot.dc.model.DeviceInfo;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author sveera
@@ -50,7 +51,7 @@ public class HeartBeatPackageConverterTest {
 	}
 
 	private DeviceInfo createExpectedDeviceInfo() {
-		return new DeviceInfo(new DeviceImpl(MANUFACTURER,MODEL_ID,"301071500007"), EXPECTED_MESSAGE_TYPE,
+		return new DeviceInfo(new DeviceImpl(MANUFACTURER,MODEL_ID,VERSION,"301071500007"), EXPECTED_MESSAGE_TYPE,
 				createBinaryPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass()));
 	}
 }

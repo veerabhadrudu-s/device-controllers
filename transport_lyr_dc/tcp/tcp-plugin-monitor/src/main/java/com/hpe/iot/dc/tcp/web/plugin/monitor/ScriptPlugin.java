@@ -3,7 +3,6 @@
  */
 package com.hpe.iot.dc.tcp.web.plugin.monitor;
 
-import com.hpe.iot.dc.model.DeviceImpl;
 import com.hpe.iot.dc.model.DeviceModelImpl;
 
 public class ScriptPlugin extends DeviceModelImpl {
@@ -11,8 +10,8 @@ public class ScriptPlugin extends DeviceModelImpl {
 	private final int connectedDevices;
 	private final String description;
 
-	public ScriptPlugin(String manufacturer, String modelId, int connectedDevices, String description) {
-		super(manufacturer, modelId);
+	public ScriptPlugin(String manufacturer, String modelId, String version, int connectedDevices, String description) {
+		super(manufacturer, modelId, version);
 		this.connectedDevices = connectedDevices;
 		this.description = description;
 	}
@@ -28,11 +27,9 @@ public class ScriptPlugin extends DeviceModelImpl {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + connectedDevices;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((getManufacturer() == null) ? 0 : getManufacturer().hashCode());
-		result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
 		return result;
 	}
 
@@ -61,6 +58,11 @@ public class ScriptPlugin extends DeviceModelImpl {
 			if (other.getModelId() != null)
 				return false;
 		} else if (!getModelId().equals(other.getModelId()))
+			return false;
+		if (getVersion() == null) {
+			if (other.getVersion() != null)
+				return false;
+		} else if (!getVersion().equals(other.getVersion()))
 			return false;
 		return true;
 	}

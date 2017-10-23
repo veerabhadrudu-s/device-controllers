@@ -5,6 +5,7 @@ package com.hpe.iot.http.libelium.smartagriculture;
 
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM_MODEL;
+import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM_VERSION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,8 +26,9 @@ public class LibeliumSmartAgricultureProTest extends HttpPluginTestBaseTemplate 
 	@Test
 	public void testHttpSouthboundServiceForLibeliumSmartAgricultureProForNotificationMsgTyp() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
+		waitForDCInitialization();
 		MvcResult mvcResult = mockMvc
-				.perform(put(SOUTHBOUND + "/" + LIBELIUM + "/" + LIBELIUM_MODEL)
+				.perform(put(SOUTHBOUND + "/" + LIBELIUM + "/" + LIBELIUM_MODEL + "/" + LIBELIUM_VERSION + "/")
 						.content(getLibeliumSmartAgricultureProForNotificationMsgTyp()).accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();

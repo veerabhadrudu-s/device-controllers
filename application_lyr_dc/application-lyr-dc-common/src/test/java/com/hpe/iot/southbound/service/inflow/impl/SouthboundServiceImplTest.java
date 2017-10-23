@@ -5,10 +5,13 @@ package com.hpe.iot.southbound.service.inflow.impl;
 
 import static com.hpe.iot.test.constants.TestConstants.REXAWARE;
 import static com.hpe.iot.test.constants.TestConstants.REXAWARE_MODEL;
+import static com.hpe.iot.test.constants.TestConstants.REXAWARE_VERSION;
 import static com.hpe.iot.test.constants.TestConstants.SAMPLE;
 import static com.hpe.iot.test.constants.TestConstants.SAMPLE_MODEL;
+import static com.hpe.iot.test.constants.TestConstants.SAMPLE_VERSION;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_MODEL;
+import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_VERSION;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,18 +78,22 @@ public class SouthboundServiceImplTest {
 				new DefaultIOTModelConverterImpl());
 		uplinkPayloadProcessor = new DefaultUplinkPayloadProcessor(iotPublisherService);
 		brokerProducerServices.add(new ActiveMQProducerService(brokerURL));
-		payloadExtractorFactory.addDeviceIdExtractor(TRACKIMO, TRACKIMO_MODEL, deviceIdExtractor);
-		payloadExtractorFactory.addDeviceIdExtractor(SAMPLE, SAMPLE_MODEL, deviceIdExtractor);
-		payloadExtractorFactory.addDeviceIdExtractor(REXAWARE, REXAWARE_MODEL, deviceIdExtractor);
-		payloadExtractorFactory.addMessageTypeExtractor(TRACKIMO, TRACKIMO_MODEL, messageTypeExtractor);
-		payloadExtractorFactory.addMessageTypeExtractor(SAMPLE, SAMPLE_MODEL, messageTypeExtractor);
-		payloadExtractorFactory.addMessageTypeExtractor(REXAWARE, REXAWARE_MODEL, messageTypeExtractor);
-		payloadExtractorFactory.addPayloadDecipher(TRACKIMO, TRACKIMO_MODEL, payloadDecipher);
-		payloadExtractorFactory.addPayloadDecipher(SAMPLE, SAMPLE_MODEL, payloadDecipher);
-		payloadExtractorFactory.addPayloadDecipher(REXAWARE, REXAWARE_MODEL, payloadDecipher);
-		payloadExtractorFactory.addUplinkPayloadProcessor(TRACKIMO, TRACKIMO_MODEL, uplinkPayloadProcessor);
-		payloadExtractorFactory.addUplinkPayloadProcessor(SAMPLE, SAMPLE_MODEL, uplinkPayloadProcessor);
-		payloadExtractorFactory.addUplinkPayloadProcessor(REXAWARE, REXAWARE_MODEL, uplinkPayloadProcessor);
+		payloadExtractorFactory.addDeviceIdExtractor(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION, deviceIdExtractor);
+		payloadExtractorFactory.addDeviceIdExtractor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION, deviceIdExtractor);
+		payloadExtractorFactory.addDeviceIdExtractor(REXAWARE, REXAWARE_MODEL, REXAWARE_VERSION, deviceIdExtractor);
+		payloadExtractorFactory.addMessageTypeExtractor(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION,
+				messageTypeExtractor);
+		payloadExtractorFactory.addMessageTypeExtractor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION, messageTypeExtractor);
+		payloadExtractorFactory.addMessageTypeExtractor(REXAWARE, REXAWARE_MODEL, REXAWARE_VERSION,
+				messageTypeExtractor);
+		payloadExtractorFactory.addPayloadDecipher(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION, payloadDecipher);
+		payloadExtractorFactory.addPayloadDecipher(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION, payloadDecipher);
+		payloadExtractorFactory.addPayloadDecipher(REXAWARE, REXAWARE_MODEL, REXAWARE_VERSION, payloadDecipher);
+		payloadExtractorFactory.addUplinkPayloadProcessor(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION,
+				uplinkPayloadProcessor);
+		payloadExtractorFactory.addUplinkPayloadProcessor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION, uplinkPayloadProcessor);
+		payloadExtractorFactory.addUplinkPayloadProcessor(REXAWARE, REXAWARE_MODEL, REXAWARE_VERSION,
+				uplinkPayloadProcessor);
 		southboundService = new SouthboundServiceImpl(deviceMetaModelFactory, payloadExtractorFactory);
 		embeddedActivemqBroker.startService();
 	}
@@ -101,7 +108,7 @@ public class SouthboundServiceImplTest {
 
 	@Test(expected = SouthboundServiceImpl.DeviceModelNotSuported.class)
 	public void testProcessDevicePayloadForInvalidDeviceModel() {
-		southboundService.processPayload("TestManufacturer", "TestModel", new byte[] {});
+		southboundService.processPayload("TestManufacturer", "TestModel", "1.0", new byte[] {});
 		Assert.fail("Failed to execute Test case");
 	}
 
@@ -113,31 +120,31 @@ public class SouthboundServiceImplTest {
 	@Test
 	public void testProcessDevicePayloadForTrackimoMovingNotification() {
 		JsonObject payload = createPayloadForTrackimoMovingNotification();
-		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload.toString().getBytes());
+		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForTrackimoSpeedNotification() {
 		JsonObject payload = createPayloadForTrackimoSpeedNotification();
-		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload.toString().getBytes());
+		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForTrackimoFenceNotification() {
 		JsonObject payload = createPayloadForTrackimoFenceNotification();
-		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, payload.toString().getBytes());
+		southboundService.processPayload(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForSampleNotification() {
 		JsonObject payload = createPayloadForSampleNotification();
-		southboundService.processPayload(SAMPLE, SAMPLE_MODEL, payload.toString().getBytes());
+		southboundService.processPayload(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION, payload.toString().getBytes());
 	}
 
 	@Test
 	public void testProcessDevicePayloadForRexaWareBikeNotification() {
 		JsonObject payload = createPayloadForRexaWareBikeNotification();
-		southboundService.processPayload(REXAWARE, REXAWARE_MODEL, payload.toString().getBytes());
+		southboundService.processPayload(REXAWARE, REXAWARE_MODEL, REXAWARE_VERSION, payload.toString().getBytes());
 	}
 
 	private JsonObject createPayloadForTrackimoMovingNotification() {

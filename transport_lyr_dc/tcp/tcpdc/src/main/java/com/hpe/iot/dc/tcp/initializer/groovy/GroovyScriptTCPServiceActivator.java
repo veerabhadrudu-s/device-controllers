@@ -119,7 +119,7 @@ public class GroovyScriptTCPServiceActivator {
 		intializedObjects.put(TCPServerSocketWriter.class, tcpServerSocketWriter);
 		intializedObjects.putAll(instantiateZeroArgumentConstructorClasses(loadedClasses));
 		intializedObjects.put(DeviceModel.class, new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),
-				serverSocketToDeviceModel.getModelId()));
+				serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion()));
 		Class<? extends IOTModelConverter> iotModelConverType = dcComponentMetaModel.getNorthBoundDCComponentMetaModel()
 				.getIotModelConverterClass() == null ? DefaultIOTModelConverterImpl.class
 						: dcComponentMetaModel.getNorthBoundDCComponentMetaModel().getIotModelConverterClass();

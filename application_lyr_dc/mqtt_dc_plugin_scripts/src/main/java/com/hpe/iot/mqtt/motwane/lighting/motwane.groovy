@@ -36,6 +36,11 @@ public class MotwaneDeviceModel implements DeviceModel{
 	public String getModelId(){
 		return "Lighting"
 	}
+
+	@Override
+	public String getVersion() {
+		return "1.0"
+	}
 }
 
 public class MotwaneLightingDeviceIdExtractor extends AbstractJsonPathDeviceIdExtractor{

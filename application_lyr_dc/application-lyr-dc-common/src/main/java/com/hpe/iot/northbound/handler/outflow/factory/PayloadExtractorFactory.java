@@ -12,8 +12,8 @@ import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
  */
 public interface PayloadExtractorFactory {
 
-	PayloadCipher getPayloadCipher(String manufacturer, String modelId);
+	PayloadCipher getPayloadCipher(String manufacturer, String modelId, String version);
 
-	DownlinkPayloadProcessor getDownlinkPayloadProcessor(String manufacturer, String modelId);
+	DownlinkPayloadProcessor getDownlinkPayloadProcessor(String manufacturer, String modelId, String version);
 
 }

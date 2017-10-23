@@ -11,6 +11,7 @@ import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
  */
 public interface GroovyDeviceModelFactory extends DeviceModelFactory {
 
-	void addGroovyDeviceModel(String manufacturer, String modelId, GroovyScriptDeviceModel groovyScriptDeviceMetaModel);
+	void addGroovyDeviceModel(String manufacturer, String modelId, String version,
+			GroovyScriptDeviceModel groovyScriptDeviceMetaModel);
 
 }

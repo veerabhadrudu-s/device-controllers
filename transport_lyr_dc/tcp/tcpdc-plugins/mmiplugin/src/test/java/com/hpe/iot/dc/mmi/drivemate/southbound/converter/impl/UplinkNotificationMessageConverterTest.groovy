@@ -27,7 +27,7 @@ class UplinkNotificationMessageConverterTest {
 	private static final String NOTIFICATION = "notification";
 
 	private static final DeviceImpl DEVICE_UNDER_TEST = new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
-	MMIDrivemateTestDataCollection.MODEL_ID,"123456789012345");
+	MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2,"123456789012345");
 
 	private UplinkNotificationMessageConverter uplinkNotificationMessageConverter;
 	private EventIdToNameMapper eventIdToNameMapper=new EventIdToNameMapper();

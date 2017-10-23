@@ -15,7 +15,8 @@ public class DeviceMetaModelAdapter extends XmlAdapter<AdaptedDeviceMetaModel, J
 
 	@Override
 	public JsonPathDeviceMetaModel unmarshal(AdaptedDeviceMetaModel adaptedDeviceMetaModel) throws Exception {
-		return new JsonPathDeviceMetaModel(adaptedDeviceMetaModel.getManufacturer(), adaptedDeviceMetaModel.getModelId(),
+		return new JsonPathDeviceMetaModel(adaptedDeviceMetaModel.getManufacturer(),
+				adaptedDeviceMetaModel.getModelId(), adaptedDeviceMetaModel.getVersion(),
 				adaptedDeviceMetaModel.getDeviceIdJsonPath(), adaptedDeviceMetaModel.getMessageTypeJsonPath());
 	}
 
@@ -24,6 +25,7 @@ public class DeviceMetaModelAdapter extends XmlAdapter<AdaptedDeviceMetaModel, J
 		AdaptedDeviceMetaModel adaptedDeviceMetaModel = new AdaptedDeviceMetaModel();
 		adaptedDeviceMetaModel.setManufacturer(deviceMetaModel.getManufacturer());
 		adaptedDeviceMetaModel.setModelId(deviceMetaModel.getModelId());
+		adaptedDeviceMetaModel.setVersion(deviceMetaModel.getVersion());
 		adaptedDeviceMetaModel.setDeviceIdJsonPath(deviceMetaModel.getDeviceIdJsonPath());
 		adaptedDeviceMetaModel.setMessageTypeJsonPath(deviceMetaModel.getMessageTypeJsonPath());
 		return adaptedDeviceMetaModel;

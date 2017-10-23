@@ -37,6 +37,11 @@ class SampleServerSocketToDeviceModel  extends AbstractServerSocketToDeviceModel
 	}
 
 	@Override
+	public String getVersion() {
+		return "1.0"
+	}
+
+	@Override
 	public String getBoundLocalAddress() {
 		return "10.3.239.75";
 	}
@@ -114,7 +119,7 @@ class SampleDataModelTransformer implements UplinkDataModelTransformer{
 		def deviceIdInByte = copyOfRange(input, 1, 11);
 		deviceIdInByte = truncateEmptyBytes(deviceIdInByte);
 		final String deviceId = convertBytesToASCIIString(deviceIdInByte, 0, deviceIdInByte.length);
-		DeviceInfo deviceData=new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), "deviceDataMessageType", input);
+		DeviceInfo deviceData=new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(), deviceId), "deviceDataMessageType", input);
 		SampleData sampleData=new SampleData(new String(copyOfRange(input,12,input.length-2)));
 		deviceData.addDeviceData(sampleData.getDeviceDataInformation(),sampleData);
 		return deviceData;

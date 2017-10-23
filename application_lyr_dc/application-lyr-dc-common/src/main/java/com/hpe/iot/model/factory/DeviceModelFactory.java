@@ -13,7 +13,7 @@ import com.hpe.iot.dc.model.DeviceModel;
  */
 public interface DeviceModelFactory {
 
-	DeviceModel findDeviceModel(String manufacturer, String modelId);
+	DeviceModel findDeviceModel(String manufacturer, String modelId, String version);
 
 	List<DeviceModel> getAllDeviceModels();
 

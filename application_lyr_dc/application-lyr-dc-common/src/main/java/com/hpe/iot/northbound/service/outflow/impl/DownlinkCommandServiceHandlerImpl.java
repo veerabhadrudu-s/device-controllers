@@ -32,15 +32,16 @@ public class DownlinkCommandServiceHandlerImpl implements DownlinkCommandService
 	@Override
 	public void processPayload(DeviceInfo deviceInfo) {
 		Device device = deviceInfo.getDevice();
-		DeviceModel deviceModel = deviceModelFactory.findDeviceModel(device.getManufacturer(), device.getModelId());
+		DeviceModel deviceModel = deviceModelFactory.findDeviceModel(device.getManufacturer(), device.getModelId(),
+				device.getVersion());
 		DownlinkPayloadProcessor downlinkPayloadProcessor = payloadExtractorFactory
-				.getDownlinkPayloadProcessor(device.getManufacturer(), device.getModelId());
+				.getDownlinkPayloadProcessor(device.getManufacturer(), device.getModelId(), device.getVersion());
 		if (deviceModel == null)
 			throw new DeviceModelNotSuported(device.getManufacturer(), device.getModelId());
 		if (downlinkPayloadProcessor == null)
 			throw new DownlinkFlowNotSupported(device.getManufacturer(), device.getModelId());
 		PayloadCipher payloadCipher = payloadExtractorFactory.getPayloadCipher(device.getManufacturer(),
-				device.getModelId());
+				device.getModelId(), device.getVersion());
 		JsonObject cipheredPayload = payloadCipher.cipherPayload(deviceModel, deviceInfo.getPayload());
 		DeviceInfo downlinkDeviceInfo = new DeviceInfo(device, deviceInfo.getMessageType(), cipheredPayload);
 		downlinkPayloadProcessor.processPayload(deviceModel, downlinkDeviceInfo);

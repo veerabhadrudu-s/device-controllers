@@ -49,8 +49,8 @@ public class DCPluginServiceMonitor {
 				.entrySet()) {
 			ServerSocketToDeviceModel socketToDeviceModel = deviceModelToSocketPool.getKey();
 			availableDcScriptPlugins.add(new ScriptPlugin(socketToDeviceModel.getManufacturer(),
-					socketToDeviceModel.getModelId(), deviceModelToSocketPool.getValue().getDevices().size(),
-					socketToDeviceModel.getDescription()));
+					socketToDeviceModel.getModelId(), socketToDeviceModel.getVersion(),
+					deviceModelToSocketPool.getValue().getDevices().size(), socketToDeviceModel.getDescription()));
 		}
 		String availableDCPluginsJString = new Gson().toJson(availableDcScriptPlugins.toArray());
 		logger.info("Loaded DC Plugin Scripts information  " + availableDCPluginsJString);

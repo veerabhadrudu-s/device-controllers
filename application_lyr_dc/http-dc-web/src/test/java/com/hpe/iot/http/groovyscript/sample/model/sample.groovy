@@ -22,6 +22,10 @@ public class SampleDeviceModel implements DeviceModel{
 	public String getModelId(){
 		return "Model"
 	}
+	@Override
+	public String getVersion(){
+		return "1.0"
+	}
 }
 
 public class SampleModelDeviceIdExtractor extends AbstractJsonPathDeviceIdExtractor{

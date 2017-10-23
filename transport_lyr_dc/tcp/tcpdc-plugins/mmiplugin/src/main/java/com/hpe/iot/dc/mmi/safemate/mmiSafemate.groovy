@@ -50,6 +50,10 @@ public class MMIServerSocketToDeviceModel extends AbstractServerSocketToDeviceMo
 		return "SafeMate";
 	}
 
+	public String getVersion() {
+		return "1.0"
+	}
+
 	public String getBoundLocalAddress(){
 		return "10.3.239.75";
 	}
@@ -57,8 +61,8 @@ public class MMIServerSocketToDeviceModel extends AbstractServerSocketToDeviceMo
 	public int getPortNumber(){
 		return 2002;
 	}
-	
-	public String getDescription() {		
+
+	public String getDescription() {
 		return "This is a Personal Safety Tracker used for child and women safety.";
 	}
 }
@@ -849,7 +853,7 @@ public abstract class AbstractMMIMessageConverter implements UplinkDeviceDataCon
 		deviceIdInByte = truncateEmptyBytes(deviceIdInByte);
 		final String deviceId = convertBytesToASCIIString(deviceIdInByte, 0, deviceIdInByte.length);
 		logger.debug("Identified Device Id is " + deviceId);
-		final DeviceInfo dataModel = new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))),
+		final DeviceInfo dataModel = new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))),
 				input);
 		addMessageSpecificParameters(dataModel.getDeviceData(), input);
 		return dataModel;
@@ -1014,11 +1018,11 @@ public class AlarmMessageConverter extends AbstractMMIMessageConverter {
 	protected void addMessageSpecificParameters(Map<String, DeviceData> deviceData, byte[] rawData) {
 		rawData = copyOfRange(rawData, 27, 63);
 		List<TrackerInfo> trackerInfos = new ArrayList<>();
-		TrackerInfo trackerInfo = trackerInfoCreator.constructTrackerInfo(rawData);		
+		TrackerInfo trackerInfo = trackerInfoCreator.constructTrackerInfo(rawData);
 		trackerInfos.add(trackerInfo);
 		deviceData.put(TrackerNotification.TRACKER_NOTIF,
-			new TrackerNotification(ALERT, 1, trackerInfos));
-		
+				new TrackerNotification(ALERT, 1, trackerInfos));
+
 	}
 
 }
@@ -1049,7 +1053,7 @@ public class HeartBeatPackageConverter implements UplinkDeviceDataConverter {
 		deviceIdInByte = truncateEmptyBytes(deviceIdInByte);
 		final String deviceId = convertBytesToASCIIString(deviceIdInByte, 0, deviceIdInByte.length);
 		logger.debug("Identified Device Id is " + deviceId);
-		return new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))), input);
+		return new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))), input);
 	}
 
 	private void performCRCCheckOperation(byte[] input) {

@@ -9,5 +9,5 @@ package com.hpe.iot.southbound.service.inflow;
  */
 public interface SouthboundService {
 
-	void processPayload(String manufacturer, String modelId, byte[] payload);
+	void processPayload(String manufacturer, String modelId, String version, byte[] payload);
 }

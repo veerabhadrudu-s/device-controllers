@@ -5,6 +5,7 @@ package com.hpe.iot.http.avanseus.videoanalytics;
 
 import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS;
 import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS_MODEL;
+import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS_VERSION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,8 +27,9 @@ public class AvanseusTest extends HttpPluginTestBaseTemplate {
 	@Test
 	public void testProcessDevicePayloadForAvanseusScript() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
+		waitForDCInitialization();
 		MvcResult mvcResult = mockMvc
-				.perform(post(SOUTHBOUND + "/" + AVANSEUS + "/" + AVANSEUS_MODEL)
+				.perform(post(SOUTHBOUND + "/" + AVANSEUS + "/" + AVANSEUS_MODEL+"/"+AVANSEUS_VERSION+"/")
 						.content(createPayloadForPayloadForAvanseusNotification()).accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();

@@ -48,8 +48,8 @@ public class CombinedStandardMessageConverter implements UplinkDeviceDataConvert
 	public DeviceInfo createModel(DeviceModel deviceModel, byte[] input) {
 		String deviceId = DataParserUtility.calculateUnsignedDecimalValFromSignedBytes(input[3], input[2], input[1]);
 		DeviceInfo deviceInfo = new DeviceInfo(
-				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), getMessageType(),
-				input);
+				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), "1.0", deviceId),
+				getMessageType(), input);
 		addDeviceData(deviceInfo.getDeviceData(), input);
 		return deviceInfo;
 	}

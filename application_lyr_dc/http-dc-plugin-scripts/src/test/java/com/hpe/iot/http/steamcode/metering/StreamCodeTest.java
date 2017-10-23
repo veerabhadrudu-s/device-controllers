@@ -5,6 +5,7 @@ package com.hpe.iot.http.steamcode.metering;
 
 import static com.hpe.iot.http.test.constants.TestConstants.STREAMCODE;
 import static com.hpe.iot.http.test.constants.TestConstants.STREAMCODE_MODEL;
+import static com.hpe.iot.http.test.constants.TestConstants.STREAMCODE_VERSION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,8 +26,9 @@ public class StreamCodeTest extends HttpPluginTestBaseTemplate {
 	@Test
 	public void testProcessDevicePayloadForStreamCodeScript() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
+		waitForDCInitialization();
 		MvcResult mvcResult = mockMvc
-				.perform(put(SOUTHBOUND + "/" + STREAMCODE + "/" + STREAMCODE_MODEL)
+				.perform(put(SOUTHBOUND + "/" + STREAMCODE + "/" + STREAMCODE_MODEL + "/" + STREAMCODE_VERSION + "/")
 						.content(createPayloadForPayloadForStreamCodeNotification()).accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();

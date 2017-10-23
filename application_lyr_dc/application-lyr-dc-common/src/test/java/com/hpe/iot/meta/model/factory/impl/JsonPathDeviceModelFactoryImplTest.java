@@ -5,8 +5,10 @@ package com.hpe.iot.meta.model.factory.impl;
 
 import static com.hpe.iot.test.constants.TestConstants.SAMPLE;
 import static com.hpe.iot.test.constants.TestConstants.SAMPLE_MODEL;
+import static com.hpe.iot.test.constants.TestConstants.SAMPLE_VERSION;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_MODEL;
+import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_VERSION;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,7 +35,8 @@ public class JsonPathDeviceModelFactoryImplTest {
 	@Test
 	public void testGetDeviceMetaModelForTrackimo() {
 		DeviceModel expectedDeviceMetaModel = getExpectedTrackimoDeviceMetaModel();
-		DeviceModel actualDeviceMetaModel = deviceMetaModelFactoryImpl.findDeviceModel(TRACKIMO, TRACKIMO_MODEL);
+		DeviceModel actualDeviceMetaModel = deviceMetaModelFactoryImpl.findDeviceModel(TRACKIMO, TRACKIMO_MODEL,
+				TRACKIMO_VERSION);
 		Assert.assertEquals("Expected and Actual DeviceMetaModel's are not same ", expectedDeviceMetaModel,
 				actualDeviceMetaModel);
 	}
@@ -41,17 +44,18 @@ public class JsonPathDeviceModelFactoryImplTest {
 	@Test
 	public void testGetDeviceMetaModelForSample() {
 		DeviceModel expectedDeviceMetaModel = getExpectedSampleDeviceMetaModel();
-		DeviceModel actualDeviceMetaModel = deviceMetaModelFactoryImpl.findDeviceModel(SAMPLE, SAMPLE_MODEL);
+		DeviceModel actualDeviceMetaModel = deviceMetaModelFactoryImpl.findDeviceModel(SAMPLE, SAMPLE_MODEL,
+				SAMPLE_VERSION);
 		Assert.assertEquals("Expected and Actual DeviceMetaModel's are not same ", expectedDeviceMetaModel,
 				actualDeviceMetaModel);
 	}
 
 	private DeviceModel getExpectedSampleDeviceMetaModel() {
-		return new JsonPathDeviceMetaModel(SAMPLE, SAMPLE_MODEL, "$.sample_id", "$.message_type");
+		return new JsonPathDeviceMetaModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION, "$.sample_id", "$.message_type");
 	}
 
 	private DeviceModel getExpectedTrackimoDeviceMetaModel() {
-		return new JsonPathDeviceMetaModel(TRACKIMO, TRACKIMO_MODEL, "$.device_id", "$.alarm_type");
+		return new JsonPathDeviceMetaModel(TRACKIMO, TRACKIMO_MODEL, TRACKIMO_VERSION, "$.device_id", "$.alarm_type");
 	}
 
 }

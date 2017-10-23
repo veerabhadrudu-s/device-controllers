@@ -17,8 +17,8 @@ public class UDPDeviceImpl extends DeviceModelImpl implements UDPDevice {
 	private final InetAddress address;
 	private final int port;
 
-	public UDPDeviceImpl(String manufacturer, String modelId, InetAddress address, int port) {
-		super(manufacturer, modelId);
+	public UDPDeviceImpl(String manufacturer, String modelId, String version, InetAddress address, int port) {
+		super(manufacturer, modelId, version);
 		this.address = address;
 		this.port = port;
 	}

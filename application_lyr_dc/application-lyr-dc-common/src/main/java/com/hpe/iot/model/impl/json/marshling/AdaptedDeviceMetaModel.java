@@ -11,6 +11,7 @@ public class AdaptedDeviceMetaModel {
 
 	private String manufacturer;
 	private String modelId;
+	private String version;
 	private String deviceIdJsonPath;
 	private String messageTypeJsonPath;
 
@@ -28,6 +29,14 @@ public class AdaptedDeviceMetaModel {
 
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public String getDeviceIdJsonPath() {

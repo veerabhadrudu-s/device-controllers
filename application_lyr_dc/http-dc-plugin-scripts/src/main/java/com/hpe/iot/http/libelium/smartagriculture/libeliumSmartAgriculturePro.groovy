@@ -31,6 +31,11 @@ public class LibeliumSmartAgricultureProModel implements DeviceModel,MessageType
 	}
 
 	@Override
+	public String getVersion() {
+		return "1.0"
+	}
+
+	@Override
 	public String extractMessageType(DeviceModel deviceModel, JsonObject payload) {
 		return "notification";
 	}

@@ -37,6 +37,11 @@ class SampleServerSocketToDeviceModel  extends AbstractServerSocketToDeviceModel
 	}
 
 	@Override
+	public String getVersion() {
+		return "1.0"
+	}
+
+	@Override
 	public String getBoundLocalAddress() {
 		return "localhost";
 	}

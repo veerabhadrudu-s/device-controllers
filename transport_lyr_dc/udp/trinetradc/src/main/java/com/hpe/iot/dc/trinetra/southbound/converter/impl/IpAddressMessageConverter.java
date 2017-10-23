@@ -29,15 +29,16 @@ public class IpAddressMessageConverter implements UplinkDeviceDataConverter {
 		final String deviceId = Long.toString(Long.parseLong(DataParserUtility.convertBytesToASCIIString(input, 1, 6)));
 		logger.debug("Identified Device Id is " + deviceId);
 		final DeviceInfo dataModel = new DeviceInfo(
-				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), getMessageType(),
-				input);
+				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), "1.0", deviceId),
+				getMessageType(), input);
 		addMetaInformationForOperation(deviceModel, dataModel, input);
 		return dataModel;
 	}
 
 	private void addMetaInformationForOperation(DeviceModel deviceModel, DeviceInfo dataModel, byte[] input) {
 		DeviceAddress deviceIpInfo = deviceModel instanceof UDPDevice
-				? getDeviceAddressFromUDPDevice((UDPDevice) deviceModel) : getDeviceAddressFromPayload(input);
+				? getDeviceAddressFromUDPDevice((UDPDevice) deviceModel)
+				: getDeviceAddressFromPayload(input);
 		dataModel.addDeviceData(deviceIpInfo.getDeviceDataInformation(), deviceIpInfo);
 	}
 

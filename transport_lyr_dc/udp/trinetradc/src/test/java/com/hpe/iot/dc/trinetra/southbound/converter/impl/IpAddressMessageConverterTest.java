@@ -74,7 +74,8 @@ public class IpAddressMessageConverterTest {
 			}
 		};
 		DeviceInfo dataModel = ipAddressMetaModelConverter.createModel(
-				new UDPDeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), address, DATA_GRAM_PORT),
+				new UDPDeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceModel.getVersion(),
+						address, DATA_GRAM_PORT),
 				DataParserUtility.createBinaryPayloadFromHexaPayload(IPUPDATE_DATA_FRAME_HEX, this.getClass()));
 		DeviceAddress deviceAddress = (DeviceAddress) dataModel.getDeviceData().get(DEVICE_ADDRESS);
 		Assert.assertEquals("Expected source Ip and Actual source Ip are not Same", DATA_GRAM_IP,

@@ -4,13 +4,15 @@
 	<devicemodel>
 		<manufacturer>MMI</manufacturer>
 		<modelId>streetlighting</modelId>
+		<version>1.0</version>
 		<deviceIdJsonPath>$.mmi_eventdetail[0].uniqueId</deviceIdJsonPath>
 		<messageTypeJsonPath></messageTypeJsonPath>
 	</devicemodel>
 	<devicemodel>
 		<manufacturer>MMI</manufacturer>
 		<modelId>wastemanagement</modelId>
+		<version>1.0</version>
 		<deviceIdJsonPath>$.mmi_eventdetail[0].uniqueId</deviceIdJsonPath>
 		<messageTypeJsonPath></messageTypeJsonPath>
-	</devicemodel>		
+	</devicemodel>
 </devicemodels>

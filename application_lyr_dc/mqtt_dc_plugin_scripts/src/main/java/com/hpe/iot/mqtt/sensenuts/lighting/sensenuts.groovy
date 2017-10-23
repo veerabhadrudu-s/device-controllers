@@ -36,6 +36,11 @@ public class SensenutsDeviceModel implements DeviceModel{
 	public String getModelId(){
 		return "lighting"
 	}
+
+	@Override
+	public String getVersion() {
+		return "1.0"
+	}
 }
 
 

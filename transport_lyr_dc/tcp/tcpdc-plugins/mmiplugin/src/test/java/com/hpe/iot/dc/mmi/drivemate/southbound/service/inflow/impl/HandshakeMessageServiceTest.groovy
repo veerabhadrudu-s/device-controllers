@@ -56,7 +56,7 @@ public class HandshakeMessageServiceTest {
 		MMIDrivemateDataModelTransformer mmiDrivemateDataModelTransformer = new MMIDrivemateDataModelTransformer(
 				new UplinkDeviceDataConverterFactoryImpl(Collections.<UplinkDeviceDataConverter> emptyList()));
 		Device device = new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
-				MMIDrivemateTestDataCollection.MODEL_ID, "123456789012345");
+				MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2, "123456789012345");
 		tcpServerClientSocketPool.addSocketChannel(device, socketChannel);
 		List<DeviceInfo> deviceInfo = mmiDrivemateDataModelTransformer.convertToModel(device,
 				TestUtility.createDataWithPaddingBytes(getClass(), MMIDrivemateTestDataCollection.HAND_SHAKE_PAYLOAD));
@@ -69,5 +69,4 @@ public class HandshakeMessageServiceTest {
 		Assert.assertEquals("Expected Message Type and Actual Message Type are not Same ", HAND_SHAKE,
 				handshakeMessageService.getMessageType());
 	}
-
 }

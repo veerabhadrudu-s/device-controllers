@@ -27,4 +27,9 @@ public class TrinetraDeviceModel implements DeviceModel {
 		return VEHICAL_TRACKING;
 	}
 
+	@Override
+	public String getVersion() {
+		return "1.0";
+	}
+
 }

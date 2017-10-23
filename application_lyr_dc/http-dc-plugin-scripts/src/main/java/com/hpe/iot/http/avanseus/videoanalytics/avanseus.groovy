@@ -16,6 +16,11 @@ public class AvanseusDeviceModel implements DeviceModel{
 	public String getModelId(){
 		return "videoanalytics"
 	}
+
+	@Override
+	public String getVersion() {
+		return "1.0"
+	}
 }
 
 public class AvanseusDeviceIdExtractor implements DeviceIdExtractor{

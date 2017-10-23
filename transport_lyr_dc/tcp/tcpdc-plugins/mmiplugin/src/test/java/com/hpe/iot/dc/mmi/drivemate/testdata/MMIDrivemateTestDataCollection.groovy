@@ -9,6 +9,8 @@ public class MMIDrivemateTestDataCollection {
 	
 	public static final String MANUFACTURER="MMI";
 	public static final String MODEL_ID="Drivemate";
+	public static final String VERSION_1="1.0";
+	public static final String VERSION_2="2.0";
 	
 	//@formatter:off
 	

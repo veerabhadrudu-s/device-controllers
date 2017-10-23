@@ -54,6 +54,10 @@ public class MMIDrivemateServerSocketToDeviceModel implements ServerSocketToDevi
 	public String getModelId(){
 		return "Drivemate";
 	}
+	
+	public String getVersion() {
+		return "1.0"
+	}
 
 	public String getBoundLocalAddress(){
 		return "10.3.239.75";

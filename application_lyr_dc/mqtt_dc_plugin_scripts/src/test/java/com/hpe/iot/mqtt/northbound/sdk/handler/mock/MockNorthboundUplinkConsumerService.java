@@ -86,7 +86,7 @@ public class MockNorthboundUplinkConsumerService {
 			JsonObject device = downlinkPayload.get("device").getAsJsonObject();
 			return new DeviceInfo(
 					new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(),
-							device.get("deviceId").getAsString()),
+							 "1.0",device.get("deviceId").getAsString()),
 					downlinkPayload.get("messageType").getAsString(), downlinkPayload.get("payload").getAsJsonObject());
 		}
 

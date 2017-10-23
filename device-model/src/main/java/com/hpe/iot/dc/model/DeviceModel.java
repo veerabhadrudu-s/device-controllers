@@ -9,4 +9,6 @@ public interface DeviceModel {
 	String getManufacturer();
 
 	String getModelId();
+	
+	String getVersion();
 }

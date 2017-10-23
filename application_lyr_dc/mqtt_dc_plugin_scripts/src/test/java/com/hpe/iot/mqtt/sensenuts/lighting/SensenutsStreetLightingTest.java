@@ -5,6 +5,7 @@ package com.hpe.iot.mqtt.sensenuts.lighting;
 
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_MODEL;
+import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_VERSION;
 import static com.hpe.iot.utility.UtilityLogger.logRawDataInHexaDecimalFormat;
 import static org.junit.Assert.assertEquals;
 
@@ -67,7 +68,8 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 	@Test
 	public void testSensenutsStreetLightingForUplinkNotification() throws InterruptedException {
 		logRawDataInHexaDecimalFormat(constructPeriodicMessage(), getClass());
-		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, DEVICE_ID), constructPeriodicMessage());
+		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
+				constructPeriodicMessage());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
 		validateDeviceModel(deviceInfo.getDevice());
@@ -77,7 +79,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 	@Test
 	public void testSensenutsStreetLightingForUplinkPowerOutageAlert() throws InterruptedException {
 		logRawDataInHexaDecimalFormat(constructPowerOutageAlertMessage(), getClass());
-		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, DEVICE_ID),
+		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				constructPowerOutageAlertMessage());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
@@ -88,7 +90,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 	@Test
 	public void testSensenutsStreetLightingForUplinkLuminaireFailureAlert() throws InterruptedException {
 		logRawDataInHexaDecimalFormat(constructLuminaireFailureMessage(), getClass());
-		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, DEVICE_ID),
+		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				constructLuminaireFailureMessage());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
@@ -173,7 +175,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><?xml-oneM2m oneM2M=\"1.10\"?><ns2:requestPrimitive xmlns:ns2=\"http://www.onem2m.org/xml/protocols\">"
 				+ "<operation>5</operation><to>HPE_IoT/Light-1234</to><from>/CSE1000</from><requestIdentifier>45f440d7b169453f8e5f00e15046444b</requestIdentifier><primitiveContent><ns2:notification><notificationEvent><representation xsi:type=\"xs:string\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
 				+ "{\"m2m:cin\":{\"ty\":4,\"ri\":\"HPE_IoT/Light-1234/downlinkCommand/8969087f43c\",\"pi\":\"HPE_IoT/Light-1234/downlinkCommand\",\"ct\":\"20171009T084338,000232\",\"lt\":\"20171009T084338,000232\",\"rn\":\"8969087f43c\",\"et\":\"20271007T084338,000220\",\"st\":1,\"cr\":\"C070878C6-85f18dc6\",\"cnf\":\"text/plain:0\",\"cs\":352,"
-				+ "\"con\":\"{\\\"device\\\":{\\\"manufacturer\\\":\\\"sensenuts\\\",\\\"modelId\\\":\\\"lighting\\\",\\\"deviceId\\\":\\\"1234\\\"},\\\"messageType\\\":\\\"downlinkCommand\\\",\\\"payload\\\":{\\\"gatewayId\\\":\\\"1234\\\",\\\"lightId\\\":\\\"0001\\\",\\\"brightness\\\":\\\"50\\\"}}\"}}</representation><operationMonitor>"
+				+ "\"con\":\"{\\\"device\\\":{\\\"manufacturer\\\":\\\"sensenuts\\\",\\\"modelId\\\":\\\"lighting\\\",\\\"version\\\":\\\"1.0\\\",\\\"deviceId\\\":\\\"1234\\\"},\\\"messageType\\\":\\\"downlinkCommand\\\",\\\"payload\\\":{\\\"gatewayId\\\":\\\"1234\\\",\\\"lightId\\\":\\\"0001\\\",\\\"brightness\\\":\\\"50\\\"}}\"}}</representation><operationMonitor>"
 				+ "<operation>5</operation><originator>C070878C6-c4c0c7c1</originator></operationMonitor><notificationEventType>1</notificationEventType></notificationEvent><verificationRequest>false</verificationRequest><subscriptionReference>7524845195623549720</subscriptionReference><creator>C070878C6-c4c0c7c1</creator></ns2:notification>"
 				+ "</primitiveContent><responseType><responseTypeValue>2</responseTypeValue></responseType></ns2:requestPrimitive>";
 	}

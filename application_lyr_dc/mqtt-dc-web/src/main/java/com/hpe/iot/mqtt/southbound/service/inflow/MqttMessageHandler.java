@@ -28,8 +28,8 @@ public class MqttMessageHandler {
 		try {
 			logger.trace("Received uplink message from device is " + mqttData.toString());
 			String topicParts[] = mqttData.getMqttTopic().split("/");
-			String manufacturer = topicParts[0], modelId = topicParts[1];
-			southboundService.processPayload(manufacturer, modelId, mqttData.getMqttMessage());
+			String manufacturer = topicParts[0], modelId = topicParts[1], version = topicParts[2];
+			southboundService.processPayload(manufacturer, modelId, version, mqttData.getMqttMessage());
 		} catch (Throwable e) {
 			logExceptionStackTrace(e, getClass());
 		}

@@ -67,18 +67,18 @@ public abstract class MqttBaseTestTemplate {
 		}
 	}
 
-	protected String formUplinkTopicName(String manufacturer, String model, String deviceId) {
-		return formTopicName(manufacturer, model, deviceId, "Up");
+	protected String formUplinkTopicName(String manufacturer, String model, String version, String deviceId) {
+		return formTopicName(manufacturer, model, version, deviceId, "Up");
 
 	}
 
-	protected String formDownlinkTopicName(String manufacturer, String model, String deviceId) {
-		return formTopicName(manufacturer, model, deviceId, "Down");
+	protected String formDownlinkTopicName(String manufacturer, String model, String version, String deviceId) {
+		return formTopicName(manufacturer, model, version, deviceId, "Down");
 
 	}
 
-	private String formTopicName(String manufacturer, String model, String deviceId, String flow) {
-		return manufacturer + "/" + model + "/" + flow + "/" + deviceId;
+	private String formTopicName(String manufacturer, String model, String version, String deviceId, String flow) {
+		return manufacturer + "/" + model + "/" + version + "/" + flow + "/" + deviceId;
 	}
 
 	private void waitForDCInitialization() throws InterruptedException {

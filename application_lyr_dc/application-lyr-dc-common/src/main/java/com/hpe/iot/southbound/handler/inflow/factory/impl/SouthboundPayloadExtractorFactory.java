@@ -25,42 +25,44 @@ public class SouthboundPayloadExtractorFactory implements PayloadExtractorFactor
 	private Map<DeviceModel, PayloadDecipher> payloadDeciphers = new ConcurrentHashMap<>();
 	private Map<DeviceModel, UplinkPayloadProcessor> uplinkPayloadProcessors = new ConcurrentHashMap<>();
 
-	public void addDeviceIdExtractor(String manufacturer, String modelId, DeviceIdExtractor deviceIdExtractor) {
-		deviceIdExtractors.put(new DeviceModelImpl(manufacturer, modelId), deviceIdExtractor);
+	public void addDeviceIdExtractor(String manufacturer, String modelId, String version,
+			DeviceIdExtractor deviceIdExtractor) {
+		deviceIdExtractors.put(new DeviceModelImpl(manufacturer, modelId, version), deviceIdExtractor);
 	}
 
-	public void addMessageTypeExtractor(String manufacturer, String modelId,
+	public void addMessageTypeExtractor(String manufacturer, String modelId, String version,
 			MessageTypeExtractor messageTypeExtractor) {
-		messageTypeExtractors.put(new DeviceModelImpl(manufacturer, modelId), messageTypeExtractor);
+		messageTypeExtractors.put(new DeviceModelImpl(manufacturer, modelId, version), messageTypeExtractor);
 	}
 
-	public void addPayloadDecipher(String manufacturer, String modelId, PayloadDecipher payloadDecipher) {
-		payloadDeciphers.put(new DeviceModelImpl(manufacturer, modelId), payloadDecipher);
+	public void addPayloadDecipher(String manufacturer, String modelId, String version,
+			PayloadDecipher payloadDecipher) {
+		payloadDeciphers.put(new DeviceModelImpl(manufacturer, modelId, version), payloadDecipher);
 	}
 
-	public void addUplinkPayloadProcessor(String manufacturer, String modelId,
+	public void addUplinkPayloadProcessor(String manufacturer, String modelId, String version,
 			UplinkPayloadProcessor uplinkPayloadProcessor) {
-		uplinkPayloadProcessors.put(new DeviceModelImpl(manufacturer, modelId), uplinkPayloadProcessor);
+		uplinkPayloadProcessors.put(new DeviceModelImpl(manufacturer, modelId, version), uplinkPayloadProcessor);
 	}
 
 	@Override
-	public DeviceIdExtractor getDeviceIdExtractor(String manufacturer, String modelId) {
-		return deviceIdExtractors.get(new DeviceModelImpl(manufacturer, modelId));
+	public DeviceIdExtractor getDeviceIdExtractor(String manufacturer, String modelId, String version) {
+		return deviceIdExtractors.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override
-	public MessageTypeExtractor getMessageTypeExtractor(String manufacturer, String modelId) {
-		return messageTypeExtractors.get(new DeviceModelImpl(manufacturer, modelId));
+	public MessageTypeExtractor getMessageTypeExtractor(String manufacturer, String modelId, String version) {
+		return messageTypeExtractors.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override
-	public PayloadDecipher getPayloadDecipher(String manufacturer, String modelId) {
-		return payloadDeciphers.get(new DeviceModelImpl(manufacturer, modelId));
+	public PayloadDecipher getPayloadDecipher(String manufacturer, String modelId, String version) {
+		return payloadDeciphers.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override
-	public UplinkPayloadProcessor getUplinkPayloadProcessor(String manufacturer, String modelId) {
-		return uplinkPayloadProcessors.get(new DeviceModelImpl(manufacturer, modelId));
+	public UplinkPayloadProcessor getUplinkPayloadProcessor(String manufacturer, String modelId, String version) {
+		return uplinkPayloadProcessors.get(new DeviceModelImpl(manufacturer, modelId, version));
 	}
 
 	@Override

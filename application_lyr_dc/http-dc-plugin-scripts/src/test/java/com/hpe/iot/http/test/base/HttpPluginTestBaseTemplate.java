@@ -61,7 +61,7 @@ public abstract class HttpPluginTestBaseTemplate {
 		return jsonParser.parse(expectedResponseString).getAsJsonObject();
 	}
 
-	private void waitForDCInitialization() throws InterruptedException {
+	protected void waitForDCInitialization() throws InterruptedException {
 		Thread.sleep(1000);
 	}
 
