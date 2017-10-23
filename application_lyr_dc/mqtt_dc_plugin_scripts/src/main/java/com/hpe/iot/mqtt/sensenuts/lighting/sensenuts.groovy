@@ -7,24 +7,19 @@ import static com.hpe.iot.utility.DataParserUtility.convertBytesToASCIIString
 import static com.hpe.iot.utility.DataParserUtility.convertHexaToFloatPoint
 import static java.util.Arrays.copyOfRange
 
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.List
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.hpe.iot.dc.model.DeviceModel
 import com.hpe.iot.model.DeviceInfo
-import com.hpe.iot.model.DeviceModel
 import com.hpe.iot.mqtt.southbound.service.holder.GroovyServicesHolder
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor
 import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher
-import com.hpe.iot.utility.UtilityLogger
 
 /**
  * @author sveera

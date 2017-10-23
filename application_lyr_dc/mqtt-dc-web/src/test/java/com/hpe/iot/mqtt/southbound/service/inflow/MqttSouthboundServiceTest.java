@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
 import com.hpe.iot.mqtt.test.constants.TestConstants;

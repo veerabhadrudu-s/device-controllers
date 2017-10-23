@@ -1,7 +1,7 @@
 package com.hpe.iot.mqtt.groovyscript.sample.model;
 
+import com.hpe.iot.dc.model.DeviceModel
 import com.hpe.iot.model.DeviceInfo
-import com.hpe.iot.model.DeviceModel
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor
 import com.hpe.iot.northbound.service.inflow.IOTPublisherService
 import com.hpe.iot.southbound.handler.inflow.impl.AbstractJsonPathDeviceIdExtractor

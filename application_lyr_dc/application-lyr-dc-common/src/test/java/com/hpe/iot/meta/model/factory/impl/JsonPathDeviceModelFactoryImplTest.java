@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.impl.UplinkJsonPathDeviceModelFactory;
 import com.hpe.iot.model.impl.JsonPathDeviceMetaModel;
 import com.hpe.iot.test.constants.TestConstants;

@@ -4,7 +4,7 @@
 package com.hpe.iot.southbound.handler.inflow;
 
 import com.google.gson.JsonObject;
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 
 /**
  * @author sveera

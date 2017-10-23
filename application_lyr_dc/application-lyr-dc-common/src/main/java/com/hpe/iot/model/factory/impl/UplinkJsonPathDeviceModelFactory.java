@@ -16,8 +16,8 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.model.DeviceModel;
-import com.hpe.iot.model.DeviceModelImpl;
+import com.hpe.iot.dc.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.impl.JsonPathDeviceMetaModel;
 import com.hpe.iot.model.impl.json.marshling.JsonPathDeviceMetaModels;

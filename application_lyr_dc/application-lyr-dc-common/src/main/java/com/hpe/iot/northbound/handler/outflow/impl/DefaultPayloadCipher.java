@@ -4,7 +4,7 @@
 package com.hpe.iot.northbound.handler.outflow.impl;
 
 import com.google.gson.JsonObject;
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
 
 /**

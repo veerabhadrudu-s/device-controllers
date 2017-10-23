@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.hpe.iot.model.DeviceModel;
-import com.hpe.iot.model.DeviceModelImpl;
+import com.hpe.iot.dc.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.model.factory.GroovyDeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
 

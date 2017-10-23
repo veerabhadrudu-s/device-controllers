@@ -4,7 +4,7 @@
 package com.hpe.iot.southbound.handler.inflow.impl;
 
 import com.google.gson.JsonObject;
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.impl.JsonPathDeviceMetaModel;
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor;
 import com.jayway.jsonpath.JsonPath;

@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
-import com.hpe.iot.model.Device;
+import com.hpe.iot.dc.model.Device;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.DeviceInfo;
-import com.hpe.iot.model.DeviceModel;
 import com.hpe.iot.mqtt.southbound.security.SecurityLayer;
 import com.hpe.iot.southbound.service.outflow.SouthboundPublisherService;
 

@@ -6,8 +6,8 @@ package com.hpe.iot.southbound.handler.inflow.factory.impl;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.hpe.iot.model.DeviceModel;
-import com.hpe.iot.model.DeviceModelImpl;
+import com.hpe.iot.dc.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor;
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor;
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher;

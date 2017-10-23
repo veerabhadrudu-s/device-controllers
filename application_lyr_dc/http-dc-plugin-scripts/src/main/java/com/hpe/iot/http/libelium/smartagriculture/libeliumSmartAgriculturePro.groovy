@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.hpe.iot.model.DeviceModel
+import com.hpe.iot.dc.model.DeviceModel
 import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher

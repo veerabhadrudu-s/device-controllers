@@ -10,7 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.GroovyDeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;

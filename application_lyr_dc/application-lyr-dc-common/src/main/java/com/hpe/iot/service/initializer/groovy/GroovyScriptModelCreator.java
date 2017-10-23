@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.bean.pool.ServerBeanPool;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.groovy.loader.GroovyScriptClassLoader;
-import com.hpe.iot.model.DeviceModel;
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
 import com.hpe.iot.service.initializer.groovy.model.GroovyScriptMetaModel;

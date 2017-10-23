@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.southbound.handler.inflow.impl;
 
-import com.hpe.iot.model.DeviceDataDeliveryStatus;
+import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.northbound.service.inflow.IOTPublisherService;
 import com.hpe.iot.southbound.handler.inflow.UplinkPayloadProcessor;

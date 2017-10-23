@@ -5,7 +5,7 @@ package com.hpe.iot.model.factory;
 
 import java.util.List;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 
 /**
  * @author sveera

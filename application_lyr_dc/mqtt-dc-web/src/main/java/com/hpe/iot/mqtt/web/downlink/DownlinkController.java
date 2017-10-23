@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.hpe.iot.model.DeviceImpl;
+import com.hpe.iot.dc.model.DeviceImpl;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.northbound.service.outflow.DownlinkCommandServiceHandler;
 

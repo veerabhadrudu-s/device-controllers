@@ -11,6 +11,7 @@
 		<module>message-broker-common</module>
 		<module>device-controllers-ear</module>
 		<module>websocket-logger</module>
+		<module>device-model</module>
 	</modules>
 	<properties>
 		<java-version>1.8</java-version>

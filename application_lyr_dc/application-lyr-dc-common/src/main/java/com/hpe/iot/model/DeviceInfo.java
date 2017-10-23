@@ -1,6 +1,7 @@
 package com.hpe.iot.model;
 
 import com.google.gson.JsonObject;
+import com.hpe.iot.dc.model.Device;
 
 /**
  * @author sveera

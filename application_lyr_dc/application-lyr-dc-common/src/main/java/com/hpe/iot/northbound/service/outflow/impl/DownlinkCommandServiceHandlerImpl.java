@@ -4,9 +4,9 @@
 package com.hpe.iot.northbound.service.outflow.impl;
 
 import com.google.gson.JsonObject;
-import com.hpe.iot.model.Device;
+import com.hpe.iot.dc.model.Device;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.DeviceInfo;
-import com.hpe.iot.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;

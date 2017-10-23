@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.service.initializer.groovy.model;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 
 /**
  * @author sveera

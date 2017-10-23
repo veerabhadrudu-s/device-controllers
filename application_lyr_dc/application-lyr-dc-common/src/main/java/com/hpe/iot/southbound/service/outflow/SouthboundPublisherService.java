@@ -3,8 +3,8 @@
  */
 package com.hpe.iot.southbound.service.outflow;
 
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.DeviceInfo;
-import com.hpe.iot.model.DeviceModel;
 
 /**
  * @author sveera

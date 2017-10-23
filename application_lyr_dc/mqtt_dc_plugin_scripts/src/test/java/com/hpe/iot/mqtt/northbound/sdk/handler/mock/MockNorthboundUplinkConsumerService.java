@@ -17,9 +17,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hpe.broker.service.consumer.BrokerConsumerService;
 import com.hpe.broker.service.consumer.handler.BrokerConsumerDataHandler;
+import com.hpe.iot.dc.model.DeviceImpl;
 import com.hpe.iot.m2m.common.ContentInstance;
 import com.hpe.iot.m2m.common.RequestPrimitive;
-import com.hpe.iot.model.DeviceImpl;
 import com.hpe.iot.model.DeviceInfo;
 
 /**

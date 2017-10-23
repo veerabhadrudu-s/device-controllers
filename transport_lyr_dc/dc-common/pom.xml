@@ -8,6 +8,11 @@
 	</parent>
 	<artifactId>dc-common</artifactId>
 	<dependencies>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>device-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Unit Test Frameworks -->
 		<dependency>
 			<groupId>junit</groupId>

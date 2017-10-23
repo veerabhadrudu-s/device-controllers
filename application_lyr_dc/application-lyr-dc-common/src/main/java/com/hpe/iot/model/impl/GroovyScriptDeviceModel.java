@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.model.impl;
 
-import com.hpe.iot.model.DeviceModelImpl;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 
 /**
  * @author sveera

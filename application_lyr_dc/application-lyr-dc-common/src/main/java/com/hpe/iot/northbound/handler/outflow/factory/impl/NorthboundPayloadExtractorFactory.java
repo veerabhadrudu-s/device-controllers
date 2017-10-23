@@ -6,8 +6,8 @@ package com.hpe.iot.northbound.handler.outflow.factory.impl;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.hpe.iot.model.DeviceModel;
-import com.hpe.iot.model.DeviceModelImpl;
+import com.hpe.iot.dc.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
 import com.hpe.iot.northbound.handler.outflow.factory.PayloadExtractorFactory;

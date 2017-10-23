@@ -1,7 +1,7 @@
 package com.hpe.iot.northbound.handler.outflow;
 
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.DeviceInfo;
-import com.hpe.iot.model.DeviceModel;
 
 public interface DownlinkPayloadProcessor {
 

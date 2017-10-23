@@ -10,6 +10,11 @@
 	<dependencies>
 		<!-- Local jars -->
 		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>device-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>m2m-common</groupId>
 			<artifactId>m2m-common</artifactId>
 			<scope>provided</scope>

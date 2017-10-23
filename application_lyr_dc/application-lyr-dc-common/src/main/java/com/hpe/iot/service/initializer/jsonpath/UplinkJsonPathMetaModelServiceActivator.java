@@ -5,7 +5,7 @@ package com.hpe.iot.service.initializer.jsonpath;
 
 import java.util.List;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.service.initializer.ServiceActivator;
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher;

@@ -25,7 +25,7 @@ import com.hpe.broker.service.activemq.EmbeddedActivemqBroker;
 import com.hpe.broker.service.producer.BrokerProducerService;
 import com.hpe.broker.service.producer.activemq.ActiveMQProducerService;
 import com.hpe.broker.service.producer.factory.impl.BrokerProducerServiceFactoryImpl;
-import com.hpe.iot.model.DeviceDataDeliveryStatus;
+import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.factory.impl.UplinkJsonPathDeviceModelFactory;

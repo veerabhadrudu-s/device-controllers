@@ -3,9 +3,9 @@ package com.hpe.iot.northbound.service.inflow.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.m2m.common.RequestPrimitive;
 import com.hpe.iot.m2m.common.ResponsePrimitive;
-import com.hpe.iot.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.northbound.converter.inflow.IOTModelConverter;
 import com.hpe.iot.northbound.service.inflow.IOTPublisherService;

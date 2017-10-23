@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.m2m.common.ContentInstance;
 import com.hpe.iot.m2m.common.PrimitiveContent;
 import com.hpe.iot.m2m.common.RequestPrimitive;
 import com.hpe.iot.m2m.common.ResponsePrimitive;
 import com.hpe.iot.m2m.common.ResponseTypeInfo;
-import com.hpe.iot.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.northbound.converter.inflow.IOTModelConverter;
 

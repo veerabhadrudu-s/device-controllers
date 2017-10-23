@@ -4,10 +4,10 @@
 package com.hpe.iot.southbound.service.inflow.impl;
 
 import com.google.gson.JsonObject;
-import com.hpe.iot.model.Device;
-import com.hpe.iot.model.DeviceImpl;
+import com.hpe.iot.dc.model.Device;
+import com.hpe.iot.dc.model.DeviceImpl;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.DeviceInfo;
-import com.hpe.iot.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor;
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor;

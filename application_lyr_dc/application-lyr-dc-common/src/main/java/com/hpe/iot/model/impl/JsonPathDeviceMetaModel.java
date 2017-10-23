@@ -5,7 +5,7 @@ package com.hpe.iot.model.impl;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.hpe.iot.model.DeviceModelImpl;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.model.impl.json.marshling.DeviceMetaModelAdapter;
 
 /**

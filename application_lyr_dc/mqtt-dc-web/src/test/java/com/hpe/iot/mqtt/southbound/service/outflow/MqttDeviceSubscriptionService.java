@@ -19,7 +19,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.mqtt.southbound.security.SecurityLayer;
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;

@@ -25,8 +25,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.http.test.constants.TestConstants;
-import com.hpe.iot.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor;

@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.model.Device;
+import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
 import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;

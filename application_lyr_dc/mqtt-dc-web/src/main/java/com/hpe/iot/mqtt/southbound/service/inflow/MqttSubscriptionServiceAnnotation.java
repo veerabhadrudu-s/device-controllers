@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.google.gson.JsonParser;
-import com.hpe.iot.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.mqtt.southbound.security.SecurityLayer;
 import com.hpe.iot.southbound.service.inflow.SouthboundService;

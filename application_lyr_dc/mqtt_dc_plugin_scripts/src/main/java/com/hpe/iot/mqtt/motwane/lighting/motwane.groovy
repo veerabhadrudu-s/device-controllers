@@ -14,9 +14,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.hpe.iot.model.Device
+import com.hpe.iot.dc.model.Device
+import com.hpe.iot.dc.model.DeviceModel
 import com.hpe.iot.model.DeviceInfo
-import com.hpe.iot.model.DeviceModel
 import com.hpe.iot.mqtt.southbound.service.holder.GroovyServicesHolder
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher
