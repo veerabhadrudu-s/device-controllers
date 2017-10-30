@@ -20,6 +20,7 @@
 				<value>classpath:activemq.properties</value>
 				<value>classpath:kafka.properties</value>
 				<value>classpath:kafka-southbound.properties</value>
+				<value>classpath:kafka-test.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -145,12 +146,19 @@
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
 	</bean>
 
+	<bean id="kafkaBrokerService" class="com.hpe.broker.service.kafka.KafkaBrokerService">
+		<constructor-arg index="0" value="${kafka.embedded.broker.port}" />
+		<constructor-arg index="1"
+			value="${kafka.embedded.broker.data.directory}" />
+	</bean>
+
 	<bean id="kafkaSouthboundInflowService"
-		class="com.hpe.iot.kafka.southbound.service.inflow.KafkaSouthboundInflowService">
+		class="com.hpe.iot.kafka.southbound.service.inflow.EmbeddedKafkaBrokerSouthboundInflowService">
 		<constructor-arg index="0" value="${kafka.southbound.brokerURL}" />
 		<constructor-arg index="1" ref="deviceModelFactory" />
 		<constructor-arg index="2" ref="southboundService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
+		<constructor-arg index="4" ref="kafkaBrokerService" />
 	</bean>
 
 	<bean id="kafkaDcInitializer" class="com.hpe.iot.kafka.initializer.KafkaDCInitializer"
@@ -199,7 +207,8 @@
 
 	<bean id="kafkaDevicePublisherService"
 		class="com.hpe.broker.service.producer.kafka.KafkaProducerService"
-		init-method="startService" destroy-method="stopService">
+		init-method="startService" destroy-method="stopService"
+		depends-on="kafkaSouthboundInflowService">
 		<constructor-arg index="0" value="${kafka.southbound.brokerURL}" />
 		<constructor-arg index="1"
 			value="${kafka.southbound.key.serializer}" />
@@ -208,10 +217,5 @@
 		<constructor-arg index="3"
 			value="${kafka.southbound.producerid}" />
 	</bean>
-
-	<!-- <bean id="kafkaBrokerService" class="com.hpe.broker.service.kafka.KafkaBrokerService" 
-		init-method="startService" destroy-method="stopService"> <constructor-arg 
-		index="0" value="9092" /> <constructor-arg index="1" value="target/kafka/tmp" 
-		/> </bean> -->
 
 </beans>

@@ -38,16 +38,17 @@ public class PristechSmartParkingCloudTest {
 	@Test
 	@Ignore
 	public void testPristechSmartParkingUplinkParkingEvent() {
-		//for (int i = 0; i < 10000; i++)
-			kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
-					getPristechSmartParkingUplinkParkingEventMsg().getBytes());
+		// for (int i = 0; i < 10000; i++)
+		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
+				getPristechSmartParkingUplinkParkingEventMsg().getBytes());
 	}
 
 	@Test
+	@Ignore
 	public void testPristechSmartParkingUplinkHealthCheck() {
-		//for (int i = 0; i < 10000; i++)
-			kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
-					getPristechSmartParkingUplinkHealthCheckMsg().getBytes());
+		// for (int i = 0; i < 10000; i++)
+		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
+				getPristechSmartParkingUplinkHealthCheckMsg().getBytes());
 	}
 
 	private String getPristechSmartParkingUplinkParkingEventMsg() {

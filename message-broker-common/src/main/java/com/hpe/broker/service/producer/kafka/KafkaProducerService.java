@@ -63,7 +63,6 @@ public class KafkaProducerService<K, V> implements BrokerProducerService<V> {
 				tryInstantiatingKafkaProducer();
 			ProducerRecord<K, V> producerRecord = new ProducerRecord<K, V>(topicName, value);
 			kafkaProducer.send(producerRecord, kafkaProducerCallbackHandler);
-			//kafkaProducer.send(producerRecord).get();
 		} catch (Throwable th) {
 			logExceptionStackTrace(th, getClass());
 			throw new RuntimeException(th);

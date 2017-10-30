@@ -20,7 +20,7 @@
 	</logger>
 
 	<logger name="org.apache.activemq">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 
 	<logger name="org.apache">
@@ -29,7 +29,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="DEBUG" />
+		<priority value="INFO" />
 		<appender-ref ref="KAFKA_DC" />
 	</root>
 

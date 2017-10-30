@@ -9,7 +9,6 @@ import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH_VERSION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.hpe.iot.dc.model.Device;
@@ -25,7 +24,6 @@ public class PristechSmartParkingTest extends KafkaDCPluginScriptTestBaseTemplat
 	private static final String DEVICE_ID = "3c003434";
 
 	@Test
-	@Ignore
 	public void testPristechSmartParkingUplinkParkingEvent() throws InterruptedException {
 		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
 				getPristechSmartParkingUplinkParkingEventMsg());
@@ -35,7 +33,6 @@ public class PristechSmartParkingTest extends KafkaDCPluginScriptTestBaseTemplat
 	}
 
 	@Test
-	@Ignore
 	public void testPristechSmartParkingUplinkHealthCheck() throws InterruptedException {
 		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
 				getPristechSmartParkingUplinkHealthCheckMsg());

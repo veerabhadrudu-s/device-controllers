@@ -38,7 +38,7 @@ public abstract class KafkaDCPluginScriptTestBaseTemplate {
 	protected MockNorthboundDownlinkProducerService mockNorthboundDownlinkProducerService;
 	@Autowired
 	protected KafkaProducerService<String, String> kafkaDevicePublisherService;
-
+	
 	@Before
 	public void beforeTest() throws InterruptedException {
 		waitForDCInitialization();
@@ -69,10 +69,11 @@ public abstract class KafkaDCPluginScriptTestBaseTemplate {
 	}
 
 	private void waitForDCInitialization() throws InterruptedException {
-		Thread.sleep(5000);
+		Thread.sleep(20000);
 	}
 
 	protected void waitForDCToCompletePayloadProcessing() throws InterruptedException {
 		Thread.sleep(5000);
 	}
+
 }
