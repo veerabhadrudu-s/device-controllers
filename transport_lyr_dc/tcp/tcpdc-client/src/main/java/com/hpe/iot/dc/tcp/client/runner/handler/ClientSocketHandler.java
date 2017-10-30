@@ -116,7 +116,7 @@ public class ClientSocketHandler {
 		while (isHandlerRunnable) {
 			isWriterExecutionException = tryForExecutionException(writerResponse);
 			isReaderExecutionException = tryForExecutionException(readerResponse);
-			if (isWriterExecutionException | isReaderExecutionException)
+			if (isWriterExecutionException || isReaderExecutionException)
 				isHandlerRunnable = false;
 		}
 	}

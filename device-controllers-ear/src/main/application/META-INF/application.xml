@@ -17,5 +17,11 @@
 			<context-root>/tcpdc</context-root>
 		</web>
 	</module>
+	<module>
+		<web>
+			<web-uri>kafkadc.war</web-uri>
+			<context-root>/kafkadc</context-root>
+		</web>
+	</module>
 	<library-directory>lib</library-directory>
 </application>

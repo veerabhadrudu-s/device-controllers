@@ -72,7 +72,7 @@ public class DownlinkCommandServiceImpl implements DownlinkCommandService {
 		}
 
 		@Override
-		public void handleConsumerMessage(String consumerData) {
+		public void handleConsumerMessage(String destiantion, String consumerData) {
 			logger.trace("Received downlink message from message broker is " + consumerData);
 			if (unmarshaller == null)
 				initializeUnmarshaller();

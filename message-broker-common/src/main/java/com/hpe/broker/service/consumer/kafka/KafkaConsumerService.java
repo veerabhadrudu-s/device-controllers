@@ -1,5 +1,6 @@
 package com.hpe.broker.service.consumer.kafka;
 
+import static com.hpe.broker.utility.UtilityLogger.logExceptionStackTrace;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collections;
@@ -70,7 +71,6 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 
 	private class KafkaConsumerRunnable implements Runnable {
 		private final Logger logger = getLogger(getClass());
-		private final String auto_commit_offset = "false";
 		private final String auto_commit_interval_ms = "1000";
 		private final int polling_interval = 100;
 		private final String destination;
@@ -94,6 +94,8 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 					kafkaConsumer.commitSync();
 					// kafkaConsumer.unsubscribe();
 				}
+			} catch (Throwable th) {
+				logExceptionStackTrace(th, getClass());
 			} finally {
 				closingKafkaConsumer();
 			}
@@ -101,7 +103,7 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 
 		private void tryProcessingMessage(ConsumerRecord<K, V> consumerRecord) {
 			try {
-				brokerConsumerDataHandler.handleConsumerMessage(consumerRecord.value());
+				brokerConsumerDataHandler.handleConsumerMessage(consumerRecord.topic(), consumerRecord.value());
 			} catch (Throwable e) {
 				UtilityLogger.logExceptionStackTrace(e, getClass());
 			}
@@ -119,6 +121,7 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 				kafkaConsumer.subscribe(Collections.singletonList(destination));
 				isConsumerRunnable = true;
 			} catch (Exception e) {
+				logExceptionStackTrace(e, getClass());
 				throw new RuntimeException("Failed to start " + this.getClass().getSimpleName());
 			}
 		}
@@ -128,7 +131,6 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 			properties.setProperty("bootstrap.servers", kafkaBootStrapServers);
 			properties.setProperty("group.id", consumerGroupId);
 			properties.setProperty("auto.commit.interval.ms", auto_commit_interval_ms);
-			properties.setProperty("auto.commit.offset", auto_commit_offset);
 
 			final Deserializer<K> keySerializer = keyDeSerializerClass == null || keyDeSerializerClass.isEmpty()
 					? (Deserializer<K>) new StringDeserializer()

@@ -51,7 +51,7 @@ public class MqttSubscriptionService {
 		try {
 			logger.info("Connecting to Mqtt Brocker with url " + mqttBrokerUrl);
 			mqttClient = new MqttClient(mqttBrokerUrl, GENERIC_MQTTDC_CLIENT_ID, persistence);
-			subscribeForTopics();
+			subscribeToTopics();
 			mqttMessageHandlerService.startService();
 		} catch (Exception e) {
 			logger.error("Mqtt client failed to conenct : " + e.getMessage());
@@ -60,7 +60,7 @@ public class MqttSubscriptionService {
 
 	}
 
-	private void subscribeForTopics() throws Exception {
+	private void subscribeToTopics() throws Exception {
 		MqttConnectOptions connect = new MqttConnectOptions();
 		connect.setCleanSession(true);
 		if (securityLayer.isSecurityEnabled())
@@ -132,7 +132,7 @@ public class MqttSubscriptionService {
 			logger.debug("Connection lost to the broker reconnecting..........");
 			if (!mqttClient.isConnected())
 				try {
-					subscribeForTopics();
+					subscribeToTopics();
 					logger.debug("Mqtt client reconnected in subscription service");
 				} catch (Exception e) {
 					logger.error("Reconnection to the broker failed  " + e.getMessage());

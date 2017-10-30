@@ -19,7 +19,7 @@ public class LoggerBrokerConsumerDataHandler implements BrokerConsumerDataHandle
 	private List<String> storedConsumerData = new CopyOnWriteArrayList<>();
 
 	@Override
-	public void handleConsumerMessage(String consumerData) {
+	public void handleConsumerMessage(String destination, String consumerData) {
 		logger.info("Consumed Message by handler is " + consumerData);
 		storedConsumerData.add(consumerData);
 	}

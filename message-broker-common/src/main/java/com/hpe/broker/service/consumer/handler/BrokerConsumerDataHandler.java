@@ -6,5 +6,5 @@ package com.hpe.broker.service.consumer.handler;
  */
 public interface BrokerConsumerDataHandler<T> {
 
-	void handleConsumerMessage(T consumerData);
+	void handleConsumerMessage(String destiantion, T consumerData);
 }

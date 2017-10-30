@@ -90,7 +90,7 @@ public class ActiveMQConsumerService implements BrokerConsumerService<String> {
 				Session session = activeMQConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 				Queue queue = session.createQueue(destination);
 				MessageConsumer consumer = session.createConsumer(queue);
-				consumer.setMessageListener(new ActivemqMessageListener(brokerConsumerDataHandler));
+				consumer.setMessageListener(new ActivemqMessageListener(destination, brokerConsumerDataHandler));
 				activeMQConnection.start();
 			}
 		} catch (JMSException e) {
@@ -114,8 +114,11 @@ public class ActiveMQConsumerService implements BrokerConsumerService<String> {
 	private class ActivemqMessageListener implements MessageListener {
 
 		private final BrokerConsumerDataHandler<String> brokerConsumerDataHandler;
+		private final String destination;
 
-		public ActivemqMessageListener(BrokerConsumerDataHandler<String> brokerConsumerDataHandler) {
+		public ActivemqMessageListener(String destination,
+				BrokerConsumerDataHandler<String> brokerConsumerDataHandler) {
+			this.destination = destination;
 			this.brokerConsumerDataHandler = brokerConsumerDataHandler;
 		}
 
@@ -128,7 +131,7 @@ public class ActiveMQConsumerService implements BrokerConsumerService<String> {
 			try {
 				if (message instanceof TextMessage) {
 					TextMessage textMessage = (TextMessage) message;
-					brokerConsumerDataHandler.handleConsumerMessage(textMessage.getText());
+					brokerConsumerDataHandler.handleConsumerMessage(destination, textMessage.getText());
 				}
 			} catch (Throwable e) {
 				logExceptionStackTrace(e, getClass());

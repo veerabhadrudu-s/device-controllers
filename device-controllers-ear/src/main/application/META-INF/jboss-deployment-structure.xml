@@ -18,4 +18,10 @@
 			<module name="org.slf4j" />
 		</exclusions>
 	</sub-deployment>
+	<sub-deployment name="kafkadc.war">
+		<exclusions>
+			<module name="org.apache.log4j" />
+			<module name="org.slf4j" />
+		</exclusions>
+	</sub-deployment>
 </jboss-deployment-structure>

@@ -2,16 +2,17 @@
 
 <devicemodels>
 	<devicemodel>
-		<manufacturer>Trackimo</manufacturer>
-		<modelId>TRKM002</modelId>
-		<deviceIdJsonPath>device_id</deviceIdJsonPath>
-		<messageTypeJsonPath>alarm_type</messageTypeJsonPath>
+		<manufacturer>MMI</manufacturer>
+		<modelId>streetlighting</modelId>
+		<version>1.0</version>
+		<deviceIdJsonPath>$.mmi_eventdetail[0].uniqueId</deviceIdJsonPath>
+		<messageTypeJsonPath></messageTypeJsonPath>
 	</devicemodel>
 	<devicemodel>
-		<manufacturer>Sample</manufacturer>
-		<modelId>SampleModel</modelId>
-		<deviceIdJsonPath>sample_id</deviceIdJsonPath>
-		<messageTypeJsonPath>message_type</messageTypeJsonPath>
+		<manufacturer>MMI</manufacturer>
+		<modelId>wastemanagement</modelId>
+		<version>1.0</version>
+		<deviceIdJsonPath>$.mmi_eventdetail[0].uniqueId</deviceIdJsonPath>
+		<messageTypeJsonPath></messageTypeJsonPath>
 	</devicemodel>
-	
 </devicemodels>

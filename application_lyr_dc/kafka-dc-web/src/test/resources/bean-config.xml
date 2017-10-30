@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+				http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="com.hpe.iot" />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:iot-broker.properties</value>
+				<value>classpath:activemq.properties</value>
+				<value>classpath:kafka.properties</value>
+				<value>classpath:kafka-southbound.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="com.hpe.broker.service.activemq.EmbeddedActivemqBroker"
+		init-method="startService" destroy-method="stopService">
+		<constructor-arg index="0" value="${activemq.embeddedBrokerUrl}" />
+	</bean>
+
+	<bean id="myManagedExecutorService"
+		class="com.hpe.iot.kafka.executor.mock.MockManagedExecutorService" />
+
+	<bean id="iotModelConverter"
+		class="com.hpe.iot.northbound.converter.inflow.impl.DefaultIOTModelConverterImpl" />
+
+	<bean id="deviceModelFactory"
+		class="com.hpe.iot.model.factory.impl.GroovyAndUplinkJsonPathDeviceModelFactory">
+		<constructor-arg index="0"
+			value="src/test/resources/devicemodels.xml" />
+	</bean>
+
+	<bean id="southboundPayloadExtractorFactory"
+		class="com.hpe.iot.southbound.handler.inflow.factory.impl.SouthboundPayloadExtractorFactory" />
+
+	<bean id="northboundPayloadExtractorFactory"
+		class="com.hpe.iot.northbound.handler.outflow.factory.impl.NorthboundPayloadExtractorFactory" />
+
+	<bean id="activeMQProducerService"
+		class="com.hpe.broker.service.producer.activemq.ActiveMQProducerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="kafkaProducerService"
+		class="com.hpe.broker.service.producer.kafka.KafkaProducerService">
+		<constructor-arg index="0" value="${kafka.brokerURL}" />
+		<constructor-arg index="1" value="${kafka.key.serializer}" />
+		<constructor-arg index="2" value="${kafka.value.serializer}" />
+		<constructor-arg index="3" value="${kafka.producerid}" />
+	</bean>
+
+	<util:list id="brokerProducerServices" list-class="java.util.ArrayList"
+		value-type="com.hpe.broker.service.producer.BrokerProducerService">
+		<ref bean="activeMQProducerService" />
+		<ref bean="kafkaProducerService" />
+	</util:list>
+
+	<bean id="brokerProducerServiceFactory"
+		class="com.hpe.broker.service.producer.factory.impl.BrokerProducerServiceFactoryImpl"
+		init-method="startAllServices" destroy-method="stopAllServices">
+		<constructor-arg index="0" ref="brokerProducerServices" />
+	</bean>
+
+	<bean id="iotPublisherHandler"
+		class="com.hpe.iot.northbound.service.inflow.impl.IOTPublisherHandler">
+		<constructor-arg index="0" ref="brokerProducerServiceFactory" />
+		<constructor-arg index="1"
+			value="${iot.device.uplink.destination}" />
+		<constructor-arg index="2" value="${active.message.broker}" />
+	</bean>
+
+	<bean id="iotPublisherService"
+		class="com.hpe.iot.northbound.service.inflow.impl.IOTPublisherServiceImpl">
+		<constructor-arg index="0" ref="iotPublisherHandler" />
+		<constructor-arg index="1" ref="iotModelConverter" />
+	</bean>
+
+	<bean id="defaultUplinkPayloadProcessor"
+		class="com.hpe.iot.southbound.handler.inflow.impl.DefaultUplinkPayloadProcessor">
+		<constructor-arg index="0" ref="iotPublisherService" />
+	</bean>
+
+	<bean id="downlinkCommandServiceHandler"
+		class="com.hpe.iot.northbound.service.outflow.impl.DownlinkCommandServiceHandlerImpl">
+		<constructor-arg index="0" ref="deviceModelFactory" />
+		<constructor-arg index="1"
+			ref="northboundPayloadExtractorFactory" />
+	</bean>
+
+	<bean id="southboundService"
+		class="com.hpe.iot.southbound.service.inflow.impl.SouthboundServiceImpl">
+		<constructor-arg index="0" ref="deviceModelFactory" />
+		<constructor-arg index="1"
+			ref="southboundPayloadExtractorFactory" />
+	</bean>
+
+	<bean id="uplinkJsonPathMetaModelServiceActivator"
+		class="com.hpe.iot.service.initializer.jsonpath.UplinkJsonPathMetaModelServiceActivator">
+		<constructor-arg index="0" ref="deviceModelFactory" />
+		<constructor-arg index="1"
+			ref="southboundPayloadExtractorFactory" />
+		<constructor-arg index="2" ref="defaultUplinkPayloadProcessor" />
+	</bean>
+
+	<bean id="serverBeanPool" class="com.hpe.iot.kafka.bean.pool.impl.ServerBeanPoolImpl" />
+
+	<bean id="groovyScriptModelCreator"
+		class="com.hpe.iot.service.initializer.groovy.GroovyScriptModelCreator">
+		<constructor-arg index="0" ref="serverBeanPool" />
+	</bean>
+
+	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
+		value-type="java.lang.String">
+		<value>src/test/java/com/hpe/iot/kafka/groovyscript/sample/model</value>
+	</util:list>
+
+	<bean id="defaultPayloadExtractorFactoryComponentHolder"
+		class="com.hpe.iot.service.initializer.groovy.DefaultPayloadExtractorFactoryComponentHolder">
+		<constructor-arg index="0" ref="defaultUplinkPayloadProcessor" />
+	</bean>
+
+	<bean id="groovyScriptMetaModelServiceActivator"
+		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
+		<constructor-arg index="0" ref="directoriesForGroovyScripts" />
+		<constructor-arg index="1"
+			ref="southboundPayloadExtractorFactory" />
+		<constructor-arg index="2"
+			ref="northboundPayloadExtractorFactory" />
+		<constructor-arg index="3" ref="deviceModelFactory" />
+		<constructor-arg index="4" ref="groovyScriptModelCreator" />
+		<constructor-arg index="5"
+			ref="defaultPayloadExtractorFactoryComponentHolder" />
+	</bean>
+
+	<bean id="kafkaSouthboundInflowService"
+		class="com.hpe.iot.kafka.southbound.service.inflow.KafkaSouthboundInflowService">
+		<constructor-arg index="0" value="${kafka.southbound.brokerURL}" />
+		<constructor-arg index="1" ref="deviceModelFactory" />
+		<constructor-arg index="2" ref="southboundService" />
+		<constructor-arg index="3" ref="myManagedExecutorService" />
+	</bean>
+
+	<bean id="kafkaDcInitializer" class="com.hpe.iot.kafka.initializer.KafkaDCInitializer"
+		init-method="startDC" destroy-method="stopDC">
+		<constructor-arg index="0"
+			ref="uplinkJsonPathMetaModelServiceActivator" />
+		<constructor-arg index="1"
+			ref="groovyScriptMetaModelServiceActivator" />
+		<constructor-arg index="2" ref="kafkaSouthboundInflowService" />
+		<constructor-arg index="3" ref="myManagedExecutorService" />
+	</bean>
+
+</beans>

@@ -60,7 +60,7 @@ public class MockNorthboundUplinkConsumerService {
 		}
 
 		@Override
-		public void handleConsumerMessage(String consumerData) {
+		public void handleConsumerMessage(String destination, String consumerData) {
 			logger.debug("Received payload in " + this.getClass().getSimpleName() + " is " + consumerData);
 			if (unmarshaller == null)
 				initializeUnmarshaller();
@@ -85,8 +85,8 @@ public class MockNorthboundUplinkConsumerService {
 			JsonObject downlinkPayload = parser.parse(deviceInfoJsonPayload).getAsJsonObject();
 			JsonObject device = downlinkPayload.get("device").getAsJsonObject();
 			return new DeviceInfo(
-					new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(),
-							 "1.0",device.get("deviceId").getAsString()),
+					new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(), "1.0",
+							device.get("deviceId").getAsString()),
 					downlinkPayload.get("messageType").getAsString(), downlinkPayload.get("payload").getAsJsonObject());
 		}
 
