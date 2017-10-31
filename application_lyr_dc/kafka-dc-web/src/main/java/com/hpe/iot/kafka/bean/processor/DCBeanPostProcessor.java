@@ -16,7 +16,7 @@ public class DCBeanPostProcessor implements BeanPostProcessor {
 	private static final Logger logger = LoggerFactory.getLogger(DCBeanPostProcessor.class);
 
 	public Object postProcessAfterInitialization(Object arg0, String arg1) throws BeansException {
-		logger.info("Bean with id " + arg1 + " created with instance " + arg0);
+		logger.info(String.format("Bean with id %s created with instance %s", arg1, arg0));
 		return arg0;
 	}
 
