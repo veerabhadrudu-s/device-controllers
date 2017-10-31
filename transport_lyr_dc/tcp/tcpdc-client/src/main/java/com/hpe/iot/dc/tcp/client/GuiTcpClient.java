@@ -5,6 +5,8 @@ package com.hpe.iot.dc.tcp.client;
 
 import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -71,27 +73,34 @@ public class GuiTcpClient {
 		return new ClientEnvironment(clientSocketManagerImpl, clientSocketEnvironment, clientSocketRunner);
 	}
 
-	private void bindButtonConfigurations(Map<JButton, String> buttonConfigurations,
-			ClientEnvironment clientEnvironment, ExecutorService executorService) {
-		Set<JButton> allButtons = buttonConfigurations.keySet();
+	private void bindButtonConfigurations(final Map<JButton, String> buttonConfigurations,
+			final ClientEnvironment clientEnvironment, ExecutorService executorService) {
+		final Set<JButton> allButtons = buttonConfigurations.keySet();
 		enableleAllButtons(allButtons, false);
-		executorService.submit(() -> {
-			while (clientEnvironment.getClientSocketManager().getHandshakedClients().size() == 0)
-				;
-			for (Map.Entry<JButton, String> buttonConfiguration : buttonConfigurations.entrySet()) {
-				JButton actionButton = buttonConfiguration.getKey();
-				actionButton.addActionListener((actionEvent) -> {
-					ClientSocketWriter clientSocketWriter = clientEnvironment.getClientSocketEnvironment()
-							.getClientSocketWriter();
-					try {
-						clientSocketWriter.pushDataUsingClients(buttonConfiguration.getValue(),
-								clientEnvironment.getClientSocketManager().getHandshakedClients().get(0));
-					} catch (Exception e) {
-						logExceptionStackTrace(e, getClass());
-					}
-				});
+		executorService.submit(new Runnable() {
+			@Override
+			public void run() {
+				while (clientEnvironment.getClientSocketManager().getHandshakedClients().size() == 0)
+					;
+				for (final Map.Entry<JButton, String> buttonConfiguration : buttonConfigurations.entrySet()) {
+					JButton actionButton = buttonConfiguration.getKey();
+					actionButton.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent actionEvent) {
+							ClientSocketWriter clientSocketWriter = clientEnvironment.getClientSocketEnvironment()
+									.getClientSocketWriter();
+							try {
+								clientSocketWriter.pushDataUsingClients(buttonConfiguration.getValue(),
+										clientEnvironment.getClientSocketManager().getHandshakedClients().get(0));
+							} catch (Exception e) {
+								logExceptionStackTrace(e, getClass());
+							}
+
+						}
+					});
+				}
+				enableleAllButtons(allButtons, true);
 			}
-			enableleAllButtons(allButtons, true);
 		});
 	}
 
@@ -100,8 +109,8 @@ public class GuiTcpClient {
 			button.setEnabled(isEnabled);
 	}
 
-	private void bindOnCloseOperation(JFrame application, ClientEnvironment clientEnvironment,
-			ExecutorService executorService) {
+	private void bindOnCloseOperation(JFrame application, final ClientEnvironment clientEnvironment,
+			final ExecutorService executorService) {
 		application.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

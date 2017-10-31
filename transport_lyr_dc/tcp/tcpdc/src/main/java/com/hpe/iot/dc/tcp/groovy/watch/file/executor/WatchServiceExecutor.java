@@ -44,14 +44,17 @@ public class WatchServiceExecutor {
 	}
 
 	private void processDirectoryEventsInThread() {
-		managedExecutorService.execute(() -> {
-			try {
-				directoryWatchService.processEvents();
-			} catch (Exception e) {
-				logger.error("Failed to run WatchServiceExecutor ");
-				logExceptionStackTrace(e, getClass());
+		managedExecutorService.execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					directoryWatchService.processEvents();
+				} catch (Exception e) {
+					logger.error("Failed to run WatchServiceExecutor ");
+					logExceptionStackTrace(e, getClass());
+				}
+				logger.debug("Stopped WatchServiceExecutor ");
 			}
-			logger.debug("Stopped WatchServiceExecutor ");
 		});
 	}
 

@@ -63,47 +63,52 @@ public class DirectoryWatchServiceTest {
 		logger.info("Completed executing watch service");
 	}
 
-	private void executeFileWatchingThread(ExecutorService executorService, CountDownLatch countDownLatch) {
-		executorService.execute(() -> {
-			try {
-				directoryWatchService.startWatching();
-				directoryWatchService.processEvents();
-			} catch (Exception e) {
-				logExceptionStackTrace(e, getClass());
-			} finally {
-				countDownLatch.countDown();
-			}
+	private void executeFileWatchingThread(ExecutorService executorService, final CountDownLatch countDownLatch) {
+		executorService.execute(new Runnable() {
 
+			@Override
+			public void run() {
+				try {
+					directoryWatchService.startWatching();
+					directoryWatchService.processEvents();
+				} catch (Exception e) {
+					logExceptionStackTrace(e, getClass());
+				} finally {
+					countDownLatch.countDown();
+				}
+
+			}
 		});
 	}
 
-	private void executeFileWritingThread(ExecutorService executorService, CountDownLatch countDownLatch) {
-		executorService.execute(() -> {
-			try {
-				Random random = new Random(100000000);
-				for (int counter = 0; counter < 5; counter++) {
-					File file = new File(ClassLoader
-							.getSystemResource(TEST_WATCH_DIRECTORY + File.separator + WATCH_TXT_FILE).toURI());
-					FileOutputStream fop = new FileOutputStream(file, true);
-					byte[] contentInBytes = ("Random Text is " + random.nextLong() + "\n").getBytes();
-					fop.write(contentInBytes);
-					fop.flush();
-					fop.close();
-					Thread.sleep(100);
-				}
-			} catch (Exception e1) {
-				logExceptionStackTrace(e1, getClass());
-			} finally {
+	private void executeFileWritingThread(ExecutorService executorService, final CountDownLatch countDownLatch) {
+		executorService.execute(new Runnable() {
+			@Override
+			public void run() {
 				try {
-					Thread.sleep(200);
-					countDownLatch.countDown();
-					directoryWatchService.stopWatching();
-				} catch (Exception e) {
-					logExceptionStackTrace(e, getClass());
+					Random random = new Random(100000000);
+					for (int counter = 0; counter < 5; counter++) {
+						File file = new File(ClassLoader
+								.getSystemResource(TEST_WATCH_DIRECTORY + File.separator + WATCH_TXT_FILE).toURI());
+						FileOutputStream fop = new FileOutputStream(file, true);
+						byte[] contentInBytes = ("Random Text is " + random.nextLong() + "\n").getBytes();
+						fop.write(contentInBytes);
+						fop.flush();
+						fop.close();
+						Thread.sleep(100);
+					}
+				} catch (Exception e1) {
+					logExceptionStackTrace(e1, getClass());
+				} finally {
+					try {
+						Thread.sleep(200);
+						countDownLatch.countDown();
+						directoryWatchService.stopWatching();
+					} catch (Exception e) {
+						logExceptionStackTrace(e, getClass());
+					}
 				}
-
 			}
-
 		});
 	}
 

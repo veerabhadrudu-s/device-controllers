@@ -77,7 +77,7 @@ public class UplinkJsonPathDeviceModelFactory implements DeviceModelFactory {
 
 	@Override
 	public List<DeviceModel> getAllDeviceModels() {
-		return new ArrayList<>(deviceMetaModels.values());
+		return new ArrayList<DeviceModel>(deviceMetaModels.values());
 	}
 
 	@Override

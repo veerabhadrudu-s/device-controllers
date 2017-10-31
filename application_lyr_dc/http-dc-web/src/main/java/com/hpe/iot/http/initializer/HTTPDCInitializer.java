@@ -34,14 +34,17 @@ public class HTTPDCInitializer implements DCInitializer {
 
 	@Override
 	public void startDC() {
-		executorService.submit(() -> {
-			try {
-				jsonPathMetaModelServiceActivator.startAllServices();
-				groovyScriptServiceActivator.startAllServices();
-				logger.info("HTTP DC Initialization completed successfully");
-			} catch (Exception e) {
-				logger.error("Failed to start DC services");
-				logExceptionStackTrace(e, getClass());
+		executorService.submit(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					jsonPathMetaModelServiceActivator.startAllServices();
+					groovyScriptServiceActivator.startAllServices();
+					logger.info("HTTP DC Initialization completed successfully");
+				} catch (Exception e) {
+					logger.error("Failed to start DC services");
+					logExceptionStackTrace(e, getClass());
+				}
 			}
 		});
 	}

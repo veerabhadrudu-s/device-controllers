@@ -41,7 +41,7 @@ public class MMIGUI implements GUI {
 		JLabel lblNewLabel = new JLabel("MMI Safemate");
 		lblNewLabel.setForeground(new Color(153, 51, 255));
 		lblNewLabel.setFont(new Font("Gabriola", Font.BOLD, 35));
-		lblNewLabel.setBounds(28, 40, 189, 66);		
+		lblNewLabel.setBounds(28, 40, 189, 66);
 		JButton sosButton = new JButton("SOS");
 		sosButton.setForeground(Color.RED);
 		sosButton.setFont(new Font("Verdana", Font.PLAIN, 30));
@@ -49,22 +49,25 @@ public class MMIGUI implements GUI {
 		frame.getContentPane().add(lblNewLabel);
 		frame.getContentPane().add(sosButton);
 		buttonConfigurations.put(sosButton, "0x4203");
-		
+
 		JLabel lblDeviceId = new JLabel("Device ID :");
 		lblDeviceId.setFont(new Font("Verdana", Font.BOLD, 12));
 		lblDeviceId.setBounds(28, 105, 82, 16);
 		frame.getContentPane().add(lblDeviceId);
-		
+
 		deviceIdLbl= new JLabel("");
 		deviceIdLbl.setBounds(111, 107, 123, 14);
 		frame.getContentPane().add(deviceIdLbl);
-		EventQueue.invokeLater({
-			try {
-				frame.setVisible(true);
-			} catch (Exception e) {
-				logExceptionStackTrace(e, getClass());
-			}
-		});
+		EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							frame.setVisible(true);
+						} catch (Exception e) {
+							logExceptionStackTrace(e, getClass());
+						}
+					}
+				});
 	}
 
 	@Override

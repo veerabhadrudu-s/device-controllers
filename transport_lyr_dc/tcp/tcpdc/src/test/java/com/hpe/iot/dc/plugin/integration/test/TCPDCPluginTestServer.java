@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -47,13 +48,16 @@ public class TCPDCPluginTestServer {
 	@Test
 	@Ignore
 	public void testAllTCPDCPlugins() {
-		TCPServerSocketServiceManager tcpServerSocketServiceManager = applicationContext
+		final TCPServerSocketServiceManager tcpServerSocketServiceManager = applicationContext
 				.getBean(TCPServerSocketServiceManager.class);
 		Assert.assertNotNull("TCPDCInitializer Cannot be null ", tcpServerSocketServiceManager);
-		EventQueue.invokeLater(() -> {
-			TCPServerSocketServiceManagerController ex = new TCPServerSocketServiceManagerController(
-					tcpServerSocketServiceManager);
-			ex.setVisible(true);
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				TCPServerSocketServiceManagerController ex = new TCPServerSocketServiceManagerController(
+						tcpServerSocketServiceManager);
+				ex.setVisible(true);
+			}
 		});
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
@@ -93,16 +97,19 @@ public class TCPDCPluginTestServer {
 			createLayout(allServicesStopButtons);
 		}
 
-		private void addButtonActionListener(ServerSocketToDeviceModel serverSocketToDeviceModel,
-				JButton stopServiceButton) {
-			stopServiceButton.addActionListener((ActionEvent event) -> {
-				try {
-					tcpServerSocketServiceManager.removeTCPServerSocketService(serverSocketToDeviceModel);
-				} catch (Exception e) {
-					logger.error("Failed to stop Service " + serverSocketToDeviceModel);
-					UtilityLogger.logExceptionStackTrace(e, getClass());
-				} finally {
-					stopServiceButton.setEnabled(false);
+		private void addButtonActionListener(final ServerSocketToDeviceModel serverSocketToDeviceModel,
+				final JButton stopServiceButton) {
+			stopServiceButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent actionEvent) {
+					try {
+						tcpServerSocketServiceManager.removeTCPServerSocketService(serverSocketToDeviceModel);
+					} catch (Exception e) {
+						logger.error("Failed to stop Service " + serverSocketToDeviceModel);
+						UtilityLogger.logExceptionStackTrace(e, getClass());
+					} finally {
+						stopServiceButton.setEnabled(false);
+					}
 				}
 			});
 		}
