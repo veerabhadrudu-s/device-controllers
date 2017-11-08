@@ -163,7 +163,8 @@
 
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
-		<value>src/main/java/com/hpe/iot/mqtt/motwane/lighting</value>
+		<value>src/main/java/com/hpe/iot/mqtt/motwane/lighting/v1</value>
+		<value>src/main/java/com/hpe/iot/mqtt/motwane/lighting/v2</value>
 		<value>src/main/java/com/hpe/iot/mqtt/sensenuts/lighting</value>
 	</util:list>
 

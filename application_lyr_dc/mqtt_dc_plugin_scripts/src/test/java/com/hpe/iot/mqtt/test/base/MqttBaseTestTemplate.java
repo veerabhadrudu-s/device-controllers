@@ -3,6 +3,7 @@
  */
 package com.hpe.iot.mqtt.test.base;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -21,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.google.gson.JsonParser;
+import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.mqtt.northbound.sdk.handler.mock.MockNorthboundDownlinkProducerService;
 import com.hpe.iot.mqtt.southbound.service.outflow.MqttDevicePayloadHolder;
@@ -82,10 +84,18 @@ public abstract class MqttBaseTestTemplate {
 	}
 
 	private void waitForDCInitialization() throws InterruptedException {
-		Thread.sleep(5000);
+		Thread.sleep(10000);
 	}
 
 	protected void waitForDCToCompletePayloadProcessing() throws InterruptedException {
-		Thread.sleep(5000);
+		Thread.sleep(10000);
+	}
+
+	protected void validateDeviceModel(Device device, String expectedManufacturer, String expectedModelId,
+			String expectedVersion, String expectedDeviceId) {
+		assertEquals("Expected and Actual Manufacturer are not same", expectedManufacturer, device.getManufacturer());
+		assertEquals("Expected and Actual Model are not same", expectedModelId, device.getModelId());
+		assertEquals("Expected and Actual Version are not same", expectedVersion, device.getVersion());
+		assertEquals("Expected and Actual DeviceId are not same", expectedDeviceId, device.getDeviceId());
 	}
 }

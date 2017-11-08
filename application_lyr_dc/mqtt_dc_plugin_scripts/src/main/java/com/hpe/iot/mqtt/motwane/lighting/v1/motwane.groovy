@@ -1,4 +1,4 @@
-package com.hpe.iot.mqtt.motwane.lighting;
+package com.hpe.iot.mqtt.motwane.lighting.v1;
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat

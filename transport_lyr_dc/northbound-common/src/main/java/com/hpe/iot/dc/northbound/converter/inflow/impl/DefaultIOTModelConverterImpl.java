@@ -20,7 +20,8 @@ public class DefaultIOTModelConverterImpl extends AbstractIOTModelConverterImpl 
 
 	@Override
 	public String getDeviceUniqueIDName() {
-		return deviceModel.getManufacturer() + "_" + deviceModel.getModelId()+"_"+"ID";
+		return deviceModel.getManufacturer() + "_" + deviceModel.getModelId() + "_" + deviceModel.getVersion() + "_"
+				+ "ID";
 	}
 
 }

@@ -7,7 +7,6 @@ import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_VERSION;
 import static com.hpe.iot.utility.UtilityLogger.logRawDataInHexaDecimalFormat;
-import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +17,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
 import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
@@ -72,7 +70,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 				constructPeriodicMessage());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
-		validateDeviceModel(deviceInfo.getDevice());
+		validateDeviceModel(deviceInfo.getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID);
 		logger.debug("Received Device Info is " + deviceInfo);
 	}
 
@@ -83,7 +81,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 				constructPowerOutageAlertMessage());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
-		validateDeviceModel(deviceInfo.getDevice());
+		validateDeviceModel(deviceInfo.getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID);
 		logger.debug("Received Device Info is " + deviceInfo);
 	}
 
@@ -94,7 +92,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 				constructLuminaireFailureMessage());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		Assert.assertNotNull("Device info cannot be null", deviceInfo);
-		validateDeviceModel(deviceInfo.getDevice());
+		validateDeviceModel(deviceInfo.getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID);
 		logger.debug("Received Device Info is " + deviceInfo);
 	}
 
@@ -112,11 +110,7 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 				constructChangeLightBrightnessDownlinkCommandMessage(), downlinkCommand.getMqttMessage());
 	}
 
-	private void validateDeviceModel(Device device) {
-		assertEquals("Expected and Actual Manufacturer are not same", SENSENUTS, device.getManufacturer());
-		assertEquals("Expected and Actual Model are not same", SENSENUTS_MODEL, device.getModelId());
-		assertEquals("Expected and Actual DeviceId are not same", DEVICE_ID, device.getDeviceId());
-	}
+	
 
 	private byte[] constructPeriodicMessage() {
 		List<Byte> periodicMessage = new ArrayList<>();
