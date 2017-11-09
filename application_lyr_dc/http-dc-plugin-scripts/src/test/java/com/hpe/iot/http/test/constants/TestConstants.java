@@ -17,4 +17,7 @@ public class TestConstants {
 	public static final String LIBELIUM = "libelium";
 	public static final String LIBELIUM_MODEL = "smartagricluturepro";
 	public static final String LIBELIUM_VERSION = "1.0";
+	public static final String PRISTECH = "pristech";
+	public static final String PRISTECH_MODEL = "smartparking";
+	public static final String PRISTECH_VERSION = "1.0";
 }

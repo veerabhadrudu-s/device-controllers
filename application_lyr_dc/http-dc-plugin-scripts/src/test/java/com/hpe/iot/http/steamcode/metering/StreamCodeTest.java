@@ -23,21 +23,24 @@ import com.hpe.iot.http.test.base.HttpPluginTestBaseTemplate;
  */
 public class StreamCodeTest extends HttpPluginTestBaseTemplate {
 
+	private static final String DEVICE_ID = "2e3a3a40-80ea-11e7-9a7b-00259075adf2";
+
 	@Test
 	public void testProcessDevicePayloadForStreamCodeScript() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		waitForDCInitialization();
 		MvcResult mvcResult = mockMvc
-				.perform(put(SOUTHBOUND + "/" + STREAMCODE + "/" + STREAMCODE_MODEL + "/" + STREAMCODE_VERSION + "/")
+				.perform(put(formUplinkURL(STREAMCODE, STREAMCODE_MODEL, STREAMCODE_VERSION))
 						.content(createPayloadForPayloadForStreamCodeNotification()).accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
 		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		validateConsumedUplinkMessage(STREAMCODE, STREAMCODE_MODEL, STREAMCODE_VERSION, DEVICE_ID);
 	}
 
 	private String createPayloadForPayloadForStreamCodeNotification() {
-		return "{\"2e3a3a40-80ea-11e7-9a7b-00259075adf2\": 285.0}";
+		return "{\"" + DEVICE_ID + "\": 285.0}";
 	}
 
 }

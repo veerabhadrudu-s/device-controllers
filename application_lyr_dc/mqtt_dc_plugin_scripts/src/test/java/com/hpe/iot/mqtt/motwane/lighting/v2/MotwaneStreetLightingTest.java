@@ -7,8 +7,8 @@ import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_VERSION_2;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
 				payload.get("SwitchInternalId").getAsString()), payload.toString().getBytes());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		Assert.assertNotNull("Device info cannot be null", deviceInfo);
+		assertNotNull("Device info cannot be null", deviceInfo);
 		validateDeviceModel(deviceInfo.getDevice(), MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, DEVICE_ID);
 		logger.debug("Received Device Info is " + deviceInfo);
 	}
