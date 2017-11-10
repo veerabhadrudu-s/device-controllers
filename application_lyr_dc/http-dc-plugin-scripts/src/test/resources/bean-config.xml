@@ -125,7 +125,8 @@
 		value-type="java.lang.String">
 		<value>src/main/java/com/hpe/iot/http/avanseus/videoanalytics</value>
 		<value>src/main/java/com/hpe/iot/http/steamcode/metering</value>
-		<value>src/main/java/com/hpe/iot/http/libelium/smartagriculture</value>				
+		<value>src/main/java/com/hpe/iot/http/libelium/smartagriculture</value>
+		<value>src/main/java/com/hpe/iot/http/groovyscript/pristech/parking/v1</value>				
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
@@ -154,5 +155,39 @@
 			ref="groovyScriptMetaModelServiceActivator" />
 		<constructor-arg index="2" ref="myManagedExecutorService" />
 	</bean>
+	
+	<bean id="iotDevicePayloadHolder"
+		class="com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder" />
+
+	<bean id="mockIotConsumerService"
+		class="com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="mockNorthboundPayloadConsumerService"
+		class="com.hpe.iot.http.northbound.sdk.handler.mock.MockNorthboundUplinkConsumerService"
+		init-method="startService" destroy-method="stopService">
+		<constructor-arg index="0"
+			value="${iot.device.uplink.destination}" />
+		<constructor-arg index="1" ref="mockIotConsumerService" />
+		<constructor-arg index="2" ref="iotDevicePayloadHolder" />
+	</bean>
+
+	<!-- <bean id="mockIotProducerService"
+		class="com.hpe.broker.service.producer.activemq.ActiveMQProducerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="mockNorthboundDownlinkProducerService"
+		class="com.hpe.iot.http.northbound.sdk.handler.mock.MockNorthboundDownlinkProducerService"
+		init-method="startService" destroy-method="stopService">
+		<constructor-arg index="0"
+			value="${iot.device.downlink.destination}" />
+		<constructor-arg index="1" ref="mockIotProducerService" />
+	</bean> -->
 
 </beans>

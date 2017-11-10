@@ -3,6 +3,8 @@
  */
 package com.hpe.iot.http.test.base;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,6 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.hpe.iot.dc.model.Device;
+import com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
+import com.hpe.iot.model.DeviceInfo;
 
 /**
  * @author sveera
@@ -32,8 +37,11 @@ import com.google.gson.JsonParser;
 @ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public abstract class HttpPluginTestBaseTemplate {
 
-	protected static final String SOUTHBOUND = "/southbound";
+	private static final String SOUTHBOUND = "/southbound";
 	protected final JsonParser jsonParser = new JsonParser();
+
+	@Autowired
+	protected IOTDevicePayloadHolder iotDevicePayloadHolder;
 
 	@Autowired
 	protected WebApplicationContext wac;
@@ -62,12 +70,38 @@ public abstract class HttpPluginTestBaseTemplate {
 	}
 
 	protected void waitForDCInitialization() throws InterruptedException {
+		Thread.sleep(5000);
+	}
+
+	protected void waitForDCProcessing() throws InterruptedException {
 		Thread.sleep(1000);
+	}
+
+	protected String formUplinkURL(final String manufacturer, final String modelId, final String version) {
+		return SOUTHBOUND + "/" + manufacturer + "/" + modelId + "/" + version + "/";
 	}
 
 	protected JsonObject getExpectedSuccessResponse() {
 		String expectedResponseString = "{\"processingStatus\":\"SUCCESS\",\"otherInformation\":\"\",\"exceptionReason\":\"\"}";
 		return jsonParser.parse(expectedResponseString).getAsJsonObject();
+	}
+
+	private void validateDeviceModel(Device device, String expectedManufacturer, String expectedModelId,
+			String expectedVersion, String expectedDeviceId) {
+		assertEquals("Expected and Actual Manufacturer are not same", expectedManufacturer, device.getManufacturer());
+		assertEquals("Expected and Actual Model are not same", expectedModelId, device.getModelId());
+		assertEquals("Expected and Actual Version are not same", expectedVersion, device.getVersion());
+		assertEquals("Expected and Actual DeviceId are not same", expectedDeviceId, device.getDeviceId());
+	}
+
+	protected DeviceInfo validateConsumedUplinkMessage(String expectedManufacturer, String expectedModelId,
+			String expectedVersion, String expectedDeviceId) throws InterruptedException {
+		waitForDCProcessing();
+		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
+		assertNotNull("Device info cannot be null", deviceInfo);
+		validateDeviceModel(deviceInfo.getDevice(), expectedManufacturer, expectedModelId, expectedVersion,
+				expectedDeviceId);
+		return deviceInfo;
 	}
 
 }

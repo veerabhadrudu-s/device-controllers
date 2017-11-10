@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hpe.iot.mqtt.northbound.sdk.handler.mock;
+package com.hpe.iot.http.northbound.sdk.handler.mock;
 
 import java.io.StringReader;
 import java.util.List;
@@ -85,7 +85,7 @@ public class MockNorthboundUplinkConsumerService {
 			JsonObject downlinkPayload = parser.parse(deviceInfoJsonPayload).getAsJsonObject();
 			JsonObject device = downlinkPayload.get("device").getAsJsonObject();
 			return new DeviceInfo(
-					new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(), device.get("version").getAsString(),
+					new DeviceImpl(device.get("manufacturer").getAsString(), device.get("modelId").getAsString(), "1.0",
 							device.get("deviceId").getAsString()),
 					downlinkPayload.get("messageType").getAsString(), downlinkPayload.get("payload").getAsJsonObject());
 		}

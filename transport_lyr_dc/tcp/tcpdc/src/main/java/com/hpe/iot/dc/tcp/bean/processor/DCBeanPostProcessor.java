@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DCBeanPostProcessor implements BeanPostProcessor {
 
-	private static final Logger logger = LoggerFactory.getLogger(DCBeanPostProcessor.class);
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public Object postProcessAfterInitialization(Object arg0, String arg1) {
 		logger.info(String.format("Bean with id %s created with instance %s", arg1, arg0));
