@@ -14,15 +14,11 @@
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="locations">
 			<list>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/httpdc/iot-broker.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/httpdc/activemq.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/httpdc/kafka.properties
-				</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/httpdc/iot-broker.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/httpdc/activemq.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/httpdc/kafka.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -71,6 +67,34 @@
 		init-method="startAllServices" destroy-method="stopAllServices">
 		<constructor-arg index="0" ref="brokerProducerServices" />
 	</bean>
+	
+	<bean id="activeMQConsumerService"
+		class="com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService">
+		<constructor-arg index="0" value="${activemq.brokerURL}" />
+		<constructor-arg index="1" value="${activemq.usename}" />
+		<constructor-arg index="2" value="${activemq.password}" />
+	</bean>
+
+	<bean id="kafkaConsumerService"
+		class="com.hpe.broker.service.consumer.kafka.KafkaConsumerService">
+		<constructor-arg index="0" value="${kafka.brokerURL}" />
+		<constructor-arg index="1" value="${kafka.key.deserializer}" />
+		<constructor-arg index="2" value="${kafka.value.deserializer}" />
+		<constructor-arg index="3" value="${kafka.consumerGroupId}" />
+		<constructor-arg index="4" ref="myManagedExecutorService" />
+	</bean>
+
+	<util:list id="brokerConsumerServices" list-class="java.util.ArrayList"
+		value-type="com.hpe.broker.service.consumer.BrokerConsumerService">
+		<ref bean="activeMQConsumerService" />
+		<ref bean="kafkaConsumerService" />
+	</util:list>
+
+	<bean id="brokerConsumerServiceFactory"
+		class="com.hpe.broker.service.consumer.factory.impl.BrokerConsumerServiceFactoryImpl"
+		init-method="startAllServices" destroy-method="stopAllServices">
+		<constructor-arg index="0" ref="brokerConsumerServices" />
+	</bean>
 
 	<bean id="iotPublisherHandler"
 		class="com.hpe.iot.northbound.service.inflow.impl.IOTPublisherHandler">
@@ -96,6 +120,16 @@
 		<constructor-arg index="0" ref="deviceModelFactory" />
 		<constructor-arg index="1"
 			ref="northboundPayloadExtractorFactory" />
+	</bean>
+
+	<bean id="downlinkCommandService"
+		class="com.hpe.iot.northbound.service.outflow.impl.DownlinkCommandServiceImpl"
+		init-method="startService" destroy-method="stopService">
+		<constructor-arg index="0" ref="downlinkCommandServiceHandler" />
+		<constructor-arg index="1" ref="brokerConsumerServiceFactory" />
+		<constructor-arg index="2" value="${active.message.broker}" />
+		<constructor-arg index="3"
+			value="${iot.device.downlink.destination}" />
 	</bean>
 
 	<bean id="southboundService"

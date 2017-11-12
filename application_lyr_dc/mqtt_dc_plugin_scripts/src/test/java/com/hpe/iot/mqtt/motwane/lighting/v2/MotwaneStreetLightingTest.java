@@ -9,6 +9,9 @@ import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_VERSION_2;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Base64;
+import java.util.Base64.Encoder;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -24,12 +27,13 @@ import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
 public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 
 	private static final String DEVICE_ID = "S000001";
+	private final Encoder encoder = Base64.getMimeEncoder();
 
 	@Test
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForALAMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForALAMessageType();
 		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
-				payload.get("SwitchInternalId").getAsString()), payload.toString().getBytes());
+				payload.get("SwitchInternalId").getAsString()), encoder.encode(payload.toString().getBytes()));
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		assertNotNull("Device info cannot be null", deviceInfo);
 		validateDeviceModel(deviceInfo.getDevice(), MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, DEVICE_ID);
@@ -41,7 +45,7 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForGSSMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForGSSMessageType();
 		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
-				payload.get("SwitchInternalId").getAsString()), payload.toString().getBytes());
+				payload.get("SwitchInternalId").getAsString()), encoder.encode(payload.toString().getBytes()));
 		ReceivedMqttMessage receivedMqttMessage = mqttDevicePayloadHolder.getMqttDeviceData();
 		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), receivedMqttMessage);
 	}
@@ -52,7 +56,7 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		JsonObject payload = getMotwaneStreetLightingForCOAMessageType();
 		String uplinkTopicName = formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
 				payload.get("SwitchInternalId").getAsString());
-		tryPublishingMessage(uplinkTopicName, payload.toString().getBytes());
+		tryPublishingMessage(uplinkTopicName, encoder.encode(payload.toString().getBytes()));
 		ReceivedMqttMessage downlinkSYDMessage = mqttDevicePayloadHolder.getMqttDeviceData();
 		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), downlinkSYDMessage);
 		ReceivedMqttMessage downlinkSPSMessage = mqttDevicePayloadHolder.getMqttDeviceData();

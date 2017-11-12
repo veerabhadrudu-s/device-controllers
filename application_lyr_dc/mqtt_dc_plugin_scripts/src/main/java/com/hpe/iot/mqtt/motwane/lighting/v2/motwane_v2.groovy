@@ -3,6 +3,8 @@ package com.hpe.iot.mqtt.motwane.lighting.v2;
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Base64.Decoder
+import java.util.Base64.Encoder
+import java.util.Base64
 import java.util.List
 
 import javax.xml.bind.DatatypeConverter
@@ -50,27 +52,17 @@ public class MotwaneLightingDeviceIdExtractor extends AbstractJsonPathDeviceIdEx
 	}
 }
 
-/*public class MotwaneLightingPayloadDecipher implements PayloadDecipher{
- private final Logger logger=LoggerFactory.getLogger(this.getClass());
- //private final Decoder decoder=Base64.getDecoder();
- private final Decoder decoder=Base64.getMimeDecoder();
- private final JsonParser jsonParser=new JsonParser();
- public JsonObject decipherPayload(DeviceModel deviceModel, byte[] rawPayload){
- JsonObject payload=jsonParser.parse(new String(rawPayload));
- logger.trace("Received payload from device is"+payload.toString());
- logger.trace("Received event type in payload is"+payload.get("Event"));
- String eventType=payload.get("Event").getAsString();
- if(!eventType.equalsIgnoreCase("GSS"))
- return payload;
- logger.trace("Received encoded Json Payload : "+payload.toString());
- String encodedMessagePayload=payload.get("message").getAsString();
- logger.trace("Received encoded Payload Part : "+encodedMessagePayload);
- String decodedMessagePayload =new String(decoder.decode(encodedMessagePayload));
- JsonObject decodedJsonMessagePayload=jsonParser.parse(decodedMessagePayload).getAsJsonObject();
- payload.add("message",decodedJsonMessagePayload);
- return payload;
- }
- }*/
+public class MotwaneLightingPayloadDecipher implements PayloadDecipher{
+	private final Logger logger=LoggerFactory.getLogger(this.getClass());
+	//private final Decoder decoder=Base64.getDecoder();
+	private final Decoder decoder=Base64.getMimeDecoder();
+	private final JsonParser jsonParser=new JsonParser();
+	public JsonObject decipherPayload(DeviceModel deviceModel, byte[] rawPayload){
+		String decodedMessagePayload =new String(decoder.decode(new String(rawPayload)));
+		logger.trace("Payload after Base64 Decoding "+decodedMessagePayload);
+		return jsonParser.parse(decodedMessagePayload).getAsJsonObject();
+	}
+}
 
 public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 
@@ -85,6 +77,7 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 	private final String dsmUserName="motwane";
 	private final String dsmUserPassword="Motwane~1";
 	private final String failureResponseFromDsm="Resource not found";
+	private final Encoder encoder = Base64.getMimeEncoder();
 
 	public MotwanePayloadProcessor(GroovyServicesHolder groovyServicesHolder){
 		this.groovyServicesHolder=groovyServicesHolder
@@ -155,9 +148,6 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 
 	private void sendSunshineAndSunSetForThirtyDaysForGSS(DeviceInfo decipheredPayload){
 		JsonObject payload=decipheredPayload.getPayload();
-		//String switchInternalId=payload.getAsJsonObject("message").get("SwitchInternalId").getAsString()
-		//String latitude=payload.getAsJsonObject("message").get("latitude").getAsString();
-		//String longitude=payload.getAsJsonObject("message").get("longitude").getAsString();
 		String switchInternalId=payload.get("SwitchInternalId").getAsString()
 		String latitude=payload.get("Latitude").getAsString();
 		String longitude=payload.get("Longitude").getAsString();
@@ -208,7 +198,8 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 			sunriseCalander.add(Calendar.DATE, 1);
 			sunsetCalander.add(Calendar.DATE, 1);
 			sunTimeCalander.add(Calendar.DATE, 1);
-			sunriseSunsets.add(new SunriseSunset(targetFormat.format(sunriseCalander.getTime()),targetFormatDate.format(sunTimeCalander.getTime()),targetFormat.format(sunsetCalander.getTime())));
+			sunriseSunsets.add(new SunriseSunset(targetFormat.format(sunriseCalander.getTime()),
+					targetFormatDate.format(sunTimeCalander.getTime()),targetFormat.format(sunsetCalander.getTime())));
 		}
 		return sunriseSunsets;
 	}
@@ -216,7 +207,8 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 	public void publishDownlinkCommand(Device device,Command command){
 		String sssDownlinkCommand=new Gson().toJson(command);
 		DeviceInfo downlinkDeviceInfo=new DeviceInfo(device,command.getCommand(), jsonParser.parse(sssDownlinkCommand).getAsJsonObject());
-		groovyServicesHolder.getSouthboundPublisherService().publishPayload(downlinkDeviceInfo.getDevice(),downlinkDeviceInfo);
+		groovyServicesHolder.getSouthboundPublisherService().publishPayload(downlinkDeviceInfo.getDevice(),device.getDeviceId(),
+				encoder.encode(downlinkDeviceInfo.getPayload().toString().getBytes()));
 	}
 
 	private class SunriseSunset{
@@ -543,6 +535,7 @@ public class MotwaneDownlinkPayloadProcessor implements DownlinkPayloadProcessor
 
 	private final Logger logger=LoggerFactory.getLogger(this.getClass());
 	private final GroovyServicesHolder groovyServicesHolder;
+	private final Encoder encoder = Base64.getMimeEncoder();
 
 	public MotwaneDownlinkPayloadProcessor(GroovyServicesHolder groovyServicesHolder) {
 		super();
@@ -554,7 +547,8 @@ public class MotwaneDownlinkPayloadProcessor implements DownlinkPayloadProcessor
 		JsonObject downlinkCommand=decipheredPayload.getPayload();
 		if(downlinkCommand.get("ReqSrNo")==null||downlinkCommand.get("ReqSrNo").getAsString()==null)
 			downlinkCommand.addProperty("ReqSrNo", getUniqueRequestId(decipheredPayload.getDevice()));
-		groovyServicesHolder.getSouthboundPublisherService().publishPayload(deviceModel, decipheredPayload);
+		groovyServicesHolder.getSouthboundPublisherService().publishPayload(deviceModel,decipheredPayload.getDevice().getDeviceId(),
+				encoder.encode(decipheredPayload.getPayload().toString().getBytes()));
 		groovyServicesHolder.getIotPublisherService().receiveDataFromDevice(decipheredPayload, "downlinkCommandRequestId");
 	}
 
