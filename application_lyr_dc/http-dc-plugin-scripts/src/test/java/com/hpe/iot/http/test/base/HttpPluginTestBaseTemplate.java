@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
+import com.hpe.iot.http.northbound.sdk.handler.mock.MockNorthboundDownlinkProducerService;
 import com.hpe.iot.model.DeviceInfo;
 
 /**
@@ -41,7 +42,9 @@ public abstract class HttpPluginTestBaseTemplate {
 	protected final JsonParser jsonParser = new JsonParser();
 
 	@Autowired
-	protected IOTDevicePayloadHolder iotDevicePayloadHolder;
+	protected IOTDevicePayloadHolder iotDevicePayloadHolder;	
+	@Autowired
+	protected MockNorthboundDownlinkProducerService mockNorthboundDownlinkProducerService;
 
 	@Autowired
 	protected WebApplicationContext wac;

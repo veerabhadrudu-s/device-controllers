@@ -13,7 +13,6 @@
 	<context:component-scan base-package="com.hpe.iot" />
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="locations">
 			<list>
 				<value>file://${jboss.home.dir}/standalone/configuration/DC/trinetradc/trinetraDC.properties
