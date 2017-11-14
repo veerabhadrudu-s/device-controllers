@@ -163,7 +163,8 @@
 		<value>src/main/java/com/hpe/iot/http/avanseus/videoanalytics</value>
 		<value>src/main/java/com/hpe/iot/http/steamcode/metering</value>
 		<value>src/main/java/com/hpe/iot/http/libelium/smartagriculture</value>
-		<value>src/main/java/com/hpe/iot/http/groovyscript/pristech/parking/v1</value>
+		<value>src/main/java/com/hpe/iot/http/pristech/parking/v1</value>
+		<value>src/main/java/com/hpe/iot/http/gaia/smartwater/v1</value>
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"

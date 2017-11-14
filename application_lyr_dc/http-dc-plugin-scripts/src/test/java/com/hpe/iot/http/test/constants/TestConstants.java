@@ -20,4 +20,7 @@ public class TestConstants {
 	public static final String PRISTECH = "pristech";
 	public static final String PRISTECH_MODEL = "smartparking";
 	public static final String PRISTECH_VERSION = "1.0";
+	public static final String GAIA = "gaia";
+	public static final String GAIA_MODEL = "smartwater";
+	public static final String GAIA_VERSION = "1.0";
 }

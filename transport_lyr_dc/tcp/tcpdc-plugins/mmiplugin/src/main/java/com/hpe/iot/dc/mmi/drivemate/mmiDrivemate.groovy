@@ -106,7 +106,7 @@ public class MMIDrivemateDeviceClientSocketExtractor implements DeviceClientSock
 	private Device extractDeviceFromPayload(byte[] clientSocketData,DeviceModel deviceModel){
 		UtilityLogger.logRawDataInDecimalFormat(clientSocketData,getClass());
 		return clientSocketData!=null&&clientSocketData.length==DrivatemateConstants.handShakeMsgLen?
-				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),
+				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(),
 				DataParserUtility.convertBytesToASCIIString(clientSocketData,2,GPS_PAYLOAD_LEN)):null;
 	}
 }

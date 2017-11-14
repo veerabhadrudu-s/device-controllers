@@ -54,7 +54,7 @@ public class MMIDrivemateServerSocketToDeviceModel implements ServerSocketToDevi
 	public String getModelId(){
 		return "Drivemate";
 	}
-	
+
 	public String getVersion() {
 		return "1.0"
 	}
@@ -107,7 +107,7 @@ public class MMIDrivemateDeviceClientSocketExtractor implements DeviceClientSock
 	private Device extractDeviceFromPayload(byte[] clientSocketData,DeviceModel deviceModel){
 		UtilityLogger.logRawDataInDecimalFormat(clientSocketData,getClass());
 		return clientSocketData!=null&&clientSocketData.length==DrivatemateConstants.handShakeMsgLen?
-				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),
+				new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(),
 				DataParserUtility.convertBytesToASCIIString(clientSocketData,2,GPS_PAYLOAD_LEN)):null;
 	}
 }
@@ -587,7 +587,7 @@ public class UplinkNotificationMessageConverter extends SessionBasedUplinkDevice
 }
 
 public class NotificationMessageService implements UplinkMessageService{
-	
+
 	private final Logger logger=LoggerFactory.getLogger(this.getClass());
 
 	def notification = "notification";
@@ -612,7 +612,7 @@ public class NotificationMessageService implements UplinkMessageService{
 		int noOfRecords=((Notification)deviceInfo.getDeviceData().get(notification)).getNoOfRecords();
 		byte[] acknowlegement=DataParserUtility.getByteArrayValueInBigEndian(noOfRecords,4);
 		tcpServerSocketWriter.sendMessage(deviceInfo.getDevice(),acknowlegement);
-		return deviceDataDeliveryStatus; 
+		return deviceDataDeliveryStatus;
 	}
 
 	@Override

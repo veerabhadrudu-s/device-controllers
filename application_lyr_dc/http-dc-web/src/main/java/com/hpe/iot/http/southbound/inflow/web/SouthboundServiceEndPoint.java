@@ -3,14 +3,15 @@
  */
 package com.hpe.iot.http.southbound.inflow.web;
 
+import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
 import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,20 +43,20 @@ public class SouthboundServiceEndPoint {
 
 	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}/{" + VERSION + "}"
 			+ "/", method = RequestMethod.POST)
-	public String processDevicePayload(@RequestBody String deviceData,
-			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId,
-			@PathVariable(value = VERSION) String version) {
-		logger.trace("Received payload from the device : " + deviceData);
-		southboundService.processPayload(manufacturer, modelId, version, deviceData.getBytes());
+	public String processDevicePayload(@PathVariable(value = MANUFACTURER) String manufacturer,
+			@PathVariable(value = MODEL_ID) String modelId, @PathVariable(value = VERSION) String version,
+			RequestEntity<byte[]> deviceData) {
+		logger.trace("Received payload from the device : " + convertArrayOfByteToString(deviceData.getBody()));
+		southboundService.processPayload(manufacturer, modelId, version, deviceData.getBody());
 		return new Gson().toJson(new RequestResult("SUCCESS"));
 	}
 
 	@RequestMapping(path = "/{" + MANUFACTURER + "}/{" + MODEL_ID + "}/{" + VERSION + "}"
 			+ "/", method = RequestMethod.PUT)
-	public String processDevicePayloadForUpdate(@RequestBody String deviceData,
-			@PathVariable(value = MANUFACTURER) String manufacturer, @PathVariable(value = MODEL_ID) String modelId,
-			@PathVariable(value = VERSION) String version) {
-		return processDevicePayload(deviceData, manufacturer, modelId, version);
+	public String processDevicePayloadForUpdate(@PathVariable(value = MANUFACTURER) String manufacturer,
+			@PathVariable(value = MODEL_ID) String modelId, @PathVariable(value = VERSION) String version,
+			RequestEntity<byte[]> deviceData) {
+		return processDevicePayload(manufacturer, modelId, version, deviceData);
 	}
 
 	@RequestMapping(path = "/dcinfo", method = RequestMethod.GET)

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hpe.iot.http.groovyscript.pristech.parking.v1
+package com.hpe.iot.http.pristech.parking.v1
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser

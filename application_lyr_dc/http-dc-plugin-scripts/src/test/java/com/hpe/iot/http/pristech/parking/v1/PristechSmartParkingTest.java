@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hpe.iot.http.groovyscript.pristech.parking.v1;
+package com.hpe.iot.http.pristech.parking.v1;
 
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH;
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH_MODEL;
