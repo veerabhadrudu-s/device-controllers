@@ -6,6 +6,9 @@ package com.hpe.iot.http.pristech.parking.v1
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.hpe.iot.dc.model.DeviceModel
+import com.hpe.iot.http.southbound.service.holder.GroovyServicesHolder
+import com.hpe.iot.model.DeviceInfo
+import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor
 import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher
@@ -32,9 +35,18 @@ class PristechSmartParkingDeviceModel implements DeviceModel {
 	}
 }
 
-class PristechSmartParkingUplinkHandler implements PayloadDecipher,DeviceIdExtractor,MessageTypeExtractor{
+class PristechSmartParkingUplinkHandler implements PayloadDecipher,DeviceIdExtractor,MessageTypeExtractor,DownlinkPayloadProcessor{
 
+	private final String certificatePath ="src/test/resources/script/cert/pristec.cer";
+	//private final String certificatePath=System.getProperty("jboss.home.dir")+"/standalone/configuration/DC/httpdc/script/cert/pristec.cer";
+	private final String ppParkDownlinkEndpoint = "https://pparke.in/Parking/instance/pparke_india/iot/testpush";
 	private final JsonParser jsonParser=new JsonParser();
+	private final GroovyServicesHolder groovyServicesHolder;
+
+	public PristechSmartParkingUplinkHandler(GroovyServicesHolder groovyServicesHolder) {
+		super();
+		this.groovyServicesHolder = groovyServicesHolder;
+	}
 
 	@Override
 	public JsonObject decipherPayload(DeviceModel deviceModel, byte[] payload) {
@@ -49,5 +61,11 @@ class PristechSmartParkingUplinkHandler implements PayloadDecipher,DeviceIdExtra
 	@Override
 	public String extractMessageType(DeviceModel deviceModel, JsonObject payload) {
 		return  payload.get("event_str").getAsString();
+	}
+
+	@Override
+	public void processPayload(DeviceModel deviceModel, DeviceInfo decipheredPayload) {
+		groovyServicesHolder.getHttpClientUtility().
+				postRequestOnHttps(ppParkDownlinkEndpoint, new HashMap<>(), decipheredPayload.getPayload().toString(), certificatePath);
 	}
 }

@@ -98,11 +98,16 @@ public class HttpClientUtility {
 
 	public String postRequestOnHttp(String resourceURI, Map<String, String> headers, String httpBody)
 			throws ClientProtocolException, IOException {
-		HttpPost httpPost = new HttpPost(resourceURI);
+		return postRequestOnHttp(resourceURI, headers, httpBody.getBytes());
+	}
+
+	public String postRequestOnHttp(String resourceURI, Map<String, String> headers, byte[] httpBody)
+			throws ClientProtocolException, IOException {
 		logger.trace("Following headers" + headers + " are used to post for resource  " + resourceURI);
+		HttpPost httpPost = new HttpPost(resourceURI);
 		for (Map.Entry<String, String> header : headers.entrySet())
 			httpPost.addHeader(header.getKey(), header.getValue());
-		HttpEntity httpEntity = new ByteArrayEntity(httpBody.getBytes());
+		HttpEntity httpEntity = new ByteArrayEntity(httpBody);
 		httpPost.setEntity(httpEntity);
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		return executeHttpUriRequest(httpClient, httpPost);
@@ -117,13 +122,20 @@ public class HttpClientUtility {
 	public String postRequestOnHttps(String resourceURI, Map<String, String> headers, String httpBody,
 			String certificatePath, boolean isHostNameVerificationRequired) throws ClientProtocolException, IOException,
 			KeyManagementException, NoSuchAlgorithmException, CertificateException, KeyStoreException {
+		return postRequestOnHttps(resourceURI, headers, httpBody.getBytes(), certificatePath,
+				isHostNameVerificationRequired);
+	}
+
+	public String postRequestOnHttps(String resourceURI, Map<String, String> headers, byte[] httpBody,
+			String certificatePath, boolean isHostNameVerificationRequired) throws ClientProtocolException, IOException,
+			KeyManagementException, NoSuchAlgorithmException, CertificateException, KeyStoreException {
+		logger.trace("Following headers" + headers + " are used to post for resource  " + resourceURI);
 		SSLContext sslContext = createSSLContextFromCertificate(certificatePath);
 		CloseableHttpClient httpClient = constructHttpClientForHttps(sslContext, isHostNameVerificationRequired);
 		HttpPost httpPost = new HttpPost(resourceURI);
-		logger.trace("Following headers" + headers + " are used to post for resource  " + resourceURI);
 		for (Map.Entry<String, String> header : headers.entrySet())
 			httpPost.addHeader(header.getKey(), header.getValue());
-		HttpEntity httpEntity = new ByteArrayEntity(httpBody.getBytes());
+		HttpEntity httpEntity = new ByteArrayEntity(httpBody);
 		httpPost.setEntity(httpEntity);
 		return executeHttpUriRequest(httpClient, httpPost);
 	}

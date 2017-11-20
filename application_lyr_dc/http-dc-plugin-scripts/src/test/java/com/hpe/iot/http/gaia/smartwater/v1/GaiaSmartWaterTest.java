@@ -30,7 +30,7 @@ import com.hpe.iot.model.DeviceInfo;
 public class GaiaSmartWaterTest extends HttpPluginTestBaseTemplate {
 
 	private static final String DEVICE_ID = "29865667679223848";
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Test
 	public void testUplinkNotification() throws Exception {
