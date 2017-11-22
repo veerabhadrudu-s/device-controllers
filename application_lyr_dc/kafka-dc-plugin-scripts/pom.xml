@@ -44,20 +44,14 @@
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka_2.11</artifactId>
-			<version>0.10.2.1</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-framework</artifactId>
-			<version>4.0.0</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-test</artifactId>
-			<version>2.12.0</version>
-			<scope>test</scope>
 		</dependency>
 		<!-- Local jars -->
 		<dependency>
@@ -156,4 +150,13 @@
 			<artifactId>hamcrest-all</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.groovy.maven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

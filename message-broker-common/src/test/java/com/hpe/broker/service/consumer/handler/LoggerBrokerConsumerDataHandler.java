@@ -20,7 +20,7 @@ public class LoggerBrokerConsumerDataHandler implements BrokerConsumerDataHandle
 
 	@Override
 	public void handleConsumerMessage(String destination, String consumerData) {
-		logger.info("Consumed Message by handler is " + consumerData);
+		logger.trace("Consumed Message by handler is " + consumerData);
 		storedConsumerData.add(consumerData);
 	}
 

@@ -160,49 +160,7 @@
 			<plugin>
 				<groupId>org.codehaus.groovy.maven</groupId>
 				<artifactId>gmaven-plugin</artifactId>
-				<version>1.0</version>
 				<extensions>true</extensions>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-all</artifactId>
-						<version>${groovy-version}</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<fileset>
-									<directory>${pom.basedir}/src/main/java</directory>
-									<includes>
-										<include>**/*.groovy</include>
-									</includes>
-								</fileset>
-							</sources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>testCompile</id>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<fileset>
-									<directory>${pom.basedir}/src/test/java</directory>
-									<includes>
-										<include>**/*.groovy</include>
-									</includes>
-								</fileset>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

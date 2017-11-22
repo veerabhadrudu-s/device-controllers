@@ -157,48 +157,6 @@ public class MMIDrivemateDataModelTransformer extends SessionBasedUplinkDataMode
 }
 
 
-/*public class MMIDrivemateDataModelTransformer extends SessionBasedUplinkDataModelTransformer {
- private final byte[] header=[0, 0, 0, 0] as byte[];
- private final UplinkDeviceDataConverter uplinkDeviceDataConverter;
- public MMIDrivemateDataModelTransformer(UplinkDeviceDataConverterFactory uplinkDeviceDataConverterFactory) {
- super(uplinkDeviceDataConverterFactory);
- uplinkDeviceDataConverter=uplinkDeviceDataConverterFactory.getModelConverter(DrivatemateConstants.NOTIFICATION);
- }
- @Override
- protected List<DeviceInfo> convertToModelForDevice(Device device, byte[] input) {
- List<DeviceInfo> deviceInfo=new ArrayList<>();
- boolean isHandShakeMsgType=checkWhetherHandShakeMsgType(input);
- if(isHandShakeMsgType)
- deviceInfo.add(new DeviceInfo(device, DrivatemateConstants.HAND_SHAKE, input));
- else
- deviceInfo=handleForNonHandShakeMessageType(device,input);
- return deviceInfo;
- }
- private boolean checkWhetherHandShakeMsgType(byte[] input){
- return input!=null&&input.length==DrivatemateConstants.handShakeMsgLen?true:false;
- }
- private List<DeviceInfo> handleForNonHandShakeMessageType(Device device, byte[] input){
- List<DeviceInfo> deviceInfo=new ArrayList<>();
- int startingArrayIndex=0,endingArrayIndex;
- while(isValidData(input,startingArrayIndex)){
- endingArrayIndex=startingArrayIndex+12+Integer.parseInt(DataParserUtility.calculateUnsignedDecimalValFromSignedBytes(
- Arrays.copyOfRange(input,startingArrayIndex+4,startingArrayIndex+8)));
- deviceInfo.add(uplinkDeviceDataConverter.createModel(device,Arrays.copyOfRange(input,startingArrayIndex,endingArrayIndex)));
- startingArrayIndex=endingArrayIndex;
- }
- return deviceInfo;
- }
- private boolean isValidData(byte[] input,int dataArrayIndex){
- println "";
- return input.length>=(dataArrayIndex+8)?
- (input.length>dataArrayIndex+12+
- Integer.parseInt(DataParserUtility.calculateUnsignedDecimalValFromSignedBytes(
- Arrays.copyOfRange(input,dataArrayIndex+4,dataArrayIndex+8))))?true:false:
- false;
- }
- }*/
-
-
 public class HandshakeMessageService implements MessageService{
 
 	private final TCPServerSocketWriter tcpServerSocketWriter;

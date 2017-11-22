@@ -103,6 +103,8 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 
 		private void tryProcessingMessage(ConsumerRecord<K, V> consumerRecord) {
 			try {
+				logger.trace("Received consumer record in " + this.getClass().getSimpleName() + " with value "
+						+ consumerRecord.toString());
 				brokerConsumerDataHandler.handleConsumerMessage(consumerRecord.topic(), consumerRecord.value());
 			} catch (Throwable e) {
 				UtilityLogger.logExceptionStackTrace(e, getClass());

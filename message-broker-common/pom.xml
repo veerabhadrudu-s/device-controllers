@@ -34,6 +34,23 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-broker</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.11</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-test</artifactId>
+		</dependency>
+		<!-- -->
+		<dependency>
+			<groupId>javax.enterprise.concurrent</groupId>
+			<artifactId>javax.enterprise.concurrent-api</artifactId>
+		</dependency>
 		<!-- Testing Frame Works -->
 		<dependency>
 			<groupId>junit</groupId>

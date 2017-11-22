@@ -180,7 +180,7 @@ public class HttpClientUtility {
 				stringBuffer.append(content);
 			}
 			logger.debug("Response received from resource URI - " + httpUriRequest.toString() + " is - "
-					+ stringBuffer.toString());
+					+ stringBuffer.toString()+" with status line "+response.getStatusLine());
 		}
 		httpClient.close();
 		return stringBuffer.toString();

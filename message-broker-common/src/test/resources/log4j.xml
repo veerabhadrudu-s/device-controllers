@@ -5,13 +5,17 @@
 	<appender name="KAFKA_TEST" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%C] %m%n" />
 		</layout>
 	</appender>
 
 	<!-- Application Loggers -->
-	<logger name="com.handson">
-		<level value="TRACE" />
+	<logger name="com.hpe">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="kafka">
+		<level value="INFO" />
 	</logger>
 
 	<!-- 3rdparty Loggers -->
@@ -20,7 +24,7 @@
 	</logger>
 
 	<logger name="org.apache.activemq">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 
 	<logger name="org.apache">
