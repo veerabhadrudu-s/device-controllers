@@ -87,7 +87,7 @@ public class HttpClientUtility {
 
 	public String getResourceOnHttps(String resourceURI) throws KeyManagementException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, IOException {
-		SSLContext sslContext = createTrustAnySSLContext();
+		SSLContext sslContext = createTrustAnyCertificateSSLContext();
 		CloseableHttpClient httpClient = constructHttpClientForHttps(sslContext, false);
 		HttpGet httpGet = new HttpGet(resourceURI);
 		return executeHttpUriRequest(httpClient, httpGet);
@@ -125,15 +125,19 @@ public class HttpClientUtility {
 	}
 
 	public String postRequestOnHttps(String resourceURI, Map<String, String> headers, String httpBody)
-			throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException,
-			CertificateException, KeyStoreException {
+			throws KeyManagementException, NoSuchAlgorithmException, ClientProtocolException, IOException {
+		return postRequestOnHttps(resourceURI, headers, httpBody.getBytes());
+	}
+
+	public String postRequestOnHttps(String resourceURI, Map<String, String> headers, byte[] httpBody)
+			throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException {
 		logger.trace("Following headers" + headers + " are used to post for resource  " + resourceURI);
-		SSLContext sslContext = createTrustAnySSLContext();
+		SSLContext sslContext = createTrustAnyCertificateSSLContext();
 		CloseableHttpClient httpClient = constructHttpClientForHttps(sslContext, false);
 		HttpPost httpPost = new HttpPost(resourceURI);
 		for (Map.Entry<String, String> header : headers.entrySet())
 			httpPost.addHeader(header.getKey(), header.getValue());
-		HttpEntity httpEntity = new ByteArrayEntity(httpBody.getBytes());
+		HttpEntity httpEntity = new ByteArrayEntity(httpBody);
 		httpPost.setEntity(httpEntity);
 		return executeHttpUriRequest(httpClient, httpPost);
 	}
@@ -181,7 +185,7 @@ public class HttpClientUtility {
 		return sslContext;
 	}
 
-	private SSLContext createTrustAnySSLContext() throws KeyManagementException, NoSuchAlgorithmException {
+	private SSLContext createTrustAnyCertificateSSLContext() throws KeyManagementException, NoSuchAlgorithmException {
 		SSLContext sslContext = SSLContexts.custom().build();
 		sslContext.init(null, new X509TrustManager[] { new DegenrateX509TrustManager() }, new SecureRandom());
 		return sslContext;
