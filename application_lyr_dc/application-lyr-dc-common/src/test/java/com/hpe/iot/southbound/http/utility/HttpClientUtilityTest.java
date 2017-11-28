@@ -44,6 +44,18 @@ public class HttpClientUtilityTest {
 
 	@Test
 	@Ignore
+	public void testGetWeatherServiceApiOverHttpsWithEmptyTrustManager()
+			throws URISyntaxException, ClientProtocolException, IOException, KeyManagementException,
+			CertificateException, NoSuchAlgorithmException, KeyStoreException {
+		URI uri = new URIBuilder().setScheme("https").setHost("api.sunrise-sunset.org").setPort(443).setPath("/json")
+				.setParameter("lat", "36.7201600").setParameter("lng", "-4.4203400").build();
+		logger.trace(uri.toString());
+		String data = httpClientUtility.getResourceOnHttps(uri.toString());
+		Assert.assertNotNull("Response cannot be null", data);
+	}
+
+	@Test
+	@Ignore
 	public void testGetPartnerUiotDashboardPageOverHttps() throws URISyntaxException, ClientProtocolException,
 			IOException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
 		String data = httpClientUtility.getResourceOnHttps(

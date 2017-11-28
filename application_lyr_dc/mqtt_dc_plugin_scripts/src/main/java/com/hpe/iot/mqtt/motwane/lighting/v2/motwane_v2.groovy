@@ -4,6 +4,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Base64.Decoder
 import java.util.Base64.Encoder
+import java.util.Arrays
 import java.util.Base64
 import java.util.List
 
@@ -156,7 +157,8 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 
 	private void sendSunshineAndSunSetForThirtyDays(String latitude,String longitude,String switchInternalId,Device device){
 		List<SunriseSunset> sunriseSunsets=calcualteSunriseSunSetForCoordinates(latitude,longitude);
-		SSSCommand sssCommand=new SSSCommand(getUniqueRequestId(device),"SSS",switchInternalId,sunriseSunsets);
+		SunriseSunset[] sunriseSunsetsArray=sunriseSunsets.toArray(new SunriseSunset[sunriseSunsets.size()]);
+		SSSCommand sssCommand=new SSSCommand(getUniqueRequestId(device),"SSS",switchInternalId,new Gson().toJson(sunriseSunsetsArray));
 		publishDownlinkCommand(device, sssCommand);
 	}
 
@@ -178,7 +180,12 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 		String sunset=weatherServiceData.getAsJsonObject("results").get("sunset").getAsString();
 		Date sunriseDate =DatatypeConverter.parseDateTime(sunrise).getTime();
 		Date sunsetDate =DatatypeConverter.parseDateTime(sunset).getTime();
-		String sunRiseString = targetFormat.format(sunriseDate);
+		//To get sunrise for next day below code is a hack to avoid making two calls to weather API. 
+		Calendar calander = Calendar.getInstance();
+		calander.setTime(sunriseDate);
+		calander.add(Calendar.DATE, 1);		
+		String sunRiseString = targetFormat.format(calander.getTime());
+		// Hack Ends
 		String sunsetString = targetFormat.format(sunsetDate);
 		String sunTimeDateString=targetFormatDate.format(sunsetDate);
 		SunriseSunset sunriseSunset=new SunriseSunset(sunRiseString,sunTimeDateString,sunsetString);
@@ -207,6 +214,7 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 	public void publishDownlinkCommand(Device device,Command command){
 		String sssDownlinkCommand=new Gson().toJson(command);
 		DeviceInfo downlinkDeviceInfo=new DeviceInfo(device,command.getCommand(), jsonParser.parse(sssDownlinkCommand).getAsJsonObject());
+		logger.debug("Acknowledged downlink message is " + downlinkDeviceInfo.getPayload().toString());
 		groovyServicesHolder.getSouthboundPublisherService().publishPayload(downlinkDeviceInfo.getDevice(),device.getDeviceId(),
 				encoder.encode(downlinkDeviceInfo.getPayload().toString().getBytes()));
 	}
@@ -270,26 +278,24 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 
 	private class SSSCommand extends Command{
 
-		private final List<SunriseSunset> SunriseSunsetList;
+		private final String SunriseSunsetList;
 
 		public SSSCommand(String ReqSrNo, String Command, String switchInternalId,
-		List<SunriseSunset> sunriseSunsetList) {
+		String sunriseSunsetList) {
 			super(ReqSrNo, Command, switchInternalId);
 			SunriseSunsetList = sunriseSunsetList;
 		}
 
-		public List<SunriseSunset> getSunriseSunsetList() {
+		public String getSunriseSunsetList() {
 			return SunriseSunsetList;
 		}
 
 		@Override
 		public String toString() {
-			return "SSSCommand [getSunriseSunsetList()=" + getSunriseSunsetList() + ", getReqSrNo()=" + getReqSrNo()+
-					", getCommand()=" + getCommand() + ", getSwitchInternalId()=" + getSwitchInternalId()+
-					", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()+
-					"]";
+			return "SSSCommand [getSunriseSunsetList()=" + Arrays.toString(getSunriseSunsetList()) + ", getReqSrNo()="+
+					getReqSrNo() + ", getCommand()=" + getCommand() + ", getSwitchInternalId()="+
+					getSwitchInternalId() + "]";
 		}
-
 	}
 
 	private class SYDCommand extends Command{
@@ -547,6 +553,7 @@ public class MotwaneDownlinkPayloadProcessor implements DownlinkPayloadProcessor
 		JsonObject downlinkCommand=decipheredPayload.getPayload();
 		if(downlinkCommand.get("ReqSrNo")==null||downlinkCommand.get("ReqSrNo").getAsString()==null)
 			downlinkCommand.addProperty("ReqSrNo", getUniqueRequestId(decipheredPayload.getDevice()));
+		logger.debug("Received downlink message is " + decipheredPayload.getPayload().toString());
 		groovyServicesHolder.getSouthboundPublisherService().publishPayload(deviceModel,decipheredPayload.getDevice().getDeviceId(),
 				encoder.encode(decipheredPayload.getPayload().toString().getBytes()));
 		groovyServicesHolder.getIotPublisherService().receiveDataFromDevice(decipheredPayload, "downlinkCommandRequestId");

@@ -12,6 +12,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthScope;
@@ -43,6 +45,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,6 +85,14 @@ public class HttpClientUtility {
 		return executeHttpUriRequest(httpClient, httpGet);
 	}
 
+	public String getResourceOnHttps(String resourceURI) throws KeyManagementException, NoSuchAlgorithmException,
+			CertificateException, KeyStoreException, IOException {
+		SSLContext sslContext = createTrustAnySSLContext();
+		CloseableHttpClient httpClient = constructHttpClientForHttps(sslContext, false);
+		HttpGet httpGet = new HttpGet(resourceURI);
+		return executeHttpUriRequest(httpClient, httpGet);
+	}
+
 	public String getResourceOnHttps(String resourceURI, String certificatePath) throws KeyManagementException,
 			NoSuchAlgorithmException, CertificateException, KeyStoreException, IOException {
 		return getResourceOnHttps(resourceURI, certificatePath, true);
@@ -110,6 +121,20 @@ public class HttpClientUtility {
 		HttpEntity httpEntity = new ByteArrayEntity(httpBody);
 		httpPost.setEntity(httpEntity);
 		CloseableHttpClient httpClient = HttpClients.createDefault();
+		return executeHttpUriRequest(httpClient, httpPost);
+	}
+
+	public String postRequestOnHttps(String resourceURI, Map<String, String> headers, String httpBody)
+			throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException,
+			CertificateException, KeyStoreException {
+		logger.trace("Following headers" + headers + " are used to post for resource  " + resourceURI);
+		SSLContext sslContext = createTrustAnySSLContext();
+		CloseableHttpClient httpClient = constructHttpClientForHttps(sslContext, false);
+		HttpPost httpPost = new HttpPost(resourceURI);
+		for (Map.Entry<String, String> header : headers.entrySet())
+			httpPost.addHeader(header.getKey(), header.getValue());
+		HttpEntity httpEntity = new ByteArrayEntity(httpBody.getBytes());
+		httpPost.setEntity(httpEntity);
 		return executeHttpUriRequest(httpClient, httpPost);
 	}
 
@@ -156,6 +181,12 @@ public class HttpClientUtility {
 		return sslContext;
 	}
 
+	private SSLContext createTrustAnySSLContext() throws KeyManagementException, NoSuchAlgorithmException {
+		SSLContext sslContext = SSLContexts.custom().build();
+		sslContext.init(null, new X509TrustManager[] { new DegenrateX509TrustManager() }, new SecureRandom());
+		return sslContext;
+	}
+
 	private CloseableHttpClient constructHttpClientForHttps(SSLContext sslContext,
 			boolean isHostNameVerificationRequired) {
 		LayeredConnectionSocketFactory sslsf = isHostNameVerificationRequired
@@ -180,7 +211,7 @@ public class HttpClientUtility {
 				stringBuffer.append(content);
 			}
 			logger.debug("Response received from resource URI - " + httpUriRequest.toString() + " is - "
-					+ stringBuffer.toString()+" with status line "+response.getStatusLine());
+					+ stringBuffer.toString() + " with status line " + response.getStatusLine());
 		}
 		httpClient.close();
 		return stringBuffer.toString();

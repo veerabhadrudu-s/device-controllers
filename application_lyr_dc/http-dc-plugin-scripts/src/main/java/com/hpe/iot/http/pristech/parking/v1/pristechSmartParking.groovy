@@ -66,6 +66,6 @@ class PristechSmartParkingUplinkHandler implements PayloadDecipher,DeviceIdExtra
 	@Override
 	public void processPayload(DeviceModel deviceModel, DeviceInfo decipheredPayload) {
 		groovyServicesHolder.getHttpClientUtility().
-				postRequestOnHttps(ppParkDownlinkEndpoint, new HashMap<>(), decipheredPayload.getPayload().toString(), certificatePath);
+				postRequestOnHttps(ppParkDownlinkEndpoint, new HashMap<>(), decipheredPayload.getPayload().toString());
 	}
 }
