@@ -22,7 +22,7 @@ import com.hpe.broker.service.producer.kafka.KafkaProducerService;
  */
 public class KafkaProducerConsumerServiceTest {
 
-	private static final int DATA_LENGTH = 20000;
+	private static final int DATA_LENGTH = 1000;
 	private static final ExecutorService executorService = new MockManagedExecutorService();
 	private static final String KAFKA_TEST_TOPIC = "kafkaTestTopic";
 	private final String kafkaBootStrapServers = "localhost:9092";

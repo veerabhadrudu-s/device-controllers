@@ -190,13 +190,8 @@ class SampleDataService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		iotPublisherService.receiveDataFromDevice(deviceInfo, getContainerName());
+		iotPublisherService.receiveDataFromDevice(deviceInfo, "default");
 		return new DeviceDataDeliveryStatus();
-	}
-
-	@Override
-	public String getContainerName() {
-		return "default";
 	}
 }
 

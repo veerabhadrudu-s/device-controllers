@@ -81,12 +81,6 @@ public class NotificationMessageServiceTest {
 	}
 
 	@Test
-	public void testGetContainerName() {
-		assertEquals("Expected Response Message Type and Actual Response Message Type are not Same ", MSG_TYPE,
-				notificationMessageService.getContainerName());
-	}
-
-	@Test
 	public void testExecuteService() {
 		UplinkNotificationMessageConverter notificationMessageConverter = new UplinkNotificationMessageConverter(new EventIdToNameMapper());
 		DeviceInfo deviceInfo = notificationMessageConverter

@@ -37,8 +37,6 @@ class PristechSmartParkingDeviceModel implements DeviceModel {
 
 class PristechSmartParkingUplinkHandler implements PayloadDecipher,DeviceIdExtractor,MessageTypeExtractor,DownlinkPayloadProcessor{
 
-	private final String certificatePath ="src/test/resources/script/cert/pristec.cer";
-	//private final String certificatePath=System.getProperty("jboss.home.dir")+"/standalone/configuration/DC/httpdc/script/cert/pristec.cer";
 	private final String ppParkDownlinkEndpoint = "https://pparke.in/Parking/instance/pparke_india/iot/testpush";
 	private final JsonParser jsonParser=new JsonParser();
 	private final GroovyServicesHolder groovyServicesHolder;

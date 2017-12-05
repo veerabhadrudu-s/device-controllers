@@ -71,7 +71,6 @@ public abstract class MqttBaseTestTemplate {
 
 	protected String formUplinkTopicName(String manufacturer, String model, String version, String deviceId) {
 		return formTopicName(manufacturer, model, version, deviceId, "Up");
-
 	}
 
 	protected String formDownlinkTopicName(String manufacturer, String model, String version, String deviceId) {

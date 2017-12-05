@@ -23,7 +23,7 @@ import com.hpe.iot.dc.udp.southbound.service.impl.UDPDatagramSender;
 @Component
 public class StandardMessageService extends TrinetraAcknowledgementMessageService
 		implements ExtendedUplinkMessageService {
-
+	private static final String CONTAINER_NAME = "notification";
 	private IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
 	@Autowired
@@ -57,14 +57,8 @@ public class StandardMessageService extends TrinetraAcknowledgementMessageServic
 		if (deviceData != null && deviceData instanceof Notification) {
 			Notification notification = (Notification) deviceData;
 			if (!notification.getNotifications().isEmpty())
-				iotPublisherService.receiveDataFromDevice(model, this.getContainerName());
+				iotPublisherService.receiveDataFromDevice(model, CONTAINER_NAME);
 		}
 		return new DeviceDataDeliveryStatus();
 	}
-
-	@Override
-	public String getContainerName() {
-		return "notification";
-	}
-
 }

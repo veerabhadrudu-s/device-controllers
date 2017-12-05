@@ -70,9 +70,4 @@ public class NotificationMessageServiceTest {
 		assertNotNull("Failed to execute NotificationMessageService", deviceDataDeliveryStatus);
 	}
 
-	@Test
-	public void testGetContainerName() {
-		assertEquals("Expected Response Message Type and Actual Response Message Type are not Same ", CONTAINER_NAME,
-				notificationMessageService.getContainerName());
-	}
 }

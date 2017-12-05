@@ -1214,14 +1214,9 @@ public class IPConnectMessageService extends AbstractAcknowledgeAndUplinkService
 	}
 
 	@Override
-	public String getContainerName() {
-		return CONTAINER_NAME;
-	}
-
-	@Override
 	protected DeviceDataDeliveryStatus executeMessageSpecificLogic(DeviceInfo model) {
 		logger.debug("Received request is " + model);
-		iotPublisherService.receiveDataFromDevice(model, getContainerName());
+		iotPublisherService.receiveDataFromDevice(model, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
 	}
 
@@ -1235,7 +1230,7 @@ public class IPConnectMessageService extends AbstractAcknowledgeAndUplinkService
 public class NotificationMessageService implements UplinkMessageService {
 
 	private static final String MESSAGE_TYPE = "0x4206";
-
+	private static final String CONTAINER_NAME = "notification";	
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
 	public NotificationMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
@@ -1250,13 +1245,8 @@ public class NotificationMessageService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		iotPublisherService.receiveDataFromDevice(deviceInfo, getContainerName());
+		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
-	}
-
-	@Override
-	public String getContainerName() {
-		return "notification";
 	}
 
 }
@@ -1264,6 +1254,7 @@ public class NotificationMessageService implements UplinkMessageService {
 public class AlarmMessageService implements UplinkMessageService {
 
 	private static final String MESSAGE_TYPE = "0x4203";
+	private static final String CONTAINER_NAME = "alarm";
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
 	public AlarmMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
@@ -1278,13 +1269,8 @@ public class AlarmMessageService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		iotPublisherService.receiveDataFromDevice(deviceInfo, getContainerName());
+		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
-	}
-
-	@Override
-	public String getContainerName() {
-		return "alarm";
 	}
 
 }

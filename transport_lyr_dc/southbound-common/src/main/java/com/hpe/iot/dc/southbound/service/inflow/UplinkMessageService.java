@@ -8,6 +8,4 @@ import com.hpe.iot.dc.service.MessageService;
  */
 public interface UplinkMessageService extends MessageService {
 
-	String getContainerName();
-
 }

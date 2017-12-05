@@ -82,9 +82,4 @@ public class IPConnectMessageServiceTest {
 				ipConnectMessageService.getMessageType());
 	}
 
-	@Test
-	public void testContainerName() {
-		assertEquals("Expected Response Message Type and Actual Response Message Type are not Same ", CONTAINER_NAME,
-				ipConnectMessageService.getContainerName());
-	}
 }

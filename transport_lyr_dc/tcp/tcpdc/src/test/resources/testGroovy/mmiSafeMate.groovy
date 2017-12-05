@@ -1,7 +1,9 @@
-package com.hpe.iot.dc.mmi;
+package com.hpe.iot.dc.mmi.safemate;
 
-import static com.hpe.iot.dc.mmi.TrackerNotification.NotificationType.HISTORY_DATA;
-import static com.hpe.iot.dc.mmi.TrackerNotification.NotificationType.REGULAR_DATA;
+import static com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType.ALERT
+import static com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType.HISTORY_DATA;
+import static com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType.IPCONNECT
+import static com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType.REGULAR_DATA;
 import static com.hpe.iot.dc.model.constants.ModelConstants.DEVICE_KEY
 import static com.hpe.iot.dc.util.DataParserUtility.*;
 import static com.hpe.iot.dc.util.UtilityLogger.convertArrayOfByteToString
@@ -14,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.hpe.iot.dc.mmi.TrackerNotification.NotificationType;
+import com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType;
 import com.hpe.iot.dc.model.Device
 import com.hpe.iot.dc.model.DeviceData;
 import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
@@ -48,16 +50,20 @@ public class MMIServerSocketToDeviceModel extends AbstractServerSocketToDeviceMo
 		return "SafeMate";
 	}
 
-	public String getBoundLocalAddress(){
-		return "localhost";
-	}
-	@Override
 	public String getVersion() {
 		return "1.0"
 	}
 
+	public String getBoundLocalAddress(){
+		return "localhost";
+	}
+
 	public int getPortNumber(){
 		return 2002;
+	}
+
+	public String getDescription() {
+		return "This is a Personal Safety Tracker used for child and women safety.";
 	}
 }
 
@@ -349,7 +355,7 @@ public class TrackerNotification implements DeviceData {
 	}
 
 	public enum NotificationType {
-		REGULAR_DATA, HISTORY_DATA;
+		IPCONNECT,REGULAR_DATA, HISTORY_DATA,ALERT;
 	}
 
 }
@@ -434,12 +440,12 @@ public class GPSInfo implements DeviceData {
 
 	private final String date;
 	private final String time;
-	private final long latitude;
-	private final long longitude;
-	private final int speed;
+	private final double latitude;
+	private final double longitude;
+	private final double speed;
 	private final int direction;
 
-	public GPSInfo(String date, String time, long latitude, long longitude, int speed, int direction) {
+	public GPSInfo(String date, String time, double latitude, double longitude, double speed, int direction) {
 		super();
 		this.date = date;
 		this.time = time;
@@ -457,15 +463,15 @@ public class GPSInfo implements DeviceData {
 		return time;
 	}
 
-	public long getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public long getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public int getSpeed() {
+	public double getSpeed() {
 		return speed;
 	}
 
@@ -521,8 +527,7 @@ public class GPSInfo implements DeviceData {
 
 	@Override
 	public String toString() {
-		return "GPSInfo [date=" + date + ", time=" + time + ", latitude=" + latitude + ", longitude=" + longitude
-		+ ", speed=" + speed + ", direction=" + direction + "]";
+		return "GPSInfo [date=" + date + ", time=" + time + ", latitude=" + latitude + ", longitude=" + longitude+ ", speed=" + speed + ", direction=" + direction + "]";
 	}
 
 }
@@ -848,7 +853,7 @@ public abstract class AbstractMMIMessageConverter implements UplinkDeviceDataCon
 		deviceIdInByte = truncateEmptyBytes(deviceIdInByte);
 		final String deviceId = convertBytesToASCIIString(deviceIdInByte, 0, deviceIdInByte.length);
 		logger.debug("Identified Device Id is " + deviceId);
-		final DeviceInfo dataModel = new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))),
+		final DeviceInfo dataModel = new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))),
 				input);
 		addMessageSpecificParameters(dataModel.getDeviceData(), input);
 		return dataModel;
@@ -876,9 +881,9 @@ public class TrackerInfoCreator {
 	public TrackerInfo constructTrackerInfo(byte[] rawBytes) {
 		String date = calculateDate(rawBytes);
 		String time = calculateTime(rawBytes);
-		long latitude = calculateLatitude(rawBytes);
-		long longitude = calculateLongitude(rawBytes);
-		int speed = calculateSpeed(rawBytes);
+		double latitude = calculateDecimalFormatLatitudeFromMilliSecondsFormat(rawBytes);
+		double longitude = calculateDecimalFormatLongitudeFromMilliSecondsFormat(rawBytes);
+		double speed = calculateSpeedInKmph(rawBytes);
 		int direction = calculateDirection(rawBytes);
 		TrackerStatus trackerStatus = calculateTrackerStatus(rawBytes);
 		TrackerInfo trackerInfo = new TrackerInfo(new GPSInfo(date, time, latitude, longitude, speed, direction),
@@ -894,22 +899,22 @@ public class TrackerInfoCreator {
 		return rawPayload[3] + ":" + rawPayload[4] + ":" + (rawPayload[5]) + " GMT";
 	}
 
-	private long calculateLatitude(byte[] rawBytes) {
+	private double calculateDecimalFormatLatitudeFromMilliSecondsFormat(byte[] rawBytes) {
 		byte[] latitude = copyOfRange(rawBytes, 6, 10);
 		reverseArray(latitude);
-		return parseLong(calculateUnsignedDecimalValFromSignedBytes(latitude));
+		return parseLong(calculateUnsignedDecimalValFromSignedBytes(latitude))/3600000;
 	}
 
-	private long calculateLongitude(byte[] rawBytes) {
+	private double calculateDecimalFormatLongitudeFromMilliSecondsFormat(byte[] rawBytes) {
 		byte[] longitude = copyOfRange(rawBytes, 10, 14);
 		reverseArray(longitude);
-		return parseLong(calculateUnsignedDecimalValFromSignedBytes(longitude));
+		return parseLong(calculateUnsignedDecimalValFromSignedBytes(longitude))/3600000;
 	}
 
-	private int calculateSpeed(byte[] rawBytes) {
+	private double calculateSpeedInKmph(byte[] rawBytes) {
 		byte[] speed = copyOfRange(rawBytes, 14, 16);
 		reverseArray(speed);
-		return parseInt(calculateUnsignedDecimalValFromSignedBytes(speed));
+		return parseInt(calculateUnsignedDecimalValFromSignedBytes(speed))*0.036;
 	}
 
 	private int calculateDirection(byte[] rawBytes) {
@@ -953,7 +958,10 @@ public class IPConnectMessageConverter extends AbstractMMIMessageConverter {
 	protected void addMessageSpecificParameters(Map<String, DeviceData> deviceData, byte[] rawBytes) {
 		rawBytes = copyOfRange(rawBytes, 27, 63);
 		TrackerInfo trackerInfo = trackerInfoCreator.constructTrackerInfo(rawBytes);
-		deviceData.put(TrackerInfo.TRACKER_INFO, trackerInfo);
+		List<TrackerInfo> trackerInfos=new ArrayList<>();
+		trackerInfos.add(trackerInfo);
+		TrackerNotification trackerNotification=new TrackerNotification(IPCONNECT, 1, trackerInfos);
+		deviceData.put(trackerNotification.getDeviceDataInformation(), trackerNotification);
 	}
 
 }
@@ -1009,8 +1017,12 @@ public class AlarmMessageConverter extends AbstractMMIMessageConverter {
 	@Override
 	protected void addMessageSpecificParameters(Map<String, DeviceData> deviceData, byte[] rawData) {
 		rawData = copyOfRange(rawData, 27, 63);
+		List<TrackerInfo> trackerInfos = new ArrayList<>();
 		TrackerInfo trackerInfo = trackerInfoCreator.constructTrackerInfo(rawData);
-		deviceData.put(TrackerInfo.TRACKER_INFO, trackerInfo);
+		trackerInfos.add(trackerInfo);
+		deviceData.put(TrackerNotification.TRACKER_NOTIF,
+				new TrackerNotification(ALERT, 1, trackerInfos));
+
 	}
 
 }
@@ -1041,7 +1053,7 @@ public class HeartBeatPackageConverter implements UplinkDeviceDataConverter {
 		deviceIdInByte = truncateEmptyBytes(deviceIdInByte);
 		final String deviceId = convertBytesToASCIIString(deviceIdInByte, 0, deviceIdInByte.length);
 		logger.debug("Identified Device Id is " + deviceId);
-		return new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))), input);
+		return new DeviceInfo(new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),deviceModel.getVersion(), deviceId), ("0x" + convertToHexValue(copyOfRange(input, 25, 27))), input);
 	}
 
 	private void performCRCCheckOperation(byte[] input) {
@@ -1202,14 +1214,9 @@ public class IPConnectMessageService extends AbstractAcknowledgeAndUplinkService
 	}
 
 	@Override
-	public String getContainerName() {
-		return CONTAINER_NAME;
-	}
-
-	@Override
 	protected DeviceDataDeliveryStatus executeMessageSpecificLogic(DeviceInfo model) {
 		logger.debug("Received request is " + model);
-		iotPublisherService.receiveDataFromDevice(model, getContainerName());
+		iotPublisherService.receiveDataFromDevice(model, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
 	}
 
@@ -1223,7 +1230,7 @@ public class IPConnectMessageService extends AbstractAcknowledgeAndUplinkService
 public class NotificationMessageService implements UplinkMessageService {
 
 	private static final String MESSAGE_TYPE = "0x4206";
-
+	private static final String CONTAINER_NAME = "notification";	
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
 	public NotificationMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
@@ -1238,13 +1245,8 @@ public class NotificationMessageService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		iotPublisherService.receiveDataFromDevice(deviceInfo, getContainerName());
+		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
-	}
-
-	@Override
-	public String getContainerName() {
-		return "notification";
 	}
 
 }
@@ -1252,6 +1254,7 @@ public class NotificationMessageService implements UplinkMessageService {
 public class AlarmMessageService implements UplinkMessageService {
 
 	private static final String MESSAGE_TYPE = "0x4203";
+	private static final String CONTAINER_NAME = "alarm";
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
 	public AlarmMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
@@ -1266,13 +1269,8 @@ public class AlarmMessageService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		iotPublisherService.receiveDataFromDevice(deviceInfo, getContainerName());
+		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
-	}
-
-	@Override
-	public String getContainerName() {
-		return "alarm";
 	}
 
 }
@@ -1360,8 +1358,8 @@ public class SettingsDownlinkConverter implements DownlinkDeviceDataConverter{
 
 	private byte[] getBinaryPayloadFromSettings(DeviceSettings settings){
 		byte[] settingsBytes=new byte[6];
-		settingsBytes[0] = (byte) parseInt("0x4001".substring(2, 4), 16);
-		settingsBytes[1] = (byte) parseInt("0x4001".substring(4, 6), 16);
+		settingsBytes[0] = (byte) parseInt("0x0140".substring(2, 4), 16);
+		settingsBytes[1] = (byte) parseInt("0x0140".substring(4, 6), 16);
 		settingsBytes[2]=2;
 		//TODO : This logic needs to be improved to split int value to 2 bytes.
 		settingsBytes[4]=settings.getNotifInterval();

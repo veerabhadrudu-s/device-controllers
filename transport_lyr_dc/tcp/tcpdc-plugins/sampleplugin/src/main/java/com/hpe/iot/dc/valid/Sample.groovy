@@ -180,6 +180,7 @@ public class SampleData implements DeviceData {
 class SampleDataService implements UplinkMessageService {
 
 	private static final String MESSAGE_TYPE = "deviceDataMessageType";
+	private static final String CONTAINER_NAME = "default";
 
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
@@ -195,14 +196,10 @@ class SampleDataService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		iotPublisherService.receiveDataFromDevice(deviceInfo, getContainerName());
+		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
 	}
 
-	@Override
-	public String getContainerName() {
-		return "default";
-	}
 }
 
 class SampleIOTModelConverter extends AbstractIOTModelConverterImpl{

@@ -69,7 +69,6 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 
 	private final Logger logger=LoggerFactory.getLogger(this.getClass());
 	private final GroovyServicesHolder groovyServicesHolder;
-	private final String weatherServiceCertifcatePath;
 	private final JsonParser jsonParser=new JsonParser();
 	private final DateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	private final DateFormat targetFormatDate = new SimpleDateFormat("dd-MM-yyyy");
@@ -82,8 +81,6 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 
 	public MotwanePayloadProcessor(GroovyServicesHolder groovyServicesHolder){
 		this.groovyServicesHolder=groovyServicesHolder
-		//this.weatherServiceCertifcatePath=System.getProperty("jboss.home.dir")+"/standalone/configuration/DC/mqttdc/script/cert/weather-der.cer";
-		this.weatherServiceCertifcatePath="src/test/resources/script/cert/weather-der.cer";
 		this.targetFormat.setTimeZone(TimeZone.getTimeZone("IST"));
 	}
 
@@ -101,7 +98,7 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 			case "ALA":
 				case "RDA":pushDataToUiotPlatform(decipheredPayload,"alarm");
 				break;
-			case "EOO_ACK":pushDataToUiotPlatform(decipheredPayload,"downlinkCommandStatus");
+			case "URR":pushDataToUiotPlatform(decipheredPayload,"downlinkCommandStatus");
 				break;
 			default: logger.debug("Ignored payload is "+decipheredPayload);
 		}
@@ -174,7 +171,7 @@ public class MotwanePayloadProcessor implements UplinkPayloadProcessor{
 		URI uri = new URIBuilder().setScheme("https").setHost("api.sunrise-sunset.org").setPort(443).setPath("/json")
 				.setParameter("lat", latitude).setParameter("lng", longitude).setParameter("date", "today").setParameter("formatted", "0").build();
 		logger.debug("Weather Api URL "+ uri.toString());
-		String weatherServiceDataString=groovyServicesHolder.getHttpClientUtility().getResourceOnHttps(uri.toString(),weatherServiceCertifcatePath,false);
+		String weatherServiceDataString=groovyServicesHolder.getHttpClientUtility().getResourceOnHttps(uri.toString());
 		JsonObject weatherServiceData=jsonParser.parse(weatherServiceDataString).getAsJsonObject();
 		String sunrise=weatherServiceData.getAsJsonObject("results").get("sunrise").getAsString();
 		String sunset=weatherServiceData.getAsJsonObject("results").get("sunset").getAsString();

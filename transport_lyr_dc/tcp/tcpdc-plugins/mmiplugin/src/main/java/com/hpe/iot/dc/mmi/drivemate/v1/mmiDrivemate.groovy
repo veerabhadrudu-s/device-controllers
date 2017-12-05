@@ -608,15 +608,10 @@ public class NotificationMessageService implements UplinkMessageService{
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
-		DeviceDataDeliveryStatus deviceDataDeliveryStatus=iotPublisherService.receiveDataFromDevice(deviceInfo,getContainerName());
+		DeviceDataDeliveryStatus deviceDataDeliveryStatus=iotPublisherService.receiveDataFromDevice(deviceInfo,notification);
 		int noOfRecords=((Notification)deviceInfo.getDeviceData().get(notification)).getNoOfRecords();
 		byte[] acknowlegement=DataParserUtility.getByteArrayValueInBigEndian(noOfRecords,4);
 		tcpServerSocketWriter.sendMessage(deviceInfo.getDevice(),acknowlegement);
 		return deviceDataDeliveryStatus;
-	}
-
-	@Override
-	public String getContainerName() {
-		return notification;
 	}
 }
