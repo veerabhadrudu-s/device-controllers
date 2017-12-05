@@ -12,6 +12,7 @@
 		<module>tcpdc</module>		
 		<module>tcpdc-plugins</module>
 		<module>tcp-plugin-monitor</module>
-		<module>tcpdc-client</module>
+		<module>tcpdc-client-common</module>
+		<module>tcpdc-clients</module>
   </modules>
 </project>
