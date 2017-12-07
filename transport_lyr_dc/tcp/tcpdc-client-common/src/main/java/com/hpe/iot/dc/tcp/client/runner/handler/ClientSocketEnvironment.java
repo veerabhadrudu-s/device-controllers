@@ -4,8 +4,8 @@
 package com.hpe.iot.dc.tcp.client.runner.handler;
 
 import com.hpe.iot.dc.tcp.client.notify.ClientHandShakeNotifier;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientToServerMessageGenerator;
-import com.hpe.iot.dc.tcp.client.payload.converter.ServerToClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.socket.ClientSocketManager;
 import com.hpe.iot.dc.tcp.client.writer.ClientSocketWriter;
 
@@ -19,14 +19,14 @@ public class ClientSocketEnvironment {
 	private final ClientSocketManager clientSocketManager;
 	private final ClientHandShakeNotifier clientHandshakeNotifier;
 	private final ClientSocketWriter clientSocketWriter;
-	private final ClientToServerMessageGenerator clientToServerMessageGenerator;
-	private final ServerToClientMessageGenerator severToClientMessageGenerator;
+	private final ClientMessageGenerator clientToServerMessageGenerator;
+	private final ClientMessageConsumer severToClientMessageGenerator;
 	private final int index;
 
 	public ClientSocketEnvironment(ClientHandlerSettings clientHandlerSettings, ClientSocketManager clientSocketManager,
 			ClientHandShakeNotifier clientHandshakeNotifier,
-			ClientToServerMessageGenerator clientToServerMessageGenerator,
-			ServerToClientMessageGenerator severToClientMessageGenerator, int index) {
+			ClientMessageGenerator clientToServerMessageGenerator,
+			ClientMessageConsumer severToClientMessageGenerator, int index) {
 		super();
 		this.clientHandlerSettings = clientHandlerSettings;
 		this.clientSocketManager = clientSocketManager;
@@ -53,11 +53,11 @@ public class ClientSocketEnvironment {
 		return clientSocketWriter;
 	}
 
-	public ClientToServerMessageGenerator getClientToServerMessageGenerator() {
+	public ClientMessageGenerator getClientMessageGenerator() {
 		return clientToServerMessageGenerator;
 	}
 
-	public ServerToClientMessageGenerator getSeverToClientMessageGenerator() {
+	public ClientMessageConsumer getClientMessageConsumer() {
 		return severToClientMessageGenerator;
 	}
 

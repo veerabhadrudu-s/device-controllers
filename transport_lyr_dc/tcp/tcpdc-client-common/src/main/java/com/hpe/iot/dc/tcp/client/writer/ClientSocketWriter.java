@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.tcp.client.model.ClientDeviceData;
 import com.hpe.iot.dc.tcp.client.model.DeviceSocketModel;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientToServerMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 
 /**
  * @author sveera
@@ -22,10 +22,10 @@ public class ClientSocketWriter {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final ClientToServerMessageGenerator clientToServerMessageGenerator;
+	private final ClientMessageGenerator clientToServerMessageGenerator;
 	private final int index;
 
-	public ClientSocketWriter(int index, ClientToServerMessageGenerator clientToServerMessageGenerator) {
+	public ClientSocketWriter(int index, ClientMessageGenerator clientToServerMessageGenerator) {
 		super();
 		this.clientToServerMessageGenerator = clientToServerMessageGenerator;
 		this.index = index;

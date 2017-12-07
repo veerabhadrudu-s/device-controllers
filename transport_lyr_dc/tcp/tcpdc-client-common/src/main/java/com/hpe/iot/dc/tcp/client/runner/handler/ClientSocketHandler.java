@@ -31,7 +31,6 @@ public class ClientSocketHandler {
 	private final ExecutorService executorService;
 	private final ClientSocketWriterRunner clientSocketWriterRunner;
 	private ClientSocketReaderRunner clientSocketReaderRunner;
-
 	private boolean isHandlerRunnable;
 
 	public ClientSocketHandler(ClientSocketEnvironment clientSocketEnvironment, ExecutorService executorService) {
@@ -75,12 +74,12 @@ public class ClientSocketHandler {
 
 	private void startHandling() throws IOException, InterruptedException {
 		Future<Void> readerResponse = null;
-		if (clientSocketEnvironment.getSeverToClientMessageGenerator() != null)
+		if (clientSocketEnvironment.getClientMessageConsumer() != null)
 			readerResponse = intializeDownLinkFlowForClients();
 		else
 			completeHandShakeForConnectedClients();
 		Future<Void> writerResponse = executorService.submit(clientSocketWriterRunner);
-		checkForAnyExceptionsInRunners(writerResponse, readerResponse);
+		checkForAnyExceptionsFromRunnersInLoop(writerResponse, readerResponse);
 	}
 
 	private Future<Void> intializeDownLinkFlowForClients() throws IOException, InterruptedException {
@@ -99,7 +98,7 @@ public class ClientSocketHandler {
 
 	private Future<Void> activateMessageListener() throws IOException {
 		clientSocketReaderRunner = new ClientSocketReaderRunner(
-				clientSocketEnvironment.getSeverToClientMessageGenerator(),
+				clientSocketEnvironment.getClientMessageConsumer(),
 				clientSocketEnvironment.getClientSocketWriter(), clientSocketEnvironment.getClientHandshakeNotifier(),
 				clientSocketEnvironment.getClientSocketManager(), clientSocketEnvironment.getClientHandlerSettings(),
 				clientSocketEnvironment.getIndex());
@@ -111,17 +110,17 @@ public class ClientSocketHandler {
 			clientSocketEnvironment.getClientHandshakeNotifier().handshakeCompleted(deviceSocketModel.getDeviceId());
 	}
 
-	private void checkForAnyExceptionsInRunners(Future<Void> writerResponse, Future<Void> readerResponse) {
+	private void checkForAnyExceptionsFromRunnersInLoop(Future<Void> writerResponse, Future<Void> readerResponse) {
 		boolean isWriterExecutionException, isReaderExecutionException;
 		while (isHandlerRunnable) {
-			isWriterExecutionException = tryForExecutionException(writerResponse);
-			isReaderExecutionException = tryForExecutionException(readerResponse);
+			isWriterExecutionException = isExecutionException(writerResponse);
+			isReaderExecutionException = isExecutionException(readerResponse);
 			if (isWriterExecutionException || isReaderExecutionException)
 				isHandlerRunnable = false;
 		}
 	}
 
-	private boolean tryForExecutionException(Future<Void> futureResponse) {
+	private boolean isExecutionException(Future<Void> futureResponse) {
 		boolean isExecutionException = false;
 		if (futureResponse == null)
 			return isExecutionException;

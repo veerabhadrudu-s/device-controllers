@@ -83,7 +83,6 @@ public class TCPServerSocketServiceManager {
 
 	public void removeTCPServerSocketService(ServerSocketToDeviceModel portToDeviceModel) throws IOException {
 		stopTCPServerSocketService(portToDeviceModel);
-		tcpServerSocketServices.remove(portToDeviceModel);
 		logger.info("Stopped and removed TCPServerSocketServcie for " + portToDeviceModel);
 	}
 
@@ -112,6 +111,7 @@ public class TCPServerSocketServiceManager {
 		logger.info("Stopped TCPServerSocketServcie for [ " + portToDeviceModel.getManufacturer() + ":"
 				+ portToDeviceModel.getModelId() + ":" + portToDeviceModel.getBoundLocalAddress() + ":"
 				+ portToDeviceModel.getPortNumber() + " ]");
+		tcpServerSocketServices.remove(portToDeviceModel);
 	}
 
 	public void stopAllTCPServerSocketServices() throws IOException {

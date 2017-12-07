@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.tcp.client.device.counter.DeviceIdCounter;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientToServerMessageGenerator;
-import com.hpe.iot.dc.tcp.client.payload.converter.ServerToClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.runner.ClientSocketHandlerRunner;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketEnvironment;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketHandler;
@@ -33,8 +33,12 @@ public class CliTcpClient {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void runClient(final ClientToServerMessageGenerator messageGenerator,
-			final ServerToClientMessageGenerator severToClientMessageGenerator) throws IOException {
+	public void runClient(final ClientMessageGenerator messageGenerator) throws IOException {
+		runClient(messageGenerator, null);
+	}
+
+	public void runClient(final ClientMessageGenerator messageGenerator,
+			final ClientMessageConsumer severToClientMessageGenerator) throws IOException {
 		ClientSettings clientSettings = new SettingsReader().readSettings(ClientType.CLI);
 		logger.info("Using client Settings :- " + clientSettings);
 		logger.info("Connecting Clients");
@@ -50,8 +54,8 @@ public class CliTcpClient {
 	}
 
 	protected List<ClientSocketHandlerRunner> connectClientsForPluginScript(final ExecutorService executorService,
-			final ClientSettings clientSettings, final ClientToServerMessageGenerator severToClientMessageGenerator,
-			ServerToClientMessageGenerator clientToServerMessageGenerator) throws IOException {
+			final ClientSettings clientSettings, final ClientMessageGenerator severToClientMessageGenerator,
+			ClientMessageConsumer clientToServerMessageGenerator) throws IOException {
 		final List<ClientSocketHandlerRunner> clientSocketRunners = new ArrayList<>();
 		final DeviceIdCounter deviceIdCounter = new DeviceIdCounter(clientSettings.getStaringDeviceId(),
 				clientSettings.getClientRunnerSettings().getNoOfClients() * clientSettings.getNoOfClientRunners());

@@ -9,7 +9,7 @@ import com.hpe.iot.dc.tcp.client.model.ClientDeviceData;
  * @author sveera
  *
  */
-public interface ServerToClientMessageGenerator {
+public interface ClientMessageConsumer {
 
 	ClientDeviceData handleMessage(byte[] message);
 

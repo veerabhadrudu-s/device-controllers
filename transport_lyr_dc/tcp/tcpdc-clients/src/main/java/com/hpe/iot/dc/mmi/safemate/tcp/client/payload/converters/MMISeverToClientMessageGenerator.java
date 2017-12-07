@@ -13,13 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.tcp.client.model.ClientDeviceData;
-import com.hpe.iot.dc.tcp.client.payload.converter.ServerToClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 
 /**
  * @author sveera
  *
  */
-public class MMISeverToClientMessageGenerator implements ServerToClientMessageGenerator {
+public class MMISeverToClientMessageGenerator implements ClientMessageConsumer {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

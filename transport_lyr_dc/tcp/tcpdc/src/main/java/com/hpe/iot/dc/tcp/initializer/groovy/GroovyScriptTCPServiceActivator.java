@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +73,7 @@ public class GroovyScriptTCPServiceActivator {
 	private final DCComponentValidator dcComponentValidator;
 	private final OptionalDCComponentValidator optionalDCComponentValidator;
 	private final TCPServerClientSocketPoolFactory tcpServerClientSocketPoolFactory;
+	private final Map<String, ServerSocketToDeviceModel> startedTcpScripts;
 
 	public GroovyScriptTCPServiceActivator(TCPServerSocketServiceManager tcpServerSocketServiceManager,
 			TCPServerClientSocketPoolFactory tcpServerClientSocketPoolFactory, ServerBeanPool serverBeanPool) {
@@ -80,10 +82,23 @@ public class GroovyScriptTCPServiceActivator {
 		this.tcpServerClientSocketPoolFactory = tcpServerClientSocketPoolFactory;
 		this.dcComponentValidator = new DCComponentValidator();
 		this.optionalDCComponentValidator = new OptionalDCComponentValidator();
+		this.startedTcpScripts = new ConcurrentHashMap<>();
 	}
 
 	public void stopAllTCPServices() throws IOException {
 		tcpServerSocketServiceManager.stopAllTCPServerSocketServices();
+	}
+
+	public void restartTCPService(String groovyScriptFullPath) throws IOException, InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		stopTCPService(groovyScriptFullPath);
+		startTCPService(groovyScriptFullPath);
+	}
+
+	public void stopTCPService(String groovyScriptFullPath) throws IOException {
+		ServerSocketToDeviceModel serverSocketToDeviceModel = startedTcpScripts.remove(groovyScriptFullPath);
+		if (serverSocketToDeviceModel != null)
+			tcpServerSocketServiceManager.stopTCPServerSocketService(serverSocketToDeviceModel);
 	}
 
 	public void startTCPService(String groovyScriptFullPath) throws IOException, InstantiationException,
@@ -91,7 +106,8 @@ public class GroovyScriptTCPServiceActivator {
 		final Class<?>[] loadedClasses = readConcreateClassesFromScript(groovyScriptFullPath);
 		if (loadedClasses == null || loadedClasses.length == 0)
 			return;
-		startTCPService(loadedClasses);
+		ServerSocketToDeviceModel serverSocketToDeviceModel = startTCPService(loadedClasses);
+		startedTcpScripts.put(groovyScriptFullPath, serverSocketToDeviceModel);
 	}
 
 	private Class<?>[] readConcreateClassesFromScript(String groovyScriptFullPath) throws IOException {
@@ -104,14 +120,27 @@ public class GroovyScriptTCPServiceActivator {
 		return loadedClasses;
 	}
 
-	private void startTCPService(final Class<?>[] loadedClasses)
+	private ServerSocketToDeviceModel startTCPService(final Class<?>[] loadedClasses)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
 		final Map<Class<?>, Object> intializedObjects = new HashMap<>();
+		final TCPDCComponentMetaModel dcComponentMetaModel = constructTCPDCComponentMetaModel(loadedClasses);
+		final ServerSocketToDeviceModel serverSocketToDeviceModel = instantiateClassType(
+				dcComponentMetaModel.getServerSocketToDeviceModelClassType(), intializedObjects);
+		startTCPService(loadedClasses, intializedObjects, dcComponentMetaModel, serverSocketToDeviceModel);
+		return serverSocketToDeviceModel;
+	}
+
+	private TCPDCComponentMetaModel constructTCPDCComponentMetaModel(final Class<?>[] loadedClasses) {
 		final TCPDCComponentMetaModel dcComponentMetaModel = loadDCComponentModelClasses(loadedClasses);
 		validateMandatoryDCMetaComponentModel(dcComponentMetaModel);
 		logIdentifiedClassTypes(dcComponentMetaModel);
-		final ServerSocketToDeviceModel serverSocketToDeviceModel = instantiateClassType(
-				dcComponentMetaModel.getServerSocketToDeviceModelClassType(), intializedObjects);
+		return dcComponentMetaModel;
+	}
+
+	private void startTCPService(final Class<?>[] loadedClasses, final Map<Class<?>, Object> intializedObjects,
+			final TCPDCComponentMetaModel dcComponentMetaModel,
+			final ServerSocketToDeviceModel serverSocketToDeviceModel)
+			throws IOException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		validateOptionalMetaComponentModel(serverSocketToDeviceModel, dcComponentMetaModel);
 		final ServerClientSocketPool tcpServerClientSocketPool = tcpServerClientSocketPoolFactory
 				.getServerClientSocketPool(serverSocketToDeviceModel);

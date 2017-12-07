@@ -13,8 +13,8 @@ import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm;
 import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientToServerMessageGenerator;
 import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMISeverToClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.CliTcpClient;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientToServerMessageGenerator;
-import com.hpe.iot.dc.tcp.client.payload.converter.ServerToClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
 
 /**
@@ -24,8 +24,8 @@ import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
 public class MMIDCPluginTestClient {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private ClientToServerMessageGenerator clientToServerMessageGenerator;
-	private ServerToClientMessageGenerator serverToClientMessageGenerator;
+	private ClientMessageGenerator clientToServerMessageGenerator;
+	private ClientMessageConsumer serverToClientMessageGenerator;
 
 	@Before
 	public void setUp() {

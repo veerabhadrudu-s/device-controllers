@@ -9,7 +9,7 @@ import com.hpe.iot.dc.tcp.client.model.ClientDeviceData;
  * @author sveera
  *
  */
-public interface ClientToServerMessageGenerator {
+public interface ClientMessageGenerator {
 
 	ClientDeviceData generateMessagePacket(long deviceId, String messageType);
 }

@@ -51,37 +51,31 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<id>sampleCli</id>
+						<configuration>
+							<finalName>sampleCli</finalName>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>com.hpe.iot.dc.sample.valid.client.Main</Main-Class>
+									</manifestEntries>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+									<resource>tcpClient.properties</resource>
+								</transformer>
+							</transformers>
+						</configuration>
 					</execution>
-				</executions>
-				<configuration>
-					<finalName>sampleCli</finalName>
-					<transformers>
-						<transformer
-							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<manifestEntries>
-								<Main-Class>com.hpe.iot.dc.sample.valid.client.Main</Main-Class>
-							</manifestEntries>
-						</transformer>
-						<transformer
-							implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
-							<resource>tcpClient.properties</resource>
-						</transformer>
-					</transformers>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
 					<execution>
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>
 						</goals>
-						<id>mmiCli</id>
+						<id>mmiSafemateCli</id>
 						<configuration>
-							<finalName>mmiCli</finalName>
+							<finalName>mmiSafemateCli</finalName>
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -101,14 +95,36 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
-						<id>mmiGui</id>
+						<id>mmiSafemateGui</id>
 						<configuration>
-							<finalName>mmiGui</finalName>
+							<finalName>mmiSafemateGui</finalName>
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
 										<Main-Class>com.hpe.iot.dc.mmi.safemate.client.GUIMain</Main-Class>
+									</manifestEntries>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+									<resource>tcpClient.properties</resource>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<id>mmiVT15Gui</id>
+						<configuration>
+							<finalName>mmiVT15Gui</finalName>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>com.hpe.iot.dc.mmi.vt15.client.GUIMain</Main-Class>
 									</manifestEntries>
 								</transformer>
 								<transformer

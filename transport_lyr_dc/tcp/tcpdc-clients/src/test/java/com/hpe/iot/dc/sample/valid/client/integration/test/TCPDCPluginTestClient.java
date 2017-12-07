@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.sample.valid.tcp.client.payload.converters.SampleClientToServerMessageGenerator;
 import com.hpe.iot.dc.tcp.client.CliTcpClient;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientToServerMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
 
 /**
@@ -21,7 +21,7 @@ import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
 public class TCPDCPluginTestClient {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private ClientToServerMessageGenerator messageGenerator;
+	private ClientMessageGenerator messageGenerator;
 
 	@Before
 	public void setUp() {
@@ -34,7 +34,7 @@ public class TCPDCPluginTestClient {
 	@Ignore
 	public void testAllTCPDCPluginsWithClientsConnected() throws IOException {
 		logger.info("Running TCPClient ");
-		new CliTcpClient().runClient(messageGenerator,null);
+		new CliTcpClient().runClient(messageGenerator);
 	}
 
 }

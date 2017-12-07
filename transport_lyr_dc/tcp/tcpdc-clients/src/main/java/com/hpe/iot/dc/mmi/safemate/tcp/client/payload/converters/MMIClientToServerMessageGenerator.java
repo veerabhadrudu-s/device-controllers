@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm;
 import com.hpe.iot.dc.tcp.client.model.ClientDeviceData;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientToServerMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 
 /**
  * @author sveera
  *
  */
-public class MMIClientToServerMessageGenerator implements ClientToServerMessageGenerator {
+public class MMIClientToServerMessageGenerator implements ClientMessageGenerator {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.hpe.iot.dc.tcp.client.model.ClientDeviceData;
 import com.hpe.iot.dc.tcp.client.model.DeviceSocketModel;
 import com.hpe.iot.dc.tcp.client.notify.ClientHandShakeNotifier;
-import com.hpe.iot.dc.tcp.client.payload.converter.ServerToClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.settings.DeviceClientSettings;
 import com.hpe.iot.dc.tcp.client.socket.ClientSocketManager;
 import com.hpe.iot.dc.tcp.client.writer.ClientSocketWriter;
@@ -31,7 +31,7 @@ public class ClientSocketReaderRunner implements Callable<Void> {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final ServerToClientMessageGenerator severToClientMessageGenerator;
+	private final ClientMessageConsumer severToClientMessageGenerator;
 	private final ClientSocketWriter clientSocketWriter;
 	private final ClientHandShakeNotifier clientHandShakeNotifier;
 	private final ClientSocketManager clientSocketManager;
@@ -41,7 +41,7 @@ public class ClientSocketReaderRunner implements Callable<Void> {
 	private boolean isReaderRunnable;
 	private int bufferSizeInBytes = 1024;
 
-	public ClientSocketReaderRunner(ServerToClientMessageGenerator severToClientMessageGenerator,
+	public ClientSocketReaderRunner(ClientMessageConsumer severToClientMessageGenerator,
 			ClientSocketWriter clientSocketWriter, ClientHandShakeNotifier clientHandShakeNotifier,
 			ClientSocketManager clientSocketManager, DeviceClientSettings deviceClientSettings, int index)
 			throws IOException {

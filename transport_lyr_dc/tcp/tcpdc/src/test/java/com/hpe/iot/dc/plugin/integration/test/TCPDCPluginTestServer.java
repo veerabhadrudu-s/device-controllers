@@ -39,7 +39,6 @@ public class TCPDCPluginTestServer {
 	private ClassPathXmlApplicationContext applicationContext;
 
 	@Before
-	@Ignore
 	public void setUp() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext("bean-config.xml");
 	}

@@ -3,6 +3,7 @@ package com.hpe.iot.dc.watch.service;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
@@ -125,7 +127,8 @@ public class DirectoryWatchService {
 		}
 
 		private void registerDirectory(Path directoryPathToBeWatched) throws IOException {
-			WatchKey key = directoryPathToBeWatched.register(watchService, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+			WatchKey key = directoryPathToBeWatched.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE,
+					OVERFLOW);
 			keys.put(key, directoryPathToBeWatched);
 		}
 	}
