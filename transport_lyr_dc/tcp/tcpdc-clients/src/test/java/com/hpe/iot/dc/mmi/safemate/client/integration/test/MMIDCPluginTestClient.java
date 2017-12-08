@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm;
-import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientToServerMessageGenerator;
-import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMISeverToClientMessageGenerator;
+import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageGenerator;
+import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.CliTcpClient;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
@@ -29,8 +29,8 @@ public class MMIDCPluginTestClient {
 
 	@Before
 	public void setUp() {
-		clientToServerMessageGenerator = new MMIClientToServerMessageGenerator(new MMICRCAlgorithm());
-		serverToClientMessageGenerator = new MMISeverToClientMessageGenerator();
+		clientToServerMessageGenerator = new MMIClientMessageGenerator(new MMICRCAlgorithm());
+		serverToClientMessageGenerator = new MMIClientMessageConsumer();
 		SettingsReader.TCP_CLIENT_PROPERTIES = "src" + File.separator + "test" + File.separator + "resources"
 				+ File.separator + "tcpClient.properties";
 	}

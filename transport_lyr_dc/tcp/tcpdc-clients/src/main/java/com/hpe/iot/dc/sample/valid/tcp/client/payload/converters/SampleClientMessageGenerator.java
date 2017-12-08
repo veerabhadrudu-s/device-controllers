@@ -12,7 +12,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-public class SampleClientToServerMessageGenerator implements ClientMessageGenerator {
+public class SampleClientMessageGenerator implements ClientMessageGenerator {
 
 	@Override
 	public ClientDeviceData generateMessagePacket(long deviceId, String messageType) {

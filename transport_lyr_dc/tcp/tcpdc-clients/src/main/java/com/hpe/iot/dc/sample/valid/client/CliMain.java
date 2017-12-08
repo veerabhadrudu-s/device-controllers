@@ -1,11 +1,9 @@
-package com.hpe.iot.dc.mmi.safemate.client;
+package com.hpe.iot.dc.sample.valid.client;
 
 import java.io.IOException;
 
 import com.hpe.iot.dc.client.AbstractCliMain;
-import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm;
-import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageConsumer;
-import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageGenerator;
+import com.hpe.iot.dc.sample.valid.tcp.client.payload.converters.SampleClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 
@@ -15,17 +13,17 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  */
 public class CliMain extends AbstractCliMain {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String args[]) throws IOException {
 		new CliMain().main();
 	}
-
+	
 	@Override
 	protected ClientMessageGenerator getClientMessageGenerator() {
-		return new MMIClientMessageGenerator(new MMICRCAlgorithm());
+		return new SampleClientMessageGenerator();
 	}
 
 	@Override
 	protected ClientMessageConsumer getClientMessageConsumer() {
-		return new MMIClientMessageConsumer();
+		return null;
 	}
 }

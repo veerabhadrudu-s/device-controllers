@@ -19,7 +19,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
  * @author sveera
  *
  */
-public class MMISeverToClientMessageGenerator implements ClientMessageConsumer {
+public class MMIClientMessageConsumer implements ClientMessageConsumer {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -49,7 +49,7 @@ public class ClientSocketWriter {
 			postMessage(clientDeviceData.getMessageData(), deviceClient.getSocketChannel());
 			logger.debug(toString() + "Completed writing on client socket port "
 					+ deviceClient.getSocketChannel().socket().getLocalPort() + " with Device ID "
-					+ deviceClient.getDeviceId());
+					+ deviceClient.getDeviceId()+" with data "+clientDeviceData);
 		} else if (deviceClient.getSocketChannel().isConnectionPending()) {
 			logger.info(toString() + "Waiting for the socket connection"
 					+ deviceClient.getSocketChannel().socket().getLocalPort() + " with Device ID "

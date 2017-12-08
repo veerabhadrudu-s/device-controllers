@@ -1,25 +1,29 @@
 package com.hpe.iot.dc.mmi.vt15.client;
 
-import java.io.File;
 import java.io.IOException;
 
-import com.hpe.iot.dc.mmi.vt15.tcp.client.payload.converters.MMIVT15ClientToServerMessageGenerator;
-import com.hpe.iot.dc.tcp.client.CliTcpClient;
+import com.hpe.iot.dc.client.AbstractCliMain;
+import com.hpe.iot.dc.mmi.vt15.tcp.client.payload.converters.MMIVT15ClientMessageGenerator;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 
 /**
  * @author sveera
  *
  */
-public class CliMain {
+public class CliMain extends AbstractCliMain {
 
 	public static void main(String[] args) throws IOException {
-		System.out.println("Starting the TCP Client. ");
-		System.out.println("Console output will be redirected to file : " + System.getProperty("user.dir")
-				+ File.separator + "tcpClient.log");
-		System.out.println();
-		System.out.println();
-		System.out.println("Press any Key and Enter to stop the client ..... ");
-		new CliTcpClient().runClient(new MMIVT15ClientToServerMessageGenerator());
-		System.out.println(" TCP Client program Stopped . Please wait for JVM to Stop.");
+		new CliMain().main();
+	}
+
+	@Override
+	protected ClientMessageGenerator getClientMessageGenerator() {
+		return new MMIVT15ClientMessageGenerator();
+	}
+
+	@Override
+	protected ClientMessageConsumer getClientMessageConsumer() {
+		return null;
 	}
 }

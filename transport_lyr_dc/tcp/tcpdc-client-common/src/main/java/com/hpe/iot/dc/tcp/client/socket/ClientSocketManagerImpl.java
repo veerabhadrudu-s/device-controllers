@@ -77,6 +77,7 @@ public class ClientSocketManagerImpl implements ClientSocketManager, ClientHandS
 	@Override
 	public void handshakeCompleted(long... deviceIds) {
 		for (long deviceId : deviceIds) {
+			logger.trace("Completed handshake for device Id " + deviceId);
 			DeviceSocketModel deviceSocketModel = deviceClients.get(deviceId);
 			if (deviceSocketModel != null)
 				handShakedDeviceClients.put(deviceId, deviceSocketModel);
@@ -94,7 +95,7 @@ public class ClientSocketManagerImpl implements ClientSocketManager, ClientHandS
 			socketChannel.connect(remoteSocket);
 			deviceClients.put(nextDeviceID, new DeviceSocketModel(nextDeviceID, socketChannel));
 			logger.trace("Connecting in ClientSocketManager - " + index + " with connected client Device ID "
-					+ String.format("%010d", nextDeviceID));
+					+ nextDeviceID);
 			Thread.sleep(50);
 		}
 		waitForAllClientsToConnect();

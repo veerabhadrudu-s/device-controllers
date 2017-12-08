@@ -18,7 +18,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-public class MMIClientToServerMessageGenerator implements ClientMessageGenerator {
+public class MMIClientMessageGenerator implements ClientMessageGenerator {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -98,7 +98,7 @@ public class MMIClientToServerMessageGenerator implements ClientMessageGenerator
 
 	private MMICRCAlgorithm mmicrcAlgorithm;
 
-	public MMIClientToServerMessageGenerator(MMICRCAlgorithm mmicrcAlgorithm) {
+	public MMIClientMessageGenerator(MMICRCAlgorithm mmicrcAlgorithm) {
 		super();
 		this.mmicrcAlgorithm = mmicrcAlgorithm;
 	}

@@ -13,7 +13,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-public class MMIVT15ClientToServerMessageGenerator implements ClientMessageGenerator {
+public class MMIVT15ClientMessageGenerator implements ClientMessageGenerator {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

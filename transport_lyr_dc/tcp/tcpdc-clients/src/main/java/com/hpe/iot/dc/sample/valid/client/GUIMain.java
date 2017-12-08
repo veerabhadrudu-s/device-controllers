@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.hpe.iot.dc.mmi.vt15.client;
+package com.hpe.iot.dc.sample.valid.client;
 
 import java.io.IOException;
 
 import com.hpe.iot.dc.client.AbstractGuiMain;
-import com.hpe.iot.dc.mmi.vt15.tcp.client.payload.converters.MMIVT15ClientMessageGenerator;
+import com.hpe.iot.dc.sample.valid.tcp.client.payload.converters.SampleClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.GUI;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
@@ -15,7 +15,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-class GUIMain extends AbstractGuiMain {
+public class GUIMain extends AbstractGuiMain {
 
 	public static void main(String[] args) throws IOException {
 		new GUIMain().main();
@@ -23,7 +23,7 @@ class GUIMain extends AbstractGuiMain {
 
 	@Override
 	protected ClientMessageGenerator getClientMessageGenerator() {
-		return new MMIVT15ClientMessageGenerator();
+		return new SampleClientMessageGenerator();
 	}
 
 	@Override
@@ -33,6 +33,6 @@ class GUIMain extends AbstractGuiMain {
 
 	@Override
 	protected GUI getGUI() {
-		return new MMIVT15GUI();
+		return new SampleGUI();
 	}
 }
