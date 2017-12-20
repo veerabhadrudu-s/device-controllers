@@ -4,8 +4,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.hpe.broker.utility.UtilityLogger;
@@ -19,7 +17,6 @@ import com.hpe.iot.dc.util.DataParserUtility;
 @Component
 public class StandardMessageCreator {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public NotificationRecord constructStandardMessage(String messageType, byte[] input) {
 		try {

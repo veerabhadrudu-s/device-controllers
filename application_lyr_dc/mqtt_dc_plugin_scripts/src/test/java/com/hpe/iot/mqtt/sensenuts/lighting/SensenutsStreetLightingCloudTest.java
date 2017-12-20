@@ -50,6 +50,20 @@ public class SensenutsStreetLightingCloudTest {
 				sensenutsStreetLightingTestData.constructPeriodicMessage());
 	}
 
+	@Test
+	@Ignore
+	public void testSensenutsStreetLightingForUplinkPowerOutageAlert() throws InterruptedException {
+		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
+				sensenutsStreetLightingTestData.constructPowerOutageAlertMessage());
+	}
+
+	@Test
+	@Ignore
+	public void testSensenutsStreetLightingForUplinkLuminaireFailureAlert() throws InterruptedException {
+		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
+				sensenutsStreetLightingTestData.constructLuminaireFailureMessage());
+	}
+
 	protected String formUplinkTopicName(String manufacturer, String model, String version, String deviceId) {
 		return formTopicName(manufacturer, model, version, deviceId, "Up");
 	}

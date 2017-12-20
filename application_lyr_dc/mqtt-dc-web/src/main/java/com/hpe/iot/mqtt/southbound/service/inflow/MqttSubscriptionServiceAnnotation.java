@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.google.gson.JsonParser;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.mqtt.southbound.security.SecurityLayer;
@@ -100,7 +99,6 @@ public class MqttSubscriptionServiceAnnotation {
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 		private final SouthboundService southboundService;
-		private final JsonParser jsonParser = new JsonParser();
 
 		public MqttSubscriptionMessageHandler(SouthboundService southboundService) {
 			super();
