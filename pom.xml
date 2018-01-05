@@ -55,7 +55,13 @@
 				<version>${org.springframework-version}</version>
 				<scope>test</scope>
 			</dependency>
-
+			<!-- jackson-databind dependency required by spring webmvc during initialization 
+				in server environment -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.9.1</version>
+			</dependency>
 			<!-- Message Broker Libraries -->
 			<dependency>
 				<groupId>org.apache.kafka</groupId>

@@ -30,7 +30,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-websocket</artifactId>
 		</dependency>
-
+		<!-- jackson-databind dependency required by spring webmvc during initialization 
+			in server environment -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>

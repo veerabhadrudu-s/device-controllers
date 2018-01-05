@@ -10,7 +10,7 @@
 		<param-value>webapp.root.tcpdc</param-value>
 	</context-param>
 
-	<context-param>
+	<!-- <context-param>
 		<param-name>log4jConfigLocation</param-name>
 		<param-value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/log4j-tcpDC.xml</param-value>
 	</context-param>
@@ -22,7 +22,7 @@
 
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>
+	</listener> -->
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
