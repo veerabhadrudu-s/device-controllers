@@ -39,11 +39,9 @@ public class SocketChangePublisherService implements WebSocketSessionPublisher, 
 				serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion(), deviceCount,
 				serverSocketToDeviceModel.getDescription());
 		String jsonString = new Gson().toJson(scriptPlugin);
-		for (Session webSocketSession : connectedClientSessions) {
+		for (Session webSocketSession : connectedClientSessions)
 			if (webSocketSession.isOpen())
 				tryPushingMessage(jsonString, webSocketSession);
-
-		}
 
 	}
 

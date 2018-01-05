@@ -3,8 +3,8 @@ package com.hpe.iot.dc.southbound.crypto;
 import static com.hpe.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
 import static com.hpe.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author sveera
@@ -14,7 +14,7 @@ public class DataDecoderTest {
 
 	private DataDecoder dataDecoder;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		dataDecoder = new DataDecoder();
 	}

@@ -4,12 +4,11 @@
 package com.hpe.iot.dc.mmi.vt15.southbound.converter.impl.v1
 
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.CONNECTION_PKT_DATA
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.vt15.v1.ConnectPacketData
 import com.hpe.iot.dc.mmi.vt15.v1.ConnectPacketUplinkDataConverter
@@ -33,22 +32,23 @@ public class ConnectPacketUplinkDataConverterTest {
 	private final Device device=new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceModel.getVersion(), DEVICE_ID);
 	private ConnectPacketUplinkDataConverter connectPacketUplinkDataConverter;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		connectPacketUplinkDataConverter=new ConnectPacketUplinkDataConverter();
 	}
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected and Actual Message Types are not same",CONNECTION_PACKET,connectPacketUplinkDataConverter.getMessageType());
+		assertEquals(CONNECTION_PACKET,connectPacketUplinkDataConverter.getMessageType(),
+				"Expected and Actual Message Types are not same");
 	}
 
 	@Test
 	public void testCreateModel() {
 		DeviceInfo actualDeviceInfo=connectPacketUplinkDataConverter.createModel(deviceModel,CONNECTION_PKT_DATA.getBytes());
 		DeviceInfo expectedDeviceInfo=constructExpectedDeviceInfo();
-		assertNotNull("Device Info can't be null",actualDeviceInfo);
-		Assert.assertEquals("Expected and Actual Device Info are not Equal",expectedDeviceInfo,actualDeviceInfo);
+		assertNotNull(actualDeviceInfo,"Device Info can't be null");
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected and Actual Device Info are not Equal");
 	}
 
 	private DeviceInfo constructExpectedDeviceInfo() {

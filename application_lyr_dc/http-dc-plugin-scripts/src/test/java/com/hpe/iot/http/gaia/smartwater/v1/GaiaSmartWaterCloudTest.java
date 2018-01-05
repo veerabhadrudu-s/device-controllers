@@ -5,7 +5,7 @@ import static com.hpe.iot.http.test.constants.TestConstants.GAIA_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.GAIA_VERSION;
 import static com.hpe.iot.utility.DataParserUtility.createBinaryPayloadFromHexaPayload;
 import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,8 +13,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class GaiaSmartWaterCloudTest {
 	private final JsonParser jsonParser = new JsonParser();
 	private final String dcIpAddress = "10.3.239.75";
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testUplinkNotification() throws URISyntaxException, IOException {
 		logger.trace("Uplink data used for posting is " + convertArrayOfByteToString(getUplinkNotficationData()));
@@ -39,7 +39,7 @@ public class GaiaSmartWaterCloudTest {
 		String responseContent = new HttpClientUtility().postRequestOnHttp(uri.toString(), new HashMap<>(),
 				getUplinkNotficationData());
 		JsonObject actualResponse = jsonParser.parse(responseContent).getAsJsonObject();
-		assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		assertEquals(expectedResponse, actualResponse,"Expected and Actual Responses are not same");
 	}
 
 	private byte[] getUplinkNotficationData() {

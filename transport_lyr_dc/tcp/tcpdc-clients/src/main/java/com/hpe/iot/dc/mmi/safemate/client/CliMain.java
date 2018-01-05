@@ -2,7 +2,7 @@ package com.hpe.iot.dc.mmi.safemate.client;
 
 import java.io.IOException;
 
-import com.hpe.iot.dc.client.AbstractCliMain;
+import com.hpe.iot.dc.client.CliMainTemplateMethod;
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm;
 import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageConsumer;
 import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageGenerator;
@@ -13,7 +13,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-public class CliMain extends AbstractCliMain {
+public class CliMain extends CliMainTemplateMethod {
 
 	public static void main(String[] args) throws IOException {
 		new CliMain().main();

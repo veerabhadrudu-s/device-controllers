@@ -2,12 +2,14 @@ package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.IPCONNECT_DATA_MESSAGE_HEX
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.MockitoAnnotations.initMocks
 
 import java.nio.channels.SocketChannel;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 
 import com.hpe.iot.dc.mmi.safemate.IPConnectMessageConverter
@@ -26,9 +28,6 @@ import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel
 import com.hpe.iot.dc.tcp.southbound.service.outflow.TCPServerSocketWriter;
 import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool
 import com.hpe.iot.dc.tcp.southbound.socketpool.impl.DefaultTCPServerClientSocketPool
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * @author sveera
@@ -49,7 +48,7 @@ public class IPConnectMessageServiceTest {
 	@Mock
 	private SocketChannel socketChannel;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		initMocks(this);
 		/*doAnswer(new MockIOTRequestResponseHandler()).when(requestResponseHandler)
@@ -73,13 +72,12 @@ public class IPConnectMessageServiceTest {
 				createBinaryPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, IPConnectMessageServiceTest.class));
 		tcpServerClientSocketPool.addSocketChannel(deviceInfo.getDevice(), socketChannel);
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = ipConnectMessageService.executeService(deviceInfo);
-		assertNotNull("Failed to execute IPConnectMessageService", deviceDataDeliveryStatus);
+		assertNotNull(deviceDataDeliveryStatus,"Failed to execute IPConnectMessageService");
 	}
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected Message Type and Actual Message Type are not Same ", MESSAGE_TYPE,
-				ipConnectMessageService.getMessageType());
+		assertEquals(MESSAGE_TYPE,ipConnectMessageService.getMessageType(),
+				"Expected Message Type and Actual Message Type are not same");
 	}
-
 }

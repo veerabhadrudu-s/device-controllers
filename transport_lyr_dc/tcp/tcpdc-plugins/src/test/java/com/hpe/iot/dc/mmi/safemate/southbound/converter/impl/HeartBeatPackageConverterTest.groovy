@@ -5,15 +5,14 @@ import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFAC
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.VERSION
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.safemate.HeartBeatPackageConverter
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm
 import com.hpe.iot.dc.mmi.safemate.MMIServerSocketToDeviceModel
-import com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection
 import com.hpe.iot.dc.model.DeviceImpl
 import com.hpe.iot.dc.model.DeviceInfo;
 
@@ -27,7 +26,7 @@ public class HeartBeatPackageConverterTest {
 
 	private HeartBeatPackageConverter heartBeatPackageConverter;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		heartBeatPackageConverter = new HeartBeatPackageConverter(new MMICRCAlgorithm());
 	}
@@ -35,19 +34,20 @@ public class HeartBeatPackageConverterTest {
 	@Test
 	public void testCreateModelForHeartBeatType() {
 		DeviceInfo expectedDeviceInfo = createExpectedDeviceInfo();
-		assertEquals("Expected Manufacturer and Actual Manufacturer are not Same", MANUFACTURER,
-				expectedDeviceInfo.getDevice().getManufacturer());
-		assertEquals("Expected Model ID and Actual Model ID are not Same", MODEL_ID,
-				expectedDeviceInfo.getDevice().getModelId());
-		assertEquals("Expected Device Info and Actual Device Info are not Same", expectedDeviceInfo,
-				heartBeatPackageConverter
-				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass())));
+		assertEquals(MANUFACTURER,expectedDeviceInfo.getDevice().getManufacturer(),
+				"Expected Manufacturer and Actual Manufacturer are not same");
+		assertEquals(MODEL_ID,expectedDeviceInfo.getDevice().getModelId(),
+				"Expected Model ID and Actual Model ID are not same");
+		assertEquals(expectedDeviceInfo,
+				heartBeatPackageConverter.createModel(new MMIServerSocketToDeviceModel(),
+				createBinaryPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass()))
+				,"Expected Device Info and Actual Device Info are not same");
 	}
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected Message Type and Actual Message Type are not same.", EXPECTED_MESSAGE_TYPE,
-				heartBeatPackageConverter.getMessageType());
+		assertEquals(EXPECTED_MESSAGE_TYPE,heartBeatPackageConverter.getMessageType(),
+				"Expected Message Type and Actual Message Type are not same");
 	}
 
 	private DeviceInfo createExpectedDeviceInfo() {

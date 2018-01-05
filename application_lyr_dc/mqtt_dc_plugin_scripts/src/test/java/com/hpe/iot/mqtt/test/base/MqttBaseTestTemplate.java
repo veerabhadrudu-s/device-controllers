@@ -3,22 +3,22 @@
  */
 package com.hpe.iot.mqtt.test.base;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.google.gson.JsonParser;
@@ -32,7 +32,7 @@ import com.hpe.iot.utility.UtilityLogger;
  * @author sveera
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public abstract class MqttBaseTestTemplate {
@@ -51,7 +51,7 @@ public abstract class MqttBaseTestTemplate {
 	@Autowired
 	protected MockNorthboundDownlinkProducerService mockNorthboundDownlinkProducerService;
 
-	@Before
+	@BeforeEach
 	public void beforeTest() throws InterruptedException, MqttException {
 		waitForDCInitialization();
 		mqttClient = new MqttClient(mqttServerUrl, "testcase-client", persistence);
@@ -92,9 +92,9 @@ public abstract class MqttBaseTestTemplate {
 
 	protected void validateDeviceModel(Device device, String expectedManufacturer, String expectedModelId,
 			String expectedVersion, String expectedDeviceId) {
-		assertEquals("Expected and Actual Manufacturer are not same", expectedManufacturer, device.getManufacturer());
-		assertEquals("Expected and Actual Model are not same", expectedModelId, device.getModelId());
-		assertEquals("Expected and Actual Version are not same", expectedVersion, device.getVersion());
-		assertEquals("Expected and Actual DeviceId are not same", expectedDeviceId, device.getDeviceId());
+		assertEquals(expectedManufacturer, device.getManufacturer(), "Expected and Actual Manufacturer are not same");
+		assertEquals(expectedModelId, device.getModelId(), "Expected and Actual Model are not same");
+		assertEquals(expectedVersion, device.getVersion(), "Expected and Actual Version are not same");
+		assertEquals(expectedDeviceId, device.getDeviceId(), "Expected and Actual DeviceId are not same");
 	}
 }

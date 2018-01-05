@@ -6,11 +6,12 @@ package com.hpe.iot.http.libelium.smartagriculture;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM_VERSION;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -26,6 +27,7 @@ public class LibeliumSmartAgricultureProTest extends HttpPluginTestBaseTemplate 
 	private static final String DEVICE_ID = "0102030405060708";
 
 	@Test
+	@DisplayName("test Process DevicePayload For Libelium Smart AgriculturePro Notification Msg Typ")
 	public void testHttpSouthboundServiceForLibeliumSmartAgricultureProForNotificationMsgTyp() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -34,7 +36,7 @@ public class LibeliumSmartAgricultureProTest extends HttpPluginTestBaseTemplate 
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 		validateConsumedUplinkMessage(LIBELIUM, LIBELIUM_MODEL, LIBELIUM_VERSION, DEVICE_ID);
 	}
 

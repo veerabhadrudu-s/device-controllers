@@ -14,10 +14,10 @@ import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKIN
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKING_HISTORY_PKT_DATA5
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKING_HISTORY_PKT_DATA6
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKING_LIVE_PKT_DATA
-import static org.junit.Assert.assertEquals
+import static org.junit.jupiter.api.Assertions.assertEquals
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.vt15.v1.ConnectPacketUplinkDataConverter
 import com.hpe.iot.dc.mmi.vt15.v1.MMIVT15DataModelTransformer
@@ -45,7 +45,7 @@ class MMIVT15DataModelTransformerTest {
 	private UplinkDeviceDataConverterFactory uplinkDeviceDataConverterFactory;
 	private MMIVT15DataModelTransformer mmivt15DataModelTransformer;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		List<UplinkDeviceDataConverter> uplinkConverters=new ArrayList<>();
 		uplinkConverters.add(connectPacketUplinkDataConverter);
@@ -59,28 +59,28 @@ class MMIVT15DataModelTransformerTest {
 	public void testConvertToModelForBulkTrackingHistoryData() {
 		List<DeviceInfo> actualDeviceData=mmivt15DataModelTransformer.convertToModel(deviceModel, TRACKING_HISTORY_PKT_BULK_DATA.getBytes());
 		List<DeviceInfo> expectedDeviceData=createExpectedDeviceDataForBulkTrackingHistoryData();
-		assertEquals("Expected and Actual device data's are not same",expectedDeviceData,actualDeviceData);
+		assertEquals(expectedDeviceData,actualDeviceData,"Expected and Actual device data's are not same");
 	}
 
 	@Test
 	public void testConvertToModelForTrackingLiveData() {
 		List<DeviceInfo> actualDeviceData=mmivt15DataModelTransformer.convertToModel(deviceModel, TRACKING_LIVE_PKT_DATA.getBytes());
 		List<DeviceInfo> expectedDeviceData=createExpectedDeviceDataForTrackingLiveData();
-		assertEquals("Expected and Actual device data's are not same",expectedDeviceData,actualDeviceData);
+		assertEquals(expectedDeviceData,actualDeviceData,"Expected and Actual device data's are not same");
 	}
 
 	@Test
 	public void testConvertToModelForSerialData() {
 		List<DeviceInfo> actualDeviceData=mmivt15DataModelTransformer.convertToModel(deviceModel, SERIAL_DATA_PKT_DATA.getBytes());
 		List<DeviceInfo> expectedDeviceData=createExpectedDeviceDataForSerialData();
-		assertEquals("Expected and Actual device data's are not same",expectedDeviceData,actualDeviceData);
+		assertEquals(expectedDeviceData,actualDeviceData,"Expected and Actual device data's are not same");
 	}
 
 	@Test
 	public void testConvertToModelForConnectionPktData() {
 		List<DeviceInfo> actualDeviceData=mmivt15DataModelTransformer.convertToModel(deviceModel, CONNECTION_PKT_DATA.getBytes());
 		List<DeviceInfo> expectedDeviceData=createExpectedDeviceDataForConnectionPktData();
-		assertEquals("Expected and Actual device data's are not same",expectedDeviceData,actualDeviceData);
+		assertEquals(expectedDeviceData,actualDeviceData,"Expected and Actual device data's are not same");
 	}
 
 
@@ -106,7 +106,7 @@ class MMIVT15DataModelTransformerTest {
 		expectedDeviceData.add(serialPacketDataUplinkDataConverter.createModel(deviceModel, SERIAL_DATA_PKT_DATA.getBytes()));
 		return expectedDeviceData;
 	}
-	
+
 	private List<DeviceInfo> createExpectedDeviceDataForConnectionPktData() {
 		List<DeviceInfo> expectedDeviceData=new ArrayList<>();
 		expectedDeviceData.add(connectPacketUplinkDataConverter.createModel(deviceModel, CONNECTION_PKT_DATA.getBytes()));

@@ -6,8 +6,7 @@ package com.hpe.iot.dc.client;
 import java.io.File;
 import java.io.IOException;
 
-import com.hpe.iot.dc.tcp.client.GUI;
-import com.hpe.iot.dc.tcp.client.GuiTcpClient;
+import com.hpe.iot.dc.tcp.client.CliTcpClient;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 
@@ -15,7 +14,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-public abstract class AbstractGuiMain {
+public abstract class CliMainTemplateMethod {
 
 	public void main() throws IOException {
 		System.out.println("Starting the TCP Client. ");
@@ -23,7 +22,8 @@ public abstract class AbstractGuiMain {
 				+ File.separator + "tcpClient.log");
 		System.out.println();
 		System.out.println();
-		new GuiTcpClient().runClient(getClientMessageGenerator(), getClientMessageConsumer(), getGUI());
+		System.out.println("Press any Key and Enter to stop the client ..... ");
+		new CliTcpClient().runClient(getClientMessageGenerator(), getClientMessageConsumer());
 		System.out.println(" TCP Client program Stopped . Please wait for JVM to Stop.");
 	}
 
@@ -31,5 +31,4 @@ public abstract class AbstractGuiMain {
 
 	protected abstract ClientMessageConsumer getClientMessageConsumer();
 
-	protected abstract GUI getGUI();
 }

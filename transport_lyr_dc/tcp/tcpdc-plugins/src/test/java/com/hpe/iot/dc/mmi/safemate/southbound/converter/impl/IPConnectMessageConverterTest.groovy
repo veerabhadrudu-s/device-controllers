@@ -7,9 +7,10 @@ import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.IPCONNE
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static org.junit.jupiter.api.Assertions.assertEquals
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.safemate.GPSInfo
 import com.hpe.iot.dc.mmi.safemate.IPConnectMessageConverter
@@ -21,7 +22,6 @@ import com.hpe.iot.dc.mmi.safemate.TrackerNotification
 import com.hpe.iot.dc.mmi.safemate.TrackerStatus
 import com.hpe.iot.dc.model.DeviceInfo;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author sveera
@@ -33,30 +33,32 @@ public class IPConnectMessageConverterTest {
 
 	private IPConnectMessageConverter ipAddressMetaModelConverter;
 
-	@Before
+	@BeforeEach
 	public void setUpBeforeClass() throws Exception {
 		ipAddressMetaModelConverter = new IPConnectMessageConverter(new MMICRCAlgorithm(), new TrackerInfoCreator());
 	}
 
 	@Test
 	public void testGetOperator() {
-		assertEquals("Expected and actual Operators are not same", EXPECTED_MESSAGE_TYPE,
-				ipAddressMetaModelConverter.getMessageType());
+		assertEquals(EXPECTED_MESSAGE_TYPE,ipAddressMetaModelConverter.getMessageType(),
+				"Expected and actual Operators are not same");
 	}
 
 	@Test
 	public void testCreateModeForIPConnectMessageType() {
 		DeviceInfo dataModel = ipAddressMetaModelConverter
 				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, this.getClass()));
-		assertEquals("Expected Manufacturer and Actual Manufacturer are not Same", MANUFACTURER,
-				dataModel.getDevice().getManufacturer());
-		assertEquals("Expected Model ID and Actual Model ID are not Same", MODEL_ID,
-				dataModel.getDevice().getModelId());
-		assertEquals("Expected and actual device Id's are not same", "301071500007", dataModel.getDevice().getDeviceId());
+		assertEquals(MANUFACTURER,dataModel.getDevice().getManufacturer(),
+				"Expected Manufacturer and Actual Manufacturer are not same");
+		assertEquals(MODEL_ID,dataModel.getDevice().getModelId(),
+				"Expected Model ID and Actual Model ID are not same");
+		assertEquals("301071500007", dataModel.getDevice().getDeviceId(),
+				"Expected and actual device Id's are not same");
 		TrackerNotification trackerNotification = createExpectedData();
-		assertEquals("Expected and actual device data are not same", trackerNotification,
-				dataModel.getDeviceData().get(TRACKER_NOTIF));
-		assertEquals("Expected and actual device data are not same", EXPECTED_MESSAGE_TYPE, dataModel.getMessageType());
+		assertEquals(trackerNotification,dataModel.getDeviceData().get(TRACKER_NOTIF),
+				"Expected and actual device data are not same");
+		assertEquals(EXPECTED_MESSAGE_TYPE, dataModel.getMessageType(),
+				"Expected and actual device data are not same");
 	}
 
 	private TrackerNotification createExpectedData() {

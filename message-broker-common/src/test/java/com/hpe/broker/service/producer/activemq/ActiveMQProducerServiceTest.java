@@ -1,16 +1,15 @@
 package com.hpe.broker.service.producer.activemq;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.broker.service.activemq.EmbeddedActivemqBroker;
-import com.hpe.broker.service.producer.activemq.ActiveMQProducerService;
 
 /**
  * @author sveera
@@ -23,7 +22,7 @@ public class ActiveMQProducerServiceTest {
 	private ActiveMQProducerService activeMQProducerService;
 	private EmbeddedActivemqBroker embeddedActivemqBroker;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		embeddedActivemqBroker = new EmbeddedActivemqBroker(embeddedBrokerUrl);
 		embeddedActivemqBroker.startService();
@@ -31,7 +30,7 @@ public class ActiveMQProducerServiceTest {
 
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		activeMQProducerService.stopService();
 		embeddedActivemqBroker.stopService();
@@ -39,13 +38,13 @@ public class ActiveMQProducerServiceTest {
 
 	@Test
 	public void testActiveMQProducerService() {
-		Assert.assertNotNull("activeMQProducerService Cannot be null", activeMQProducerService);
+		assertNotNull(activeMQProducerService,"activeMQProducerService Cannot be null");
 	}
 
 	@Test
 	public void testActiveMQProducerServiceGetName() {
-		assertEquals("Expected ActiveMQProducerService name and actual name are not same", "activemq",
-				activeMQProducerService.getName());
+		assertEquals( "activemq",
+				activeMQProducerService.getName(),"Expected ActiveMQProducerService name and actual name are not same");
 	}
 
 	@Test

@@ -7,10 +7,10 @@ import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH;
 import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH_MODEL;
 import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH_VERSION;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.broker.service.producer.kafka.KafkaProducerService;
 
@@ -22,7 +22,7 @@ public class PristechSmartParkingCloudTest {
 
 	private KafkaProducerService<String, byte[]> kafkaDevicePublisherService;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		kafkaDevicePublisherService = new KafkaProducerService<>("10.3.239.72:9092",
 				"org.apache.kafka.common.serialization.StringSerializer",
@@ -30,13 +30,13 @@ public class PristechSmartParkingCloudTest {
 		kafkaDevicePublisherService.startService();
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		kafkaDevicePublisherService.stopService();
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testPristechSmartParkingUplinkParkingEvent() {
 		// for (int i = 0; i < 10000; i++)
 		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
@@ -44,7 +44,7 @@ public class PristechSmartParkingCloudTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testPristechSmartParkingUplinkHealthCheck() {
 		// for (int i = 0; i < 10000; i++)
 		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),

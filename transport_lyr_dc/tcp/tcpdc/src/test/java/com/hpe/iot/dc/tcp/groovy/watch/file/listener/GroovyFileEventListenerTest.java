@@ -1,12 +1,10 @@
 package com.hpe.iot.dc.tcp.groovy.watch.file.listener;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.hpe.iot.dc.tcp.groovy.watch.file.listener.GroovyFileEventListener;
-
-import static org.junit.Assert.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author sveera
@@ -16,15 +14,15 @@ public class GroovyFileEventListenerTest {
 
 	private GroovyFileEventListener groovyDirectoryListener;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		// groovyDirectoryListener = new GroovyFileEventListener();
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testGroovyDirectoryWatchService() {
-		assertNotNull("GroovyDirectoryListener can not be null", groovyDirectoryListener);
+		assertNotNull(groovyDirectoryListener, "GroovyDirectoryListener can not be null");
 	}
 
 }

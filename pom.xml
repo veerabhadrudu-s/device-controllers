@@ -15,9 +15,9 @@
 	</modules>
 	<properties>
 		<java-version>1.8</java-version>
-		<org.springframework-version>4.3.1.RELEASE</org.springframework-version>
+		<org.springframework-version>5.0.0.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
-		<groovy-version>2.5.0-beta-1</groovy-version>
+		<groovy-version>2.5.0-beta-2</groovy-version>
 		<slf4j_version>1.6.6</slf4j_version>
 		<kafka_version>0.10.2.1</kafka_version>
 		<activemq_version>5.14.5</activemq_version>
@@ -179,13 +179,6 @@
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
 				<version>${junit.jupiter.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<!-- To run tests on IDE such as Eclipse, Intellij -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>

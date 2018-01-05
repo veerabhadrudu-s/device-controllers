@@ -2,12 +2,12 @@ package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.ALARM_MESSAGE_HEX
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock;
 
 import com.hpe.iot.dc.mmi.safemate.AlarmMessageConverter
@@ -38,7 +38,7 @@ public class AlarmMessageServiceTest {
 	@Mock
 	private IOTPublisherHandler iotPublisherHandler;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		initMocks(this);
 		/*doAnswer(new MockIOTRequestResponseHandler()).when(requestResponseHandler)
@@ -51,8 +51,8 @@ public class AlarmMessageServiceTest {
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected Message Type and Actual Message Type are not Same ", MESSAGE_TYPE,
-				alarmMessageService.getMessageType());
+		assertEquals(MESSAGE_TYPE,
+				alarmMessageService.getMessageType(),"Expected Message Type and Actual Message Type are not same");
 	}
 
 	@Test
@@ -61,7 +61,6 @@ public class AlarmMessageServiceTest {
 		DeviceInfo deviceInfo = alarmMessageConverter
 				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(ALARM_MESSAGE_HEX, getClass()));
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = alarmMessageService.executeService(deviceInfo);
-		assertNotNull("Failed to execute NotificationMessageService", deviceDataDeliveryStatus);
+		assertNotNull(deviceDataDeliveryStatus,"Failed to execute NotificationMessageService");
 	}
-
 }

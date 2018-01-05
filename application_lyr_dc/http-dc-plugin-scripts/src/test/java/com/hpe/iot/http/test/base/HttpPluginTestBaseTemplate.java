@@ -3,19 +3,19 @@
  */
 package com.hpe.iot.http.test.base;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -33,7 +33,7 @@ import com.hpe.iot.model.DeviceInfo;
  * @author sveera
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public abstract class HttpPluginTestBaseTemplate {
@@ -42,7 +42,7 @@ public abstract class HttpPluginTestBaseTemplate {
 	protected final JsonParser jsonParser = new JsonParser();
 
 	@Autowired
-	protected IOTDevicePayloadHolder iotDevicePayloadHolder;	
+	protected IOTDevicePayloadHolder iotDevicePayloadHolder;
 	@Autowired
 	protected MockNorthboundDownlinkProducerService mockNorthboundDownlinkProducerService;
 
@@ -50,20 +50,21 @@ public abstract class HttpPluginTestBaseTemplate {
 	protected WebApplicationContext wac;
 	protected MockMvc mockMvc;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		waitForDCInitialization();
 	}
 
 	@Test
+	@DisplayName("test Get DC Info")
 	public void testGetDCInfo() throws Exception {
 		JsonObject expectedResponse = getExpectedDCInfo();
 		MvcResult mvcResult = mockMvc.perform(get(SOUTHBOUND + "/dcinfo").accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 
 	}
 
@@ -91,17 +92,17 @@ public abstract class HttpPluginTestBaseTemplate {
 
 	private void validateDeviceModel(Device device, String expectedManufacturer, String expectedModelId,
 			String expectedVersion, String expectedDeviceId) {
-		assertEquals("Expected and Actual Manufacturer are not same", expectedManufacturer, device.getManufacturer());
-		assertEquals("Expected and Actual Model are not same", expectedModelId, device.getModelId());
-		assertEquals("Expected and Actual Version are not same", expectedVersion, device.getVersion());
-		assertEquals("Expected and Actual DeviceId are not same", expectedDeviceId, device.getDeviceId());
+		assertEquals(expectedManufacturer, device.getManufacturer(), "Expected and Actual Manufacturer are not same");
+		assertEquals(expectedModelId, device.getModelId(), "Expected and Actual Model are not same");
+		assertEquals(expectedVersion, device.getVersion(), "Expected and Actual Version are not same");
+		assertEquals(expectedDeviceId, device.getDeviceId(), "Expected and Actual DeviceId are not same");
 	}
 
 	protected DeviceInfo validateConsumedUplinkMessage(String expectedManufacturer, String expectedModelId,
 			String expectedVersion, String expectedDeviceId) throws InterruptedException {
 		waitForDCProcessing();
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		assertNotNull("Device info cannot be null", deviceInfo);
+		assertNotNull(deviceInfo, "Device info cannot be null");
 		validateDeviceModel(deviceInfo.getDevice(), expectedManufacturer, expectedModelId, expectedVersion,
 				expectedDeviceId);
 		return deviceInfo;

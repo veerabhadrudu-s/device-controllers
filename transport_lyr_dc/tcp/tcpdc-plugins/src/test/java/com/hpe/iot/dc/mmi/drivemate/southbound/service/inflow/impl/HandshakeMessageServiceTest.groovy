@@ -3,14 +3,13 @@
  */
 package com.hpe.iot.dc.mmi.drivemate.southbound.service.inflow.impl;
 
-import java.io.IOException;
-import java.nio.channels.SocketChannel;
-import java.util.Collections;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import java.nio.channels.SocketChannel;
+
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -41,7 +40,7 @@ public class HandshakeMessageServiceTest {
 	@Mock
 	private SocketChannel socketChannel;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		Mockito.when(socketChannel.isConnected()).thenReturn(true);
@@ -61,12 +60,12 @@ public class HandshakeMessageServiceTest {
 		List<DeviceInfo> deviceInfo = mmiDrivemateDataModelTransformer.convertToModel(device,
 				TestUtility.createDataWithPaddingBytes(getClass(), MMIDrivemateTestDataCollection.HAND_SHAKE_PAYLOAD));
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = handshakeMessageService.executeService(deviceInfo.get(0));
-		Assert.assertNotNull("Failed to execute " + this.getClass().getName(), deviceDataDeliveryStatus);
+		assertNotNull(deviceDataDeliveryStatus,"Failed to execute " + this.getClass().getName());
 	}
 
 	@Test
 	public void testGetMessageType() {
-		Assert.assertEquals("Expected Message Type and Actual Message Type are not Same ", HAND_SHAKE,
-				handshakeMessageService.getMessageType());
+		assertEquals(HAND_SHAKE,
+				handshakeMessageService.getMessageType(),"Expected Message Type and Actual Message Type are not same");
 	}
 }

@@ -16,14 +16,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -48,7 +49,7 @@ import com.hpe.iot.southbound.handler.inflow.factory.impl.SouthboundPayloadExtra
  * @author sveera
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public class SouthboundServiceEndPointTest {
@@ -66,24 +67,26 @@ public class SouthboundServiceEndPointTest {
 	private WebApplicationContext wac;
 	private MockMvc mockMvc;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		waitForDCInitialization();
 	}
 
 	@Test
+	@DisplayName("test for get DC information")
 	public void testGetDCInfo() throws Exception {
 		JsonObject expectedResponse = getExpectedDCInfo();
 		MvcResult mvcResult = mockMvc.perform(get(SOUTHBOUND + "/dcinfo").accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 
 	}
 
 	@Test
+	@DisplayName("test for Process Invalid Model")
 	public void testProcessForInvalidModel() throws Exception {
 		JsonObject expectedResponse = getExpectedFailureResponse();
 		MvcResult mvcResult = mockMvc
@@ -92,10 +95,11 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
+	@DisplayName("test for Process Trackimo Fence Notification")
 	public void testProcessForTrackimoFenceNotification() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -104,10 +108,11 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
+	@DisplayName("test for Process Trackimo Moving Notification")
 	public void testProcessForTrackimoMovingNotification() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -116,10 +121,11 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
+	@DisplayName("test for Process Trackimo Speed Notification")
 	public void testProcessForTrackimoSpeedNotification() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -128,10 +134,11 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
+	@DisplayName("test for Process RexaWare Bike Notification")
 	public void testProcessDevicePayloadForRexaWareBikeNotification() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -140,11 +147,12 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
-	public void verifyDCSamplePluginScrip() {
+	@DisplayName("test for verify DC Sample Plugin Script")
+	public void verifyDCSamplePluginScript() {
 		DeviceModel actualDeviceModel = deviceModelFactory.findDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
 		DeviceIdExtractor deviceIdExtractor = southboundPayloadExtractorFactory.getDeviceIdExtractor(SAMPLE,
 				SAMPLE_MODEL, SAMPLE_VERSION);
@@ -158,21 +166,20 @@ public class SouthboundServiceEndPointTest {
 				SAMPLE_VERSION);
 		DownlinkPayloadProcessor downlinkPayloadProcessor = northboundPayloadExtractorFactory
 				.getDownlinkPayloadProcessor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
-		Assert.assertEquals("Expected Device Model and Actual Device Models are not same",
-				new GroovyScriptDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION), actualDeviceModel);
-		Assert.assertTrue("Expected DeviceIdExtractor and DeviceIdExtractor are not same",
-				deviceIdExtractor instanceof DeviceIdExtractor);
-		Assert.assertTrue("Expected MessageTypeExtractor and MessageTypeExtractor are not same",
-				messageTypeExtractor instanceof MessageTypeExtractor);
-		Assert.assertTrue("Expected PayloadDecipher and PayloadDecipher are not same",
-				payloadDecipher instanceof PayloadDecipher);
-		Assert.assertTrue("Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same",
-				uplinkPayloadProcessor instanceof UplinkPayloadProcessor);
-		Assert.assertTrue("Expected PayloadCipher and PayloadCipher are not same",
-				payloadCipher instanceof PayloadCipher);
-		Assert.assertTrue("Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same",
-				downlinkPayloadProcessor instanceof DownlinkPayloadProcessor);
-
+		Assertions.assertEquals(new GroovyScriptDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION), actualDeviceModel,
+				"Expected Device Model and Actual Device Models are not same");
+		Assertions.assertTrue(deviceIdExtractor instanceof DeviceIdExtractor,
+				"Expected DeviceIdExtractor and DeviceIdExtractor are not same");
+		Assertions.assertTrue(messageTypeExtractor instanceof MessageTypeExtractor,
+				"Expected MessageTypeExtractor and MessageTypeExtractor are not same");
+		Assertions.assertTrue(payloadDecipher instanceof PayloadDecipher,
+				"Expected PayloadDecipher and PayloadDecipher are not same");
+		Assertions.assertTrue(uplinkPayloadProcessor instanceof UplinkPayloadProcessor,
+				"Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same");
+		Assertions.assertTrue(payloadCipher instanceof PayloadCipher,
+				"Expected PayloadCipher and PayloadCipher are not same");
+		Assertions.assertTrue(downlinkPayloadProcessor instanceof DownlinkPayloadProcessor,
+				"Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same");
 	}
 
 	private JsonObject getExpectedDCInfo() {

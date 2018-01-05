@@ -4,15 +4,15 @@
 package com.hpe.iot.kafka.test.base;
 
 import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.google.gson.JsonParser;
@@ -24,7 +24,7 @@ import com.hpe.iot.kafka.northbound.sdk.handler.mock.MockNorthboundDownlinkProdu
  * @author sveera
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public abstract class KafkaDCPluginScriptTestBaseTemplate {
@@ -39,7 +39,7 @@ public abstract class KafkaDCPluginScriptTestBaseTemplate {
 	@Autowired
 	protected KafkaProducerService<String, String> kafkaDevicePublisherService;
 	
-	@Before
+	@BeforeEach
 	public void beforeTest() throws InterruptedException {
 		waitForDCInitialization();
 	}

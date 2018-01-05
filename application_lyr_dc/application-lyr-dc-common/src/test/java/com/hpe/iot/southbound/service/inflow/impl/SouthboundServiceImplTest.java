@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -68,7 +68,7 @@ public class SouthboundServiceImplTest {
 
 	private SouthboundService southboundService;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		embeddedActivemqBroker = new EmbeddedActivemqBroker(embeddedBrokerUrl);
 		List<BrokerProducerService<String>> brokerProducerServices = new ArrayList<>();
@@ -98,7 +98,7 @@ public class SouthboundServiceImplTest {
 		embeddedActivemqBroker.startService();
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		for (Map.Entry<String, BrokerProducerService<String>> brokerProducerService : brokerProducerServiceFactory
 				.getBrokerProducerServices().entrySet())
@@ -106,15 +106,16 @@ public class SouthboundServiceImplTest {
 		embeddedActivemqBroker.stopService();
 	}
 
-	@Test(expected = SouthboundServiceImpl.DeviceModelNotSuported.class)
+	@Test
 	public void testProcessDevicePayloadForInvalidDeviceModel() {
-		southboundService.processPayload("TestManufacturer", "TestModel", "1.0", new byte[] {});
-		Assert.fail("Failed to execute Test case");
+		Assertions.assertThrows(SouthboundServiceImpl.DeviceModelNotSuported.class, () -> {
+			southboundService.processPayload("TestManufacturer", "TestModel", "1.0", new byte[] {});
+		});
 	}
 
 	@Test
 	public void testSouthboundService() {
-		Assert.assertNotNull("SouthboundService cannot be null", southboundService);
+		Assertions.assertNotNull(southboundService, "SouthboundService cannot be null");
 	}
 
 	@Test

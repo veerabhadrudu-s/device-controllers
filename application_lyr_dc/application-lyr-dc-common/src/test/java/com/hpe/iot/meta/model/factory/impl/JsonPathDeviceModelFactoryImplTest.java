@@ -10,9 +10,10 @@ import static com.hpe.iot.test.constants.TestConstants.TRACKIMO;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_MODEL;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_VERSION;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.impl.UplinkJsonPathDeviceModelFactory;
@@ -27,27 +28,29 @@ public class JsonPathDeviceModelFactoryImplTest {
 
 	private UplinkJsonPathDeviceModelFactory deviceMetaModelFactoryImpl;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		deviceMetaModelFactoryImpl = new UplinkJsonPathDeviceModelFactory(TestConstants.FULL_PATH);
 	}
 
 	@Test
+	@DisplayName("Get DeviceMetaModel For Trackimo")
 	public void testGetDeviceMetaModelForTrackimo() {
 		DeviceModel expectedDeviceMetaModel = getExpectedTrackimoDeviceMetaModel();
 		DeviceModel actualDeviceMetaModel = deviceMetaModelFactoryImpl.findDeviceModel(TRACKIMO, TRACKIMO_MODEL,
 				TRACKIMO_VERSION);
-		Assert.assertEquals("Expected and Actual DeviceMetaModel's are not same ", expectedDeviceMetaModel,
-				actualDeviceMetaModel);
+		Assertions.assertEquals(expectedDeviceMetaModel, actualDeviceMetaModel,
+				"Expected and Actual DeviceMetaModel's are not same ");
 	}
 
 	@Test
+	@DisplayName("Get DeviceMetaModel For Sample")
 	public void testGetDeviceMetaModelForSample() {
 		DeviceModel expectedDeviceMetaModel = getExpectedSampleDeviceMetaModel();
 		DeviceModel actualDeviceMetaModel = deviceMetaModelFactoryImpl.findDeviceModel(SAMPLE, SAMPLE_MODEL,
 				SAMPLE_VERSION);
-		Assert.assertEquals("Expected and Actual DeviceMetaModel's are not same ", expectedDeviceMetaModel,
-				actualDeviceMetaModel);
+		Assertions.assertEquals(expectedDeviceMetaModel, actualDeviceMetaModel,
+				"Expected and Actual DeviceMetaModel's are not same ");
 	}
 
 	private DeviceModel getExpectedSampleDeviceMetaModel() {

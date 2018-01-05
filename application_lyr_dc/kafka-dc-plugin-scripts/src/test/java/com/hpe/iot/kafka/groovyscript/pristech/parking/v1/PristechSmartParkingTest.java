@@ -6,10 +6,10 @@ package com.hpe.iot.kafka.groovyscript.pristech.parking.v1;
 import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH;
 import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH_MODEL;
 import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH_VERSION;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.kafka.test.base.KafkaDCPluginScriptTestBaseTemplate;
@@ -29,7 +29,7 @@ public class PristechSmartParkingTest extends KafkaDCPluginScriptTestBaseTemplat
 				getPristechSmartParkingUplinkParkingEventMsg());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		validateDeviceData(deviceInfo);
-		assertEquals("Expected and actual Message Type are not same", "PARKING_EVENT", deviceInfo.getMessageType());
+		assertEquals("PARKING_EVENT", deviceInfo.getMessageType(), "Expected and actual Message Type are not same");
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class PristechSmartParkingTest extends KafkaDCPluginScriptTestBaseTemplat
 				getPristechSmartParkingUplinkHealthCheckMsg());
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		validateDeviceData(deviceInfo);
-		assertEquals("Expected and actual Message Type are not same", "PARKING_HEALTH", deviceInfo.getMessageType());
+		assertEquals("PARKING_HEALTH", deviceInfo.getMessageType(), "Expected and actual Message Type are not same");
 
 	}
 
@@ -57,13 +57,13 @@ public class PristechSmartParkingTest extends KafkaDCPluginScriptTestBaseTemplat
 	}
 
 	private void validateDeviceData(DeviceInfo deviceInfo) {
-		assertNotNull("DeviceInfo object cannot be null", deviceInfo);
+		assertNotNull(deviceInfo, "DeviceInfo object cannot be null");
 		Device device = deviceInfo.getDevice();
-		assertNotNull("Device object cannot be null", device);
-		assertEquals("Expected and actual Manufacturer are not same", PRISTECH, device.getManufacturer());
-		assertEquals("Expected and actual Model are not same", PRISTECH_MODEL, device.getModelId());
-		assertEquals("Expected and actual Version are not same", PRISTECH_VERSION, device.getVersion());
-		assertEquals("Expected and actual DeviceId are not same", DEVICE_ID, device.getDeviceId());
+		assertNotNull(device, "Device object cannot be null");
+		assertEquals(PRISTECH, device.getManufacturer(), "Expected and actual Manufacturer are not same");
+		assertEquals(PRISTECH_MODEL, device.getModelId(), "Expected and actual Model are not same");
+		assertEquals(PRISTECH_VERSION, device.getVersion(), "Expected and actual Version are not same");
+		assertEquals(DEVICE_ID, device.getDeviceId(), "Expected and actual DeviceId are not same");
 	}
 
 }

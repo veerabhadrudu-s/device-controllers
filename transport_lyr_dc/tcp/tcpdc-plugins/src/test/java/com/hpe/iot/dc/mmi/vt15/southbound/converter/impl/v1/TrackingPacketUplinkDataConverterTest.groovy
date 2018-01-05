@@ -5,10 +5,11 @@ package com.hpe.iot.dc.mmi.vt15.southbound.converter.impl.v1
 
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKING_HISTORY_PKT_DATA
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKING_LIVE_PKT_DATA
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.vt15.v1.MMIVT15ServerSocketToDeviceModel
 import com.hpe.iot.dc.mmi.vt15.v1.PacketDataExtractor
@@ -33,30 +34,31 @@ class TrackingPacketUplinkDataConverterTest {
 	private final PacketDataExtractor packetDataExtractor=new PacketDataExtractor();
 	private TrackingPacketUplinkDataConverter trackingPacketUplinkDataConverter;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		trackingPacketUplinkDataConverter=new TrackingPacketUplinkDataConverter(packetDataExtractor);
 	}
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected and Actual Message Types are not same",TRACKING_PACKET,trackingPacketUplinkDataConverter.getMessageType());
+		assertEquals(TRACKING_PACKET,trackingPacketUplinkDataConverter.getMessageType(),
+				"Expected and Actual Message Types are not same");
 	}
 
 	@Test
 	public void testCreateModelForLiveData() {
 		DeviceInfo actualDeviceInfo=trackingPacketUplinkDataConverter.createModel(deviceModel,TRACKING_LIVE_PKT_DATA.getBytes());
 		DeviceInfo expectedDeviceInfo=constructExpectedDeviceInfoForLiveData();
-		assertNotNull("Device Info can't be null",actualDeviceInfo);
-		assertEquals("Expected and Actual Device Info are not Equal",expectedDeviceInfo,actualDeviceInfo);
+		assertNotNull(actualDeviceInfo,"Device Info can't be null");
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected and Actual Device Info are not Equal");
 	}
 
 	@Test
 	public void testCreateModelForHistoricalData() {
 		DeviceInfo actualDeviceInfo=trackingPacketUplinkDataConverter.createModel(deviceModel,TRACKING_HISTORY_PKT_DATA.getBytes());
 		DeviceInfo expectedDeviceInfo=constructExpectedDeviceInfoForHistoricalData();
-		assertNotNull("Device Info can't be null",actualDeviceInfo);
-		assertEquals("Expected and Actual Device Info are not Equal",expectedDeviceInfo,actualDeviceInfo);
+		assertNotNull(actualDeviceInfo,"Device Info can't be null");
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected and Actual Device Info are not Equal");
 	}
 
 	private DeviceInfo constructExpectedDeviceInfoForLiveData() {

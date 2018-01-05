@@ -3,14 +3,14 @@
  */
 package com.hpe.iot.dc.mmi.drivemate.southbound.service.inflow.impl;
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.Mockito.doAnswer
 
 import java.nio.channels.SocketChannel
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -56,7 +56,7 @@ public class NotificationMessageServiceTest {
 	private SocketChannel socketChannel;
 	private Answer mockRequestResponseHandler;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		mockRequestResponseHandler=new MockIOTRequestResponseHandler();
@@ -76,8 +76,8 @@ public class NotificationMessageServiceTest {
 
 	@Test
 	public void testGetMessageType() {
-		Assert.assertEquals("Expected Message Type and Actual Message Type are not Same ", MSG_TYPE,
-				notificationMessageService.getMessageType());
+		assertEquals(MSG_TYPE,
+				notificationMessageService.getMessageType(),"Expected Message Type and Actual Message Type are not same");
 	}
 
 	@Test
@@ -87,6 +87,6 @@ public class NotificationMessageServiceTest {
 				.createModel(DEVICE_UNDER_TEST,DataParserUtility.createBinaryPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD, getClass()));
 		tcpServerClientSocketPool.addSocketChannel(deviceInfo.getDevice(), socketChannel);
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = notificationMessageService.executeService(deviceInfo);
-		assertNotNull("Failed to execute NotificationMessageService", deviceDataDeliveryStatus);
+		assertNotNull(deviceDataDeliveryStatus,"Failed to execute NotificationMessageService");
 	}
 }

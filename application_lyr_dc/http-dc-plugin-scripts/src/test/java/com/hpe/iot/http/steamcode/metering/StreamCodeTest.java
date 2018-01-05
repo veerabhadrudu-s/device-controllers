@@ -9,8 +9,9 @@ import static com.hpe.iot.http.test.constants.TestConstants.STREAMCODE_VERSION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -26,6 +27,7 @@ public class StreamCodeTest extends HttpPluginTestBaseTemplate {
 	private static final String DEVICE_ID = "2e3a3a40-80ea-11e7-9a7b-00259075adf2";
 
 	@Test
+	@DisplayName("test Process DevicePayload For Stream Code Script")
 	public void testProcessDevicePayloadForStreamCodeScript() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		waitForDCInitialization();
@@ -35,7 +37,7 @@ public class StreamCodeTest extends HttpPluginTestBaseTemplate {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 		validateConsumedUplinkMessage(STREAMCODE, STREAMCODE_MODEL, STREAMCODE_VERSION, DEVICE_ID);
 	}
 

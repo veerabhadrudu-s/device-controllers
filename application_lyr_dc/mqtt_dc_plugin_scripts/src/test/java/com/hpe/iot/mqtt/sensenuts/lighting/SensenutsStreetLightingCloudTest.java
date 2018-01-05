@@ -7,17 +7,17 @@ import static com.hpe.iot.mqtt.sensenuts.lighting.SensenutsStreetLightingTestDat
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_VERSION;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.iot.utility.UtilityLogger;
 
@@ -32,33 +32,33 @@ public class SensenutsStreetLightingCloudTest {
 	private final String mqttServerUrl = "tcp://10.3.239.75:1883";
 	private MqttClient mqttClient;
 
-	@Before
+	@BeforeEach
 	public void beforeTest() throws InterruptedException, MqttException {
 		mqttClient = new MqttClient(mqttServerUrl, "testcase-client", persistence);
 		mqttClient.connect();
 	}
 
-	@After
+	@AfterEach
 	public void afterTest() throws InterruptedException, MqttException {
 		mqttClient.disconnect();
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testSensenutsStreetLightingForUplinkNotification() {
 		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				sensenutsStreetLightingTestData.constructPeriodicMessage());
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testSensenutsStreetLightingForUplinkPowerOutageAlert() throws InterruptedException {
 		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				sensenutsStreetLightingTestData.constructPowerOutageAlertMessage());
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testSensenutsStreetLightingForUplinkLuminaireFailureAlert() throws InterruptedException {
 		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				sensenutsStreetLightingTestData.constructLuminaireFailureMessage());

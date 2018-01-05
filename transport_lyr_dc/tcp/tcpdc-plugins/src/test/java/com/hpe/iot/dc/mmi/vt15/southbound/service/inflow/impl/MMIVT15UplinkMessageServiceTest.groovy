@@ -4,12 +4,12 @@
 package com.hpe.iot.dc.mmi.vt15.southbound.service.inflow.impl
 
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.TRACKING_LIVE_PKT_DATA
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.Mockito.doAnswer
 import static org.mockito.MockitoAnnotations.initMocks
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 
@@ -39,7 +39,7 @@ class MMIVT15UplinkMessageServiceTest {
 	private final TrackingPacketUplinkDataConverter trackingPacketUplinkDataConverter=new TrackingPacketUplinkDataConverter(new PacketDataExtractor());
 	private MMIVT15UplinkMessageService mmivt15UplinkMessageService;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		initMocks(this);
 		doAnswer(new MockIOTRequestResponseHandler()).when(iotPublisherHandler)
@@ -56,6 +56,6 @@ class MMIVT15UplinkMessageServiceTest {
 		DeviceInfo deviceInfo = trackingPacketUplinkDataConverter
 				.createModel(new MMIVT15ServerSocketToDeviceModel(),TRACKING_LIVE_PKT_DATA.getBytes());
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = mmivt15UplinkMessageService.executeService(deviceInfo);
-		assertNotNull("Failed to execute "+MMIVT15UplinkMessageService.class.getSimpleName(), deviceDataDeliveryStatus);
+		assertNotNull(deviceDataDeliveryStatus,"Failed to execute "+MMIVT15UplinkMessageService.class.getSimpleName());
 	}
 }

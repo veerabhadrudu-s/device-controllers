@@ -3,18 +3,17 @@
  */
 package com.hpe.broker.service.producer.factory.impl;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.broker.service.producer.BrokerProducerService;
 import com.hpe.broker.service.producer.activemq.ActiveMQProducerService;
 import com.hpe.broker.service.producer.factory.BrokerProducerServiceFactory;
-import com.hpe.broker.service.producer.factory.impl.BrokerProducerServiceFactoryImpl;
 import com.hpe.broker.service.producer.kafka.KafkaProducerService;
 
 /**
@@ -30,7 +29,7 @@ public class BrokerProducerServiceFactoryImplTest {
 	private final String producerClientId = this.getClass().getSimpleName();
 	private BrokerProducerServiceFactory<String> brokerProducerServiceFactory;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		List<BrokerProducerService<String>> brokerProducerServices = new ArrayList<>();
 		brokerProducerServices.add(new KafkaProducerService<String, String>(kafkaBootStrapServers, keySerializerClass,
@@ -41,10 +40,10 @@ public class BrokerProducerServiceFactoryImplTest {
 
 	@Test
 	public void testGetBrokerProducerService() {
-		assertTrue("Expected and actual BrokerProducerService are not same",
-				brokerProducerServiceFactory.getBrokerProducerService("activemq") instanceof ActiveMQProducerService);
-		assertTrue("Expected and actual BrokerProducerService are not same",
-				brokerProducerServiceFactory.getBrokerProducerService("kafka") instanceof KafkaProducerService);
+		assertTrue(brokerProducerServiceFactory.getBrokerProducerService("activemq") instanceof ActiveMQProducerService,
+				"Expected and actual BrokerProducerService are not same");
+		assertTrue(brokerProducerServiceFactory.getBrokerProducerService("kafka") instanceof KafkaProducerService,
+				"Expected and actual BrokerProducerService are not same");
 	}
 
 }

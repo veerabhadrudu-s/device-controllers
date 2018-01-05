@@ -1,14 +1,15 @@
 package com.hpe.broker.service.kafka.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.broker.executor.mock.MockManagedExecutorService;
 import com.hpe.broker.service.consumer.handler.LoggerBrokerConsumerDataHandler;
@@ -40,48 +41,52 @@ public class KafkaProducerConsumerServiceTest {
 	private KafkaProducerService<String, String> kafkaProducerService;
 	private static KafkaBrokerService kafkaBrokerService;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUp() throws Exception {
 		kafkaBrokerService = new KafkaBrokerService(9092, "target/kafka-data/tmp");
 		kafkaBrokerService.startService();
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void tearDown() {
 		kafkaBrokerService.stopService();
 		executorService.shutdown();
 	}
 
 	@Test
+	@DisplayName("test KafkaProducer Consumer Services With Default Settings")
 	public void testKafkaProducerConsumerServicesWithDefaultSettings() throws InterruptedException {
 		loggerBrokerConsumerDataHandler = new LoggerBrokerConsumerDataHandler();
 		testConsumeDataWithDefaultDeSerializer();
 		testPublishDataWithDefaultSerializers();
 		waitForDataProcessing();
 		List<String> consumerData = loggerBrokerConsumerDataHandler.getAllConsumedMessages();
-		assertEquals("Expected and actual consumed data length are not same ", DATA_LENGTH, consumerData.size());
+		assertEquals(DATA_LENGTH, consumerData.size(), "Expected and actual consumed data length are not same");
 		kafkaConsumerService.stopService();
 	}
 
 	@Test
+	@DisplayName("test KafkaProducer Consumer Services With Custom Settings")
 	public void testKafkaProducerConsumerServicesWithCustomSettings() throws InterruptedException {
 		loggerBrokerConsumerDataHandler = new LoggerBrokerConsumerDataHandler();
 		testConsumeDataWithExternalDeSerializer();
 		testPublishDataWithExternalSerializers();
 		waitForDataProcessing();
 		List<String> consumerData = loggerBrokerConsumerDataHandler.getAllConsumedMessages();
-		assertEquals("Expected and actual consumed data length are not same ", DATA_LENGTH, consumerData.size());
+		assertEquals(DATA_LENGTH, consumerData.size(), "Expected and actual consumed data length are not same");
 		kafkaConsumerService.stopService();
 	}
 
 	@Test
+	@DisplayName("test KafkaProducer Consumer Services UsingConsumerGroup")
 	public void testKafkaProducerConsumerServicesUsingConsumerGroup() throws InterruptedException {
 		testConsumeDataWithConsumerGroup();
 		testPublishDataWithExternalSerializers();
 		waitForDataProcessing();
-		assertEquals("Expected and actual consumed data length are not same ", DATA_LENGTH,
+		assertEquals(DATA_LENGTH,
 				loggerBrokerConsumerDataHandler1.getAllConsumedMessages().size()
-						+ loggerBrokerConsumerDataHandler2.getAllConsumedMessages().size());
+						+ loggerBrokerConsumerDataHandler2.getAllConsumedMessages().size(),
+				"Expected and actual consumed data length are not same");
 
 		kafkaConsumerService.stopService();
 	}

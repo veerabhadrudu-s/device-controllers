@@ -4,9 +4,10 @@ import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFAC
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.NOTIFICATION_MESSAGE_HEX
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static org.junit.jupiter.api.Assertions.assertEquals
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm
 import com.hpe.iot.dc.mmi.safemate.MMIServerSocketToDeviceModel
@@ -17,7 +18,6 @@ import com.hpe.iot.dc.mmi.safemate.TrackerNotification
 import com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType
 import com.hpe.iot.dc.model.DeviceInfo;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author sveera
@@ -83,15 +83,15 @@ public class NotificationMessageConverterTest {
 		"74",
 		"60" ] as String[];
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		regularUpdateMessageConverter = new NotificationMessageConverter(mmicrcAlgorithm, trackerInfoCreator);
 	}
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected Message Type and Actual Message Type are not same", EXPECTED_MESSAGE_TYPE,
-				regularUpdateMessageConverter.getMessageType());
+		assertEquals(EXPECTED_MESSAGE_TYPE,regularUpdateMessageConverter.getMessageType(),
+				"Expected Message Type and Actual Message Type are not same");
 	}
 
 	@Test
@@ -99,15 +99,16 @@ public class NotificationMessageConverterTest {
 		TrackerNotification trackerNotification = getExpectedTrackerNotification();
 		DeviceInfo deviceInfo = regularUpdateMessageConverter
 				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(NOTIFICATION_MESSAGE_HEX, getClass()));
-		assertEquals("Expected Manufacturer and Actual Manufacturer are not Same", MANUFACTURER,
-				deviceInfo.getDevice().getManufacturer());
-		assertEquals("Expected Model ID and Actual Model ID are not Same", MODEL_ID,
-				deviceInfo.getDevice().getModelId());
-		assertEquals("Expected device Id and Actual device Id are not same", "301071500007", deviceInfo.getDevice().getDeviceId());
-		assertEquals("Expected and actual device data are not same", EXPECTED_MESSAGE_TYPE,
-				deviceInfo.getMessageType());
-		assertEquals("Expected Tracker Notification and Actual Tracker Notification are not same", trackerNotification,
-				deviceInfo.getDeviceData().get(TrackerNotification.TRACKER_NOTIF));
+		assertEquals(MANUFACTURER,deviceInfo.getDevice().getManufacturer(),
+				"Expected Manufacturer and Actual Manufacturer are not same");
+		assertEquals(MODEL_ID,deviceInfo.getDevice().getModelId(),
+				"Expected Model ID and Actual Model ID are not same");
+		assertEquals("301071500007", deviceInfo.getDevice().getDeviceId(),
+				"Expected device Id and Actual device Id are not same");
+		assertEquals(EXPECTED_MESSAGE_TYPE,deviceInfo.getMessageType(),
+				"Expected and actual device data are not same");
+		assertEquals(trackerNotification,deviceInfo.getDeviceData().get(TrackerNotification.TRACKER_NOTIF),
+				"Expected Tracker Notification and Actual Tracker Notification are not same");
 	}
 
 	private TrackerNotification getExpectedTrackerNotification() {

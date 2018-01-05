@@ -1,9 +1,9 @@
 package com.hpe.broker.service.producer.kafka;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author sveera
@@ -20,14 +20,14 @@ public class KafkaProducerServiceTest {
 	@Test
 	public void testKafkaProducerService() throws Exception, IllegalAccessException, ClassNotFoundException {
 		initKafkaProducer(keySerializerClass, valueSerializerClass);
-		assertNotNull("KafkaProducerService cannot be null", kafkaProducerService);
+		assertNotNull(kafkaProducerService, "KafkaProducerService cannot be null");
 	}
 
 	@Test
 	public void testKafkaProducerServiceGetName() {
 		initKafkaProducer(keySerializerClass, valueSerializerClass);
-		assertEquals("Expected KafkaProducerService name and actual name are not same", "kafka",
-				kafkaProducerService.getName());
+		assertEquals("kafka", kafkaProducerService.getName(),
+				"Expected KafkaProducerService name and actual name are not same");
 	}
 
 	private void initKafkaProducer(String keySerializerClass, String valueSerializerClass) {

@@ -3,20 +3,20 @@
  */
 package com.hpe.broker.service.consumer.factory.impl;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.hpe.broker.service.consumer.BrokerConsumerService;
 import com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService;
 import com.hpe.broker.service.consumer.factory.BrokerConsumerServiceFactory;
-import com.hpe.broker.service.consumer.factory.impl.BrokerConsumerServiceFactoryImpl;
 import com.hpe.broker.service.consumer.kafka.KafkaConsumerService;
 
 /**
@@ -33,7 +33,7 @@ public class BrokerConsumerServiceFactoryImplTest {
 	private ExecutorService executorService;
 	private BrokerConsumerServiceFactory<String> brokerConsumerServiceFactory;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		executorService = Executors.newFixedThreadPool(5);
 		List<BrokerConsumerService<String>> brokerConsumerServices = new ArrayList<>();
@@ -44,11 +44,12 @@ public class BrokerConsumerServiceFactoryImplTest {
 	}
 
 	@Test
+	@DisplayName("test Get Broker Consumer Service")
 	public void testGetBrokerConsumerService() {
-		assertTrue("Expected and actual BrokerConsumerService are not same",
-				brokerConsumerServiceFactory.getBrokerConsumerService("activemq") instanceof ActiveMQConsumerService);
-		assertTrue("Expected and actual BrokerConsumerService are not same",
-				brokerConsumerServiceFactory.getBrokerConsumerService("kafka") instanceof KafkaConsumerService);
+		assertTrue(brokerConsumerServiceFactory.getBrokerConsumerService("activemq") instanceof ActiveMQConsumerService,
+				"Expected and actual BrokerConsumerService are not same");
+		assertTrue(brokerConsumerServiceFactory.getBrokerConsumerService("kafka") instanceof KafkaConsumerService,
+				"Expected and actual BrokerConsumerService are not same");
 	}
 
 }

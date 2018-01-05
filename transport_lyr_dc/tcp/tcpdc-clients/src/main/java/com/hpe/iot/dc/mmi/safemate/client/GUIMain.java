@@ -5,7 +5,7 @@ package com.hpe.iot.dc.mmi.safemate.client;
 
 import java.io.IOException;
 
-import com.hpe.iot.dc.client.AbstractGuiMain;
+import com.hpe.iot.dc.client.GuiMainTemplateMethod;
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm;
 import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageConsumer;
 import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessageGenerator;
@@ -17,7 +17,7 @@ import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
  * @author sveera
  *
  */
-public class GUIMain extends AbstractGuiMain {
+public class GUIMain extends GuiMainTemplateMethod {
 
 	public static void main(String[] args) throws IOException {
 		new GUIMain().main();

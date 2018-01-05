@@ -1,10 +1,12 @@
 package com.hpe.iot.dc.mmi.safemate.northbound.service.outflow.impl;
 
+import static org.junit.jupiter.api.Assertions.fail
+
 import java.nio.channels.SocketChannel
 
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -14,8 +16,6 @@ import com.hpe.iot.dc.mmi.safemate.SettingsDownlinkService
 import com.hpe.iot.dc.tcp.southbound.service.outflow.TCPServerSocketWriter
 import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool
 import com.hpe.iot.dc.tcp.southbound.socketpool.impl.DefaultTCPServerClientSocketPool
-
-import static org.junit.Assert.*
 
 /**
  * @author sveera
@@ -29,7 +29,7 @@ class SettingsDownlinkServiceTest {
 	@Mock
 	private SocketChannel socketChannel;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		Mockito.when(socketChannel.isConnected()).thenReturn(true);
@@ -39,7 +39,7 @@ class SettingsDownlinkServiceTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void test() {
 		fail("Not yet implemented");
 	}

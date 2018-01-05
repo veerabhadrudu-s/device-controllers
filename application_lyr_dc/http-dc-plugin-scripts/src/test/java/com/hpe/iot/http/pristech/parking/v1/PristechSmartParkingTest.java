@@ -6,12 +6,13 @@ package com.hpe.iot.http.pristech.parking.v1;
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH;
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH_VERSION;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -28,6 +29,7 @@ public class PristechSmartParkingTest extends HttpPluginTestBaseTemplate {
 	private static final String DEVICE_ID = "3c003434";
 
 	@Test
+	@DisplayName("test Process DevicePayload For Pristech Smart Parking Uplink Parking Event")
 	public void testPristechSmartParkingUplinkParkingEvent() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -36,12 +38,13 @@ public class PristechSmartParkingTest extends HttpPluginTestBaseTemplate {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 		validateConsumedPristechUplinkMessage("PARKING_EVENT");
 
 	}
 
 	@Test
+	@DisplayName("test Process DevicePayload For Pristech Smart Parking Uplink Health Check")
 	public void testPristechSmartParkingUplinkHealthCheck() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
@@ -50,14 +53,15 @@ public class PristechSmartParkingTest extends HttpPluginTestBaseTemplate {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 		validateConsumedPristechUplinkMessage("PARKING_HEALTH");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
+	@DisplayName("test Process DevicePayload For Pristech Smart Parking Downlink Command")
 	public void testPristechSmartParkingDownlinkCommandForPpark() throws Exception {
-		mockNorthboundDownlinkProducerService.publishDownlinkData(createNorthboundOneM2MDownlinkCommandForPPark());		
+		mockNorthboundDownlinkProducerService.publishDownlinkData(createNorthboundOneM2MDownlinkCommandForPPark());
 	}
 
 	private String getPristechSmartParkingUplinkParkingEventMsg() {
@@ -76,7 +80,7 @@ public class PristechSmartParkingTest extends HttpPluginTestBaseTemplate {
 
 	private void validateConsumedPristechUplinkMessage(String expectedMessageType) throws InterruptedException {
 		DeviceInfo deviceInfo = validateConsumedUplinkMessage(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION, DEVICE_ID);
-		assertEquals("Expected and actual Message Type are not same", expectedMessageType, deviceInfo.getMessageType());
+		assertEquals(expectedMessageType, deviceInfo.getMessageType(), "Expected and actual Message Type are not same");
 	}
 
 	private String createNorthboundOneM2MDownlinkCommandForPPark() {

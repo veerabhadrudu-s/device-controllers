@@ -6,14 +6,14 @@ package com.hpe.iot.mqtt.motwane.lighting.v2;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_VERSION_2;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Base64;
 import java.util.Base64.Encoder;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 import com.hpe.iot.model.DeviceInfo;
@@ -35,13 +35,13 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
 				payload.get("SwitchInternalId").getAsString()), encoder.encode(payload.toString().getBytes()));
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		assertNotNull("Device info cannot be null", deviceInfo);
+		assertNotNull(deviceInfo, "Device info cannot be null");
 		validateDeviceModel(deviceInfo.getDevice(), MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, DEVICE_ID);
 		logger.debug("Received Device Info is " + deviceInfo);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForGSSMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForGSSMessageType();
 		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
@@ -51,7 +51,7 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForCOAMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForCOAMessageType();
 		String uplinkTopicName = formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
@@ -70,10 +70,10 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		byte[] mqttMessage = receivedMqttMessage.getMqttMessage();
 		JsonObject downlinkPayload = jsonParser.parse(new String(mqttMessage)).getAsJsonObject();
 		logger.debug("Received downlink message is " + downlinkPayload.toString());
-		assertEquals("Expected downlink topic and actual downlink topic are not same",
-				formDownlinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, expectedDeviceId), mqttDownlinkTopic);
-		assertEquals("Expected and Actual DeviceId are not same", expectedDeviceId,
-				downlinkPayload.get("SwitchInternalId").getAsString());
+		assertEquals(formDownlinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, expectedDeviceId),
+				mqttDownlinkTopic, "Expected downlink topic and actual downlink topic are not same");
+		assertEquals(expectedDeviceId, downlinkPayload.get("SwitchInternalId").getAsString(),
+				"Expected and Actual DeviceId are not same");
 	}
 
 	private JsonObject getMotwaneStreetLightingForALAMessageType() {
@@ -93,5 +93,4 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 				"{\"Event\":\"COA\",\"SwitchInternalId\":\"S000001\",\"SwitchDateTime\":\"25-07-2016 03:05:15\", \"Mobile\":\"1012314562\", \"IPAddress\":\"192.168.0.168\", \"Latitude\":\"70.1235\",\"Longitude\":\"43.1256\",\"GPSRealTime\":\"25-07-2016 03:05:15\"}")
 				.getAsJsonObject();
 	}
-
 }

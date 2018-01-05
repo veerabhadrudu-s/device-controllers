@@ -1,7 +1,7 @@
 package com.hpe.iot.dc.tcp.initializer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -34,31 +35,33 @@ public class TCPDCInitializerTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private ClassPathXmlApplicationContext applicationContext;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext("bean-config.xml");
 	}
 
 	@Test
+	@DisplayName("test TCP DC initializer")
 	public void testTCPDCInitializer() {
 		TCPServerSocketServiceManager tcpServerSocketServiceManager = applicationContext
 				.getBean(TCPServerSocketServiceManager.class);
-		assertNotNull("TCPDCInitializer Cannot be null ", tcpServerSocketServiceManager);
-		assertEquals("Expected Running services and actual running servcies are not same ", 4,
-				tcpServerSocketServiceManager.getRunningServerSocketServices().size());
+		assertNotNull(tcpServerSocketServiceManager, "TCPDCInitializer Cannot be null");
+		assertEquals(4, tcpServerSocketServiceManager.getRunningServerSocketServices().size(),
+				"Expected Running services and actual running servcies are not same");
 		applicationContext.close();
 	}
 
 	@Test
+	@DisplayName("test TCP DC initializer after on the fly script modifications")
 	public void modifyTCPDCInitializer() throws IOException, URISyntaxException, InterruptedException {
 		try {
 			TCPServerSocketServiceManager tcpServerSocketServiceManager = applicationContext
 					.getBean(TCPServerSocketServiceManager.class);
 			copyModifiedScript();
 			waitForProcessing();
-			assertNotNull("TCPDCInitializer Cannot be null ", tcpServerSocketServiceManager);
-			assertEquals("Expected Running services and actual running servcies are not same ", 4,
-					tcpServerSocketServiceManager.getRunningServerSocketServices().size());
+			assertNotNull(tcpServerSocketServiceManager, "TCPDCInitializer Cannot be null");
+			assertEquals(4, tcpServerSocketServiceManager.getRunningServerSocketServices().size(),
+					"Expected Running services and actual running servcies are not same");
 		} finally {
 			applicationContext.close();
 			revertModifiedScript();

@@ -3,16 +3,16 @@ package com.hpe.iot.dc.mmi.safemate.southbound.converter.impl;
 import static com.hpe.iot.dc.mmi.safemate.TrackerStatus.AlarmStatus.OFF;
 import static com.hpe.iot.dc.mmi.safemate.TrackerStatus.AlarmStatus.ON;
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static org.junit.jupiter.api.Assertions.assertEquals
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.safemate.GPSInfo
 import com.hpe.iot.dc.mmi.safemate.TrackerInfo
 import com.hpe.iot.dc.mmi.safemate.TrackerInfoCreator
 import com.hpe.iot.dc.mmi.safemate.TrackerStatus
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author sveera
@@ -75,15 +75,15 @@ public class TrackerInfoCreatorTest {
 
 	private TrackerInfoCreator trackerInfoCreator;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		trackerInfoCreator = new TrackerInfoCreator();
 	}
 
 	@Test
 	public void testConstructTrackerInfo() {
-		assertEquals("Expected Tracker Info value and Actual Tracker Info are not equal", getExpectedTrackerInfo(),
-				trackerInfoCreator.constructTrackerInfo(getTestData()));
+		assertEquals(getExpectedTrackerInfo(),trackerInfoCreator.constructTrackerInfo(getTestData()),
+				"Expected Tracker Info value and Actual Tracker Info are not equal");
 	}
 
 	private byte[] getTestData() {

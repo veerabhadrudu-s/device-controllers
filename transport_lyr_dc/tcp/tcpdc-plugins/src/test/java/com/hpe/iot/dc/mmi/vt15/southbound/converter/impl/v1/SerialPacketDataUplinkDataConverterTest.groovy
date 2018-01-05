@@ -4,10 +4,11 @@
 package com.hpe.iot.dc.mmi.vt15.southbound.converter.impl.v1
 
 import static com.hpe.iot.dc.mmi.vt15.testdata.MMIVT15TestDataCollection.SERIAL_DATA_PKT_DATA
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.vt15.v1.MMIVT15ServerSocketToDeviceModel
 import com.hpe.iot.dc.mmi.vt15.v1.PacketDataExtractor
@@ -32,22 +33,23 @@ class SerialPacketDataUplinkDataConverterTest {
 	private final PacketDataExtractor packetDataExtractor=new PacketDataExtractor();
 	private SerialPacketDataUplinkDataConverter serialPacketDataUplinkDataConverter;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		serialPacketDataUplinkDataConverter=new SerialPacketDataUplinkDataConverter(packetDataExtractor);
 	}
 
 	@Test
 	public void testGetMessageType() {
-		assertEquals("Expected and Actual Message Types are not same",SERIAL_PACKET,serialPacketDataUplinkDataConverter.getMessageType());
+		assertEquals(SERIAL_PACKET,serialPacketDataUplinkDataConverter.getMessageType(),
+				"Expected and Actual Message Types are not same");
 	}
 
 	@Test
 	public void testCreateModelForLiveData() {
 		DeviceInfo actualDeviceInfo=serialPacketDataUplinkDataConverter.createModel(deviceModel,SERIAL_DATA_PKT_DATA.getBytes());
 		DeviceInfo expectedDeviceInfo=constructExpectedDeviceInfoForLiveData();
-		assertNotNull("Device Info can't be null",actualDeviceInfo);
-		assertEquals("Expected and Actual Device Info are not Equal",expectedDeviceInfo,actualDeviceInfo);
+		assertNotNull(actualDeviceInfo,"Device Info can't be null");
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected and Actual Device Info are not Equal");
 	}
 
 	private DeviceInfo constructExpectedDeviceInfoForLiveData() {

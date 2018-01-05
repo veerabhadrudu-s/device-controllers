@@ -9,8 +9,9 @@ import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS_VERSION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -29,6 +30,7 @@ public class AvanseusTest extends HttpPluginTestBaseTemplate {
 	private static final String DEVICE_ID = CUSTOMER_ID + "&" + DEVICE_NAME;
 
 	@Test
+	@DisplayName("test Process DevicePayload For Avanseus Script")
 	public void testProcessDevicePayloadForAvanseusScript() throws Exception {
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		waitForDCInitialization();
@@ -38,7 +40,7 @@ public class AvanseusTest extends HttpPluginTestBaseTemplate {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assert.assertEquals("Expected and Actual Responses are not same.", expectedResponse, actualResponse);
+		Assertions.assertEquals(expectedResponse, actualResponse);
 		validateConsumedUplinkMessage(AVANSEUS, AVANSEUS_MODEL, AVANSEUS_VERSION, DEVICE_ID);
 	}
 

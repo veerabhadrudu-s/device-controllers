@@ -6,10 +6,10 @@ package com.hpe.iot.mqtt.motwane.lighting.v1;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.MOTWANE_VERSION_1;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
@@ -29,7 +29,7 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForGSSMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForGSSMessageType();
 		tryPublishingMessage(formUplinkTopicName(MOTWANE_MODEL, MOTWANE_MODEL, MOTWANE_VERSION_1,
@@ -39,13 +39,13 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		byte[] mqttMessage = receivedMqttMessage.getMqttMessage();
 		JsonObject downlinkPayload = jsonParser.parse(new String(mqttMessage)).getAsJsonObject();
 		logger.debug("Received downlink message is " + downlinkPayload.toString());
-		Assert.assertEquals("Expected downlink topic and actual downlink topic are not same",
+		assertEquals(
 				formDownlinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_1, payload.get("deviceId").getAsString()),
-				mqttDownlinkTopic);
+				mqttDownlinkTopic, "Expected downlink topic and actual downlink topic are not same");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForCOAMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForCOAMessageType();
 		tryPublishingMessage(formUplinkTopicName(MOTWANE_MODEL, MOTWANE_MODEL, MOTWANE_VERSION_1,
@@ -55,9 +55,9 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		byte[] mqttMessage = receivedMqttMessage.getMqttMessage();
 		JsonObject downlinkPayload = jsonParser.parse(new String(mqttMessage)).getAsJsonObject();
 		logger.debug("Received downlink message is " + downlinkPayload.toString());
-		Assert.assertEquals("Expected downlink topic and actual downlink topic are not same",
+		assertEquals(
 				formDownlinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_1, payload.get("deviceId").getAsString()),
-				mqttDownlinkTopic);
+				mqttDownlinkTopic, "Expected downlink topic and actual downlink topic are not same");
 	}
 
 	private JsonObject getMotwaneStreetLightingForALAMessageType() {

@@ -15,16 +15,16 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.watch.file.listener.FileEventListener;
 import com.hpe.iot.dc.watch.listener.test.MockFileEventListener;
-
-import static org.junit.Assert.assertNotNull;
 
 /**
  * @author sveera
@@ -39,7 +39,7 @@ public class DirectoryWatchServiceTest {
 
 	private DirectoryWatchService directoryWatchService;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		List<FileEventListener> directoryListeners = new ArrayList<>();
 		directoryListeners.add(new MockFileEventListener());
@@ -49,10 +49,11 @@ public class DirectoryWatchServiceTest {
 
 	@Test
 	public void testDirectoryWatchService() {
-		assertNotNull("DirectoryWatchService can not be null", directoryWatchService);
+		Assertions.assertNotNull(directoryWatchService,"DirectoryWatchService can not be null");
 	}
 
 	@Test
+	@DisplayName("Test Modified File Change Events")
 	public void testModifiedFileChangeTest()
 			throws URISyntaxException, FileNotFoundException, IOException, InterruptedException {
 		CountDownLatch countDownLatch = new CountDownLatch(2);
@@ -107,7 +108,7 @@ public class DirectoryWatchServiceTest {
 		});
 	}
 
-	@After
+	@AfterEach
 	public void clearTextFile() throws URISyntaxException, FileNotFoundException {
 		File file = new File(
 				ClassLoader.getSystemResource(TEST_WATCH_DIRECTORY + File.separator + WATCH_TXT_FILE).toURI());

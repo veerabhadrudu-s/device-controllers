@@ -1,6 +1,7 @@
 package com.hpe.iot.dc.plugin.integration.test;
 
 import static javax.swing.BoxLayout.Y_AXIS;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.Container;
 import java.awt.EventQueue;
@@ -16,10 +17,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -38,17 +38,17 @@ public class TCPDCPluginTestServer {
 
 	private ClassPathXmlApplicationContext applicationContext;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		applicationContext = new ClassPathXmlApplicationContext("bean-config.xml");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testAllTCPDCPlugins() {
 		TCPServerSocketServiceManager tcpServerSocketServiceManager = applicationContext
 				.getBean(TCPServerSocketServiceManager.class);
-		Assert.assertNotNull("TCPDCInitializer Cannot be null ", tcpServerSocketServiceManager);
+		assertNotNull(tcpServerSocketServiceManager, "TCPDCInitializer Cannot be null");
 		EventQueue.invokeLater(() -> {
 			TCPServerSocketServiceManagerController ex = new TCPServerSocketServiceManagerController(
 					tcpServerSocketServiceManager);

@@ -16,9 +16,9 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.utils.URIBuilder;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,18 +32,18 @@ public class HttpClientUtilityTest {
 	private final HttpClientUtility httpClientUtility = new HttpClientUtility();
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testGetWeatherServiceApiOverHttps() throws URISyntaxException, ClientProtocolException, IOException,
 			KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
 		URI uri = new URIBuilder().setScheme("https").setHost("api.sunrise-sunset.org").setPort(443).setPath("/json")
 				.setParameter("lat", "36.7201600").setParameter("lng", "-4.4203400").build();
 		logger.trace(uri.toString());
 		String data = httpClientUtility.getResourceOnHttps(uri.toString(), "src/test/resources/cert/weather-der.cer");
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testGetWeatherServiceApiOverHttpsWithEmptyTrustManager()
 			throws URISyntaxException, ClientProtocolException, IOException, KeyManagementException,
 			CertificateException, NoSuchAlgorithmException, KeyStoreException {
@@ -51,41 +51,41 @@ public class HttpClientUtilityTest {
 				.setParameter("lat", "36.7201600").setParameter("lng", "-4.4203400").build();
 		logger.trace(uri.toString());
 		String data = httpClientUtility.getResourceOnHttps(uri.toString());
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testGetPartnerUiotDashboardPageOverHttps() throws URISyntaxException, ClientProtocolException,
 			IOException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
 		String data = httpClientUtility.getResourceOnHttps(
 				"https://185.170.48.160:13080/auth/realms/saml-demo/protocol/saml",
 				"src/test/resources/cert/partner-uiot-der.cer", false);
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testGetAssetByNameOverHttp() throws ClientProtocolException, IOException {
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Authorization", "Basic " + new String(Base64.getEncoder().encode("motwane:Motwane~1".getBytes())));
 		String data = httpClientUtility
 				.getResourceOnHttp("http://10.3.239.70/dsm/wsi/asset/getAssetByName/Motwane-S000003", headers);
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
 	@Deprecated
-	@Ignore
+	@Disabled
 	public void testGetAssetByNameOverHttpUsingBasicAuth() throws URISyntaxException, ClientProtocolException,
 			IOException, KeyManagementException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
 		String data = httpClientUtility.getResourceOnHttpUsingBasicAuth(
 				"http://10.3.239.70/dsm/wsi/asset/getAssetByName/MMIS-17013P1R8ATEST07", "mmiindia", "Mmiindia~1");
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testPostRequestOnHttpForSafemateAssetTracker() throws Exception {
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Accept", "application/json");
@@ -96,11 +96,11 @@ public class HttpClientUtilityTest {
 		String httpBody = oneM2MNotificationPayloadForSafemateAssetTracker();
 		String data = httpClientUtility.postRequestOnHttp(
 				"http://115.112.105.107:4530/HPUIOTIntegrationService/ConsumeSOSPayload?rt=2", headers, httpBody);
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testPostRequestOnHttpsDrivemateOBD2Sensor() throws ClientProtocolException, IOException,
 			KeyManagementException, NoSuchAlgorithmException, CertificateException, KeyStoreException {
 
@@ -114,11 +114,11 @@ public class HttpClientUtilityTest {
 		String data = httpClientUtility.postRequestOnHttps(
 				"https://commandcenter.nectechnologies.in:8443/scc/vehicleTrackingInfo?rt=2", headers, httpBody,
 				"src/test/resources/cert/NEC.cer");
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testPostRequestOnHttpDrivemateOBD2Sensor() throws ClientProtocolException, IOException,
 			KeyManagementException, NoSuchAlgorithmException, CertificateException, KeyStoreException {
 
@@ -131,7 +131,7 @@ public class HttpClientUtilityTest {
 		String httpBody = oneM2MNotificationPayloadForDrivemateOBD2Sensor();
 		String data = httpClientUtility.postRequestOnHttp(
 				"https://commandcenter.nectechnologies.in:8443/scc/vehicleTrackingInfo?rt=2", headers, httpBody);
-		Assert.assertNotNull("Response cannot be null", data);
+		Assertions.assertNotNull(data, "Response cannot be null");
 	}
 
 	private String oneM2MNotificationPayloadForSafemateAssetTracker() {

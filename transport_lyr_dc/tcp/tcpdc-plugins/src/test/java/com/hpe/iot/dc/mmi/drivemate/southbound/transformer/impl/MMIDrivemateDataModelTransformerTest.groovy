@@ -4,11 +4,12 @@
 package com.hpe.iot.dc.mmi.drivemate.southbound.transformer.impl;
 
 import static com.hpe.iot.dc.mmi.utility.TestUtility.createDataWithPaddingBytes
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.drivemate.EventIdToNameMapper
 import com.hpe.iot.dc.mmi.drivemate.MMIDrivemateDataModelTransformer
@@ -37,7 +38,7 @@ public class MMIDrivemateDataModelTransformerTest {
 	private MMIDrivemateDataModelTransformer mmiDrivemateDataModelTransformer;
 	private UplinkDeviceDataConverterFactory uplinkDeviceDataConverterFactory;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		List<UplinkDeviceDataConverter> uplinkConverters=new ArrayList<>();
 		uplinkNotificationMessageConverter=new UplinkNotificationMessageConverter(new EventIdToNameMapper());
@@ -48,7 +49,7 @@ public class MMIDrivemateDataModelTransformerTest {
 
 	@Test
 	public void testMMIDrivemateDataModelTransformer() {
-		Assert.assertNotNull("MMIDrivemateDataModelTransformer cannot be null",mmiDrivemateDataModelTransformer);
+		assertNotNull(mmiDrivemateDataModelTransformer,"MMIDrivemateDataModelTransformer cannot be null");
 	}
 
 	@Test
@@ -57,7 +58,7 @@ public class MMIDrivemateDataModelTransformerTest {
 		List<DeviceInfo> expectedDeviceInfo=createExpectedDataInfoForHandshakeMessage(inputData);
 		List<DeviceInfo> actualDeviceInfo=mmiDrivemateDataModelTransformer.convertToModel(new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
 				MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2,"123456789012345"),inputData);
-		Assert.assertEquals("Expected DeviceInfo and Actual DeviceInfo are not same",expectedDeviceInfo,actualDeviceInfo);
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual DeviceInfo are not same");
 	}
 
 	@Test
@@ -66,17 +67,17 @@ public class MMIDrivemateDataModelTransformerTest {
 		List<DeviceInfo> expectedDeviceInfo=createExpectedDataInfoForNotificationMessage(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD);
 		List<DeviceInfo> actualDeviceInfo=mmiDrivemateDataModelTransformer.convertToModel(new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
 				MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2,"123456789012345"),inputData);
-		Assert.assertEquals("Expected DeviceInfo and Actual DeviceInfo are not same",expectedDeviceInfo,actualDeviceInfo);
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual DeviceInfo are not same");
 	}
-	
-	@Ignore
+
+	@Disabled
 	@Test
 	public void testForNotificationMessage2() {
 		byte[] inputData = createDataWithPaddingBytes(this.getClass(),MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD_2);
 		List<DeviceInfo> expectedDeviceInfo=createExpectedDataInfoForNotificationMessage(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD_2);
 		List<DeviceInfo> actualDeviceInfo=mmiDrivemateDataModelTransformer.convertToModel(new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
 				MMIDrivemateTestDataCollection.MODEL_ID,"123456789012345"),inputData);
-		Assert.assertEquals("Expected DeviceInfo and Actual DeviceInfo are not same",expectedDeviceInfo,actualDeviceInfo);
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual DeviceInfo are not same");
 	}
 
 	@Test
@@ -85,7 +86,7 @@ public class MMIDrivemateDataModelTransformerTest {
 		List<DeviceInfo> expectedDeviceInfo=createExpectedDataInfoForNotificationMessage(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD);
 		List<DeviceInfo> actualDeviceInfo=mmiDrivemateDataModelTransformer.convertToModel(new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
 				MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2,"123456789012345"),inputData);
-		Assert.assertEquals("Expected DeviceInfo and Actual DeviceInfo are not same",expectedDeviceInfo,actualDeviceInfo);
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual DeviceInfo are not same");
 	}
 
 	@Test
@@ -95,7 +96,7 @@ public class MMIDrivemateDataModelTransformerTest {
 		List<DeviceInfo> expectedDeviceInfo=createExpectedDataInfoForNotificationMessage(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD);
 		List<DeviceInfo> actualDeviceInfo=mmiDrivemateDataModelTransformer.convertToModel(new DeviceImpl(MMIDrivemateTestDataCollection.MANUFACTURER,
 				MMIDrivemateTestDataCollection.MODEL_ID,MMIDrivemateTestDataCollection.VERSION_2,"123456789012345"),inputData);
-		Assert.assertEquals("Expected DeviceInfo and Actual DeviceInfo are not same",expectedDeviceInfo,actualDeviceInfo);
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual DeviceInfo are not same");
 	}
 
 	private List<DeviceInfo> createExpectedDataInfoForHandshakeMessage(byte[] inputData){

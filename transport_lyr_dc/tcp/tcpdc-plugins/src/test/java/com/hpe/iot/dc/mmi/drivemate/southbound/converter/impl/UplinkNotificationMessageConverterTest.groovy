@@ -3,9 +3,13 @@
  */
 package com.hpe.iot.dc.mmi.drivemate.southbound.converter.impl;
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertNotNull
+
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import com.hpe.iot.dc.mmi.drivemate.EventIdToNameMapper
 import com.hpe.iot.dc.mmi.drivemate.Notification
@@ -15,8 +19,6 @@ import com.hpe.iot.dc.mmi.drivemate.testdata.MMIDrivemateTestDataCollection
 import com.hpe.iot.dc.model.DeviceImpl
 import com.hpe.iot.dc.model.DeviceInfo
 import com.hpe.iot.dc.util.DataParserUtility
-
-import static org.junit.Assert.*
 
 /**
  * @author sveera
@@ -32,14 +34,14 @@ class UplinkNotificationMessageConverterTest {
 	private UplinkNotificationMessageConverter uplinkNotificationMessageConverter;
 	private EventIdToNameMapper eventIdToNameMapper=new EventIdToNameMapper();
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		uplinkNotificationMessageConverter=new UplinkNotificationMessageConverter(eventIdToNameMapper);
 	}
 
 	@Test
 	public void testNotificationUplinkMessageConverter() {
-		Assert.assertNotNull("UplinkNotificationMessageConverter cannot be null",uplinkNotificationMessageConverter);
+		assertNotNull(uplinkNotificationMessageConverter,"UplinkNotificationMessageConverter cannot be null");
 	}
 
 	@Test
@@ -48,7 +50,7 @@ class UplinkNotificationMessageConverterTest {
 		DeviceInfo actualDeviceInfo=uplinkNotificationMessageConverter.createModel(
 				DEVICE_UNDER_TEST,
 				DataParserUtility.createBinaryPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,getClass()));
-		Assert.assertEquals("Expected DeviceInfo and Actual Device Info are not same.",expectedDeviceInfo,actualDeviceInfo);
+		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual Device Info are not same");
 	}
 
 	private DeviceInfo createExpectedDeviceInfo(){

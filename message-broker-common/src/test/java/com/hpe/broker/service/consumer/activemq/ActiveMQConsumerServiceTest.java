@@ -3,19 +3,19 @@
  */
 package com.hpe.broker.service.consumer.activemq;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Date;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 import com.hpe.broker.service.activemq.EmbeddedActivemqBroker;
-import com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService;
 import com.hpe.broker.service.consumer.handler.LoggerBrokerConsumerDataHandler;
 import com.hpe.broker.service.producer.activemq.ActiveMQProducerService;
 
@@ -35,7 +35,7 @@ public class ActiveMQConsumerServiceTest {
 	private EmbeddedActivemqBroker embeddedActivemqBroker;
 	private LoggerBrokerConsumerDataHandler loggerBrokerConsumerDataHandler;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		loggerBrokerConsumerDataHandler = new LoggerBrokerConsumerDataHandler();
 		embeddedActivemqBroker = new EmbeddedActivemqBroker(embeddedBrokerUrl);
@@ -45,7 +45,7 @@ public class ActiveMQConsumerServiceTest {
 
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		activeMQConsumerService.stopService();
 		activeMQProducerService.stopService();
@@ -57,20 +57,22 @@ public class ActiveMQConsumerServiceTest {
 	}
 
 	@Test
+	@DisplayName("test ActiveMQConsumer Service Get Name")
 	public void testActiveMQConsumerServiceGetName() {
-		assertEquals("Expected ActiveMQConsumerService name and actual name are not same", "activemq",
-				activeMQConsumerService.getName());
+		assertEquals("activemq", activeMQConsumerService.getName(),
+				"Expected ActiveMQConsumerService name and actual name are not same");
 	}
 
 	@Test
+	@DisplayName("test ActiveMQConsumer Service Consume Data")
 	public void testActiveMQConsumerServiceConsumeData() throws InterruptedException {
 		trySendingMessagesToQueue();
 		activeMQConsumerService.consumeData(destination, loggerBrokerConsumerDataHandler);
 		waitForConsumerToFinish();
 		logger.debug("Total Messages consumed by " + ActiveMQConsumerService.class.getSimpleName() + " is "
 				+ loggerBrokerConsumerDataHandler.getAllConsumedMessages().size());
-		assertTrue("Expected message count and actual message count are not same",
-				loggerBrokerConsumerDataHandler.getAllConsumedMessages().size() == PRODUCER_MSG_COUNT);
+		assertTrue(loggerBrokerConsumerDataHandler.getAllConsumedMessages().size() == PRODUCER_MSG_COUNT,
+				"Expected message count and actual message count are not same");
 	}
 
 	private void trySendingMessagesToQueue() {
