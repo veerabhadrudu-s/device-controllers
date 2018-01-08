@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<!-- Rolling File Appender -->
+		<RollingFile name="MQTT_DC">
+			<FileName>${sys:jboss.server.log.dir}/mqttdc.log</FileName>
+			<FilePattern>${sys:jboss.server.log.dir}/mqttdc.{yyyy-MM-dd-hh-mm}.log.zip
+			</FilePattern>
+			<PatternLayout>
+				<Pattern>%d %-5p (%F:%L) - %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.hpe.iot" level="trace" />
+		<Logger name="org.springframework" level="error" />
+		<Logger name="org.apache.activemq" level="warn" />
+		<Logger name="org.apache" level="warn" />
+		<Root level="warn">
+			<AppenderRef ref="MQTT_DC" />
+		</Root>
+	</Loggers>
+</Configuration>

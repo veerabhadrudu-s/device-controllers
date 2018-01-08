@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import java.net.InetAddress;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.hpe.iot.dc.model.DeviceInfo;
@@ -26,8 +25,6 @@ import mockit.Mocked;
  * @author sveera
  *
  */
-@Disabled
-// @RunWith(JMockit.class)
 public class IpAddressMessageConverterTest {
 
 	private static final String DATA_GRAM_IP = "106.208.80.48";

@@ -1,6 +1,7 @@
 package com.hpe.iot.dc.watch.service;
 
 import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ public class DirectoryWatchServiceTest {
 
 	@Test
 	public void testDirectoryWatchService() {
-		Assertions.assertNotNull(directoryWatchService,"DirectoryWatchService can not be null");
+		assertNotNull(directoryWatchService,"DirectoryWatchService can not be null");
 	}
 
 	@Test

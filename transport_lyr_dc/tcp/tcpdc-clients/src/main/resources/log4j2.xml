@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<!-- Rolling File Appender -->
+		<RollingFile name="TCP_CLIENT">
+			<FileName>tcpClient</FileName>
+			<FilePattern>tcpClient.{yyyy-MM-dd-hh-mm}.log.zip
+			</FilePattern>
+			<PatternLayout>
+				<Pattern>%d %-5p (%F:%L) - %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="5 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.hpe.iot.dc" level="trace" />
+		<Logger name="org.springframework" level="error" />
+		<Logger name="org.apache.activemq" level="debug" />
+		<Logger name="org.apache" level="warn" />
+		<Root level="warn">
+			<AppenderRef ref="TCP_CLIENT" />
+		</Root>
+	</Loggers>
+</Configuration>

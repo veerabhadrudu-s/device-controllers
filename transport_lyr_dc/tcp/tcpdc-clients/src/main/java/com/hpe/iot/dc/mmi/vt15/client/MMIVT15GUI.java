@@ -63,10 +63,6 @@ public class MMIVT15GUI implements GUI {
 		buttonConfigurations.put(serialDataButton, "serial_packet");
 		
 		JButton bulkHistoricalButton = new JButton("Bulk Data");
-		bulkHistoricalButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		bulkHistoricalButton.setForeground(new Color(65, 105, 225));
 		bulkHistoricalButton.setFont(new Font("Verdana", Font.PLAIN, 30));
 		bulkHistoricalButton.setBounds(244, 227, 222, 56);

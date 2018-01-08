@@ -19,8 +19,9 @@ import com.hpe.iot.dc.watch.file.listener.FileEventListener;
  */
 public class GroovyFileEventListener implements FileEventListener {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final String FAILED_TO_EXECUTE_GROOVY_SCRIPT = "Failed to execute Groovy Script";
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final GroovyScriptTCPServiceActivator groovyScriptTCPServiceActivator;
 
 	public GroovyFileEventListener(GroovyScriptTCPServiceActivator groovyScriptTCPServiceActivator) {
@@ -47,7 +48,7 @@ public class GroovyFileEventListener implements FileEventListener {
 		try {
 			groovyScriptTCPServiceActivator.startTCPService(fullPath);
 		} catch (Exception e) {
-			logger.error("Failed to execute Groovy Script");
+			logger.error(FAILED_TO_EXECUTE_GROOVY_SCRIPT);
 			logExceptionStackTrace(e, getClass());
 		}
 	}
@@ -56,7 +57,7 @@ public class GroovyFileEventListener implements FileEventListener {
 		try {
 			groovyScriptTCPServiceActivator.restartTCPService(fullPath);
 		} catch (Exception e) {
-			logger.error("Failed to execute Groovy Script");
+			logger.error(FAILED_TO_EXECUTE_GROOVY_SCRIPT);
 			logExceptionStackTrace(e, getClass());
 		}
 	}
@@ -65,7 +66,7 @@ public class GroovyFileEventListener implements FileEventListener {
 		try {
 			groovyScriptTCPServiceActivator.stopTCPService(fullPath);
 		} catch (Exception e) {
-			logger.error("Failed to execute Groovy Script");
+			logger.error(FAILED_TO_EXECUTE_GROOVY_SCRIPT);
 			logExceptionStackTrace(e, getClass());
 		}
 	}

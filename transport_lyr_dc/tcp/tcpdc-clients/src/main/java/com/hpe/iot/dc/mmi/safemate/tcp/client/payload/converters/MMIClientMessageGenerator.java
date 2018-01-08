@@ -68,7 +68,7 @@ public class MMIClientMessageGenerator implements ClientMessageGenerator {
 	*/
 	//@formatter:on	
 
-	public static final String[] NOTIFICATION_MESSAGE_HEX = new String[] { "00", "01", "04", "0c", "10", "11", "37",
+	private static final String[] NOTIFICATION_MESSAGE_HEX = new String[] { "00", "01", "04", "0c", "10", "11", "37",
 			"13", "98", "26", "c9", "02", "d0", "2f", "ad", "10", "0d", "00", "01", "07", "67", "00", "00", "00", "00",
 			"64", "00", "00", "00", "00", "00", "00", "00", "fc", "61", "74", "60"};
 		
@@ -90,7 +90,7 @@ public class MMIClientMessageGenerator implements ClientMessageGenerator {
 	*/
 	//@formatter:on
 
-	public static final String[] SOS_MESSAGE_HEX =  new String[] { "06", "0c", "10", "09", "22", "1b", "4e", "ee", "c9", "02",
+	private static final String[] SOS_MESSAGE_HEX =  new String[] { "06", "0c", "10", "09", "22", "1b", "4e", "ee", "c9", "02",
 		 "3e", "8a", "ab", "10", "00", "00", "00","00", "03", "40", "00", "00", "00", "64", "00", "00", "00", 
 		 "00", "00", "00", "00", "fb", "61", "0f", "a1"};
 
