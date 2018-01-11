@@ -157,12 +157,7 @@
 					<attachClasses>true</attachClasses>
 					<classesClassifier>classes</classesClassifier>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.groovy.maven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<extensions>true</extensions>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 </project>

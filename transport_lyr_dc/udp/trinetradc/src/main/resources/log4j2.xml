@@ -4,13 +4,12 @@
 		<!-- Rolling File Appender -->
 		<RollingFile name="TRINETRA_DC">
 			<FileName>${sys:jboss.server.log.dir}/trinetraDC.log</FileName>
-			<FilePattern>${sys:jboss.server.log.dir}/trinetraDC.{yyyy-MM-dd-hh-mm}.log.zip
-			</FilePattern>
+			<FilePattern>${sys:jboss.server.log.dir}/trinetraDC.%d{yyyy-MM-dd-hh-mm}.%i.log.zip</FilePattern>
 			<PatternLayout>
 				<Pattern>%d %-5p (%F:%L) - %m%n</Pattern>
 			</PatternLayout>
 			<Policies>
-				<SizeBasedTriggeringPolicy size="5 MB" />
+				<SizeBasedTriggeringPolicy size="10 MB" />
 			</Policies>
 			<DefaultRolloverStrategy max="5" />
 		</RollingFile>
