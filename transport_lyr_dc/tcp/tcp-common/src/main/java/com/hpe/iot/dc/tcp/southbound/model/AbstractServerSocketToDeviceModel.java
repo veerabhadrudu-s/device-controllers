@@ -35,8 +35,8 @@ public abstract class AbstractServerSocketToDeviceModel implements ServerSocketT
 
 	@Override
 	public String toString() {
-		return getClass() + "[ Manufacturer=" + getManufacturer() + ", ModelId=" + getModelId() + ", BoundAddress="
-				+ getBoundLocalAddress() + ", PortNumber=" + getPortNumber() + "]";
+		return getClass() + "[ Manufacturer=" + getManufacturer() + ", ModelId=" + getModelId() + ", Version="
+				+ getVersion() + ", BoundAddress=" + getBoundLocalAddress() + ", PortNumber=" + getPortNumber() + "]";
 	}
 
 }

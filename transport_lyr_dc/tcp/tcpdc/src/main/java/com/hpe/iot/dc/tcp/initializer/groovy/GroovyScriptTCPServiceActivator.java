@@ -15,6 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.logger.LiveLogger;
+import com.handson.logger.impl.LiveLoggerAdapter;
+import com.handson.logger.service.LoggerService;
 import com.hpe.iot.dc.bean.pool.ServerBeanPool;
 import com.hpe.iot.dc.groovy.loader.GroovyScriptClassLoader;
 import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
@@ -145,13 +148,15 @@ public class GroovyScriptTCPServiceActivator {
 			final ServerSocketToDeviceModel serverSocketToDeviceModel)
 			throws IOException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		validateOptionalMetaComponentModel(serverSocketToDeviceModel, dcComponentMetaModel);
+		final DeviceModel deviceModel = new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),
+				serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion());
 		final ServerClientSocketPool tcpServerClientSocketPool = tcpServerClientSocketPoolFactory
 				.getServerClientSocketPool(serverSocketToDeviceModel);
 		final TCPServerSocketWriter tcpServerSocketWriter = new TCPServerSocketWriter(tcpServerClientSocketPool);
+		intializedObjects.put(LiveLogger.class, instantiateLiveLogger(deviceModel));
 		intializedObjects.put(TCPServerSocketWriter.class, tcpServerSocketWriter);
 		intializedObjects.putAll(instantiateZeroArgumentConstructorClasses(loadedClasses));
-		intializedObjects.put(DeviceModel.class, new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),
-				serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion()));
+		intializedObjects.put(DeviceModel.class, deviceModel);
 		Class<? extends IOTModelConverter> iotModelConverType = dcComponentMetaModel.getNorthBoundDCComponentMetaModel()
 				.getIotModelConverterClass() == null ? DefaultIOTModelConverterImpl.class
 						: dcComponentMetaModel.getNorthBoundDCComponentMetaModel().getIotModelConverterClass();
@@ -171,7 +176,12 @@ public class GroovyScriptTCPServiceActivator {
 		TCPDCComponentModel dcComponentModel = intializeTCPComponent(dcComponentMetaModel, intializedObjects,
 				southBoundDCComponentModel, northBoundDCComponentModel);
 		tryStartingTCPService(serverSocketToDeviceModel, tcpServerClientSocketPool, tcpServerSocketWriter,
-				dcComponentModel);
+				serverBeanPool.getBean(LoggerService.class), dcComponentModel);
+	}
+
+	private LiveLogger instantiateLiveLogger(DeviceModel deviceModel) {
+		LoggerService loggerService = serverBeanPool.getBean(LoggerService.class);
+		return new LiveLoggerAdapter(loggerService, deviceModel);
 	}
 
 	private TCPDCComponentModel intializeTCPComponent(TCPDCComponentMetaModel dcComponentMetaModel,
@@ -193,10 +203,10 @@ public class GroovyScriptTCPServiceActivator {
 	// handling exception.
 	private void tryStartingTCPService(final ServerSocketToDeviceModel serverSocketToDeviceModel,
 			final ServerClientSocketPool tcpServerClientSocketPool, final TCPServerSocketWriter tcpServerSocketWriter,
-			TCPDCComponentModel dcComponentModel) throws IOException {
+			final LoggerService loggerService, TCPDCComponentModel dcComponentModel) throws IOException {
 		try {
 			tcpServerSocketServiceManager.createTCPServerSocketService(serverSocketToDeviceModel, dcComponentModel,
-					tcpServerClientSocketPool, tcpServerSocketWriter);
+					tcpServerClientSocketPool, tcpServerSocketWriter, loggerService);
 		} catch (Throwable ex) {
 			tcpServerClientSocketPoolFactory.removeServerClientSocketPool(serverSocketToDeviceModel);
 			throw ex;

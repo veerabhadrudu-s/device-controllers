@@ -3,6 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.southbound.service.inflow.task;
 
+import static com.hpe.iot.dc.util.UtilityLogger.exceptionStackToString;
 import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -10,6 +11,9 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedTransferQueue;
 
+import com.handson.logger.service.LoggerService;
+import com.hpe.iot.dc.model.DeviceModelImpl;
+import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.DeviceSocketData;
 
 /**
@@ -18,16 +22,20 @@ import com.hpe.iot.dc.tcp.southbound.service.inflow.DeviceSocketData;
  */
 public abstract class DeviceDataProcessingTask implements Runnable {
 
-	private final BlockingQueue<DeviceSocketData> liveSocketsData;
 	private volatile boolean isTaskRunnable;
 	private final long pollingPeriod;
+	private final LoggerService loggerService;
+	protected final ServerSocketToDeviceModel serverSocketToDeviceModel;
+	private final BlockingQueue<DeviceSocketData> liveSocketsData;
 
-	public DeviceDataProcessingTask(final long pollingPeriod) {
+	public DeviceDataProcessingTask(long pollingPeriod, LoggerService loggerService,
+			ServerSocketToDeviceModel serverSocketToDeviceModel) {
 		super();
-		this.pollingPeriod = pollingPeriod;
-		this.liveSocketsData = new LinkedTransferQueue<>();
 		this.isTaskRunnable = true;
-
+		this.pollingPeriod = pollingPeriod;
+		this.loggerService = loggerService;
+		this.serverSocketToDeviceModel = serverSocketToDeviceModel;
+		this.liveSocketsData = new LinkedTransferQueue<>();
 	}
 
 	public void addLiveSocketData(DeviceSocketData deviceSocketData) throws InterruptedException {
@@ -47,7 +55,6 @@ public abstract class DeviceDataProcessingTask implements Runnable {
 					continue;
 				tryProcessingSocketData(deviceSocketData);
 			}
-
 		} catch (Throwable e) {
 			logExceptionStackTrace(e, getClass());
 		}
@@ -58,6 +65,10 @@ public abstract class DeviceDataProcessingTask implements Runnable {
 			processSocketData(deviceSocketData);
 		} catch (Throwable e) {
 			logExceptionStackTrace(e, getClass());
+			loggerService.log(
+					new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),
+							serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion()),
+					exceptionStackToString(e));
 		}
 	}
 

@@ -12,18 +12,16 @@
 	<context:annotation-config />
 	<context:component-scan base-package="com.hpe.iot" />
 	<import resource="classpath:spring/tcp-plugin-service-monitor.xml" />
+	<import resource="classpath:spring/logger-service.xml" />
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 
-			<list>				
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/iot-broker.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/activemq.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/kafka.properties
-				</value>
+			<list>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/iot-broker.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/activemq.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/tcpdc/kafka.properties</value>
 			</list>
 
 		</property>
@@ -31,7 +29,7 @@
 
 	<jee:jndi-lookup id="myManagedExecutorService"
 		jndi-name="java:jboss/ee/concurrency/executor/default" />
-	
+
 	<bean id="activeMQProducerService"
 		class="com.hpe.broker.service.producer.activemq.ActiveMQProducerService">
 		<constructor-arg index="0" value="${activemq.brokerURL}" />

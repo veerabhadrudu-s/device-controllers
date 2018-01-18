@@ -7,7 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>tcp-common</artifactId>
-	<dependencies>		
+	<dependencies>
 		<dependency>
 			<groupId>javax.enterprise.concurrent</groupId>
 			<artifactId>javax.enterprise.concurrent-api</artifactId>
@@ -24,8 +24,12 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>websocket-logger</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Logging -->
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

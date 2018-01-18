@@ -44,7 +44,7 @@ public class SouthboundServiceImpl implements SouthboundService {
 	}
 
 	private DeviceInfo constructDeviceInfo(DeviceModel deviceModel, byte[] payload) {
-		JsonObject deciperedPayload = deciperPaylaod(deviceModel, payload);
+		JsonObject deciperedPayload = deciperPayload(deviceModel, payload);
 		String deviceId = findDeviceId(deviceModel, deciperedPayload);
 		String messageType = findMessageType(deviceModel, deciperedPayload);
 		Device device = new DeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(),
@@ -52,7 +52,7 @@ public class SouthboundServiceImpl implements SouthboundService {
 		return new DeviceInfo(device, messageType, deciperedPayload);
 	}
 
-	private JsonObject deciperPaylaod(DeviceModel deviceModel, byte[] payload) {
+	private JsonObject deciperPayload(DeviceModel deviceModel, byte[] payload) {
 		PayloadDecipher payloadDecipher = payloadExtractorFactory.getPayloadDecipher(deviceModel.getManufacturer(),
 				deviceModel.getModelId(), deviceModel.getVersion());
 		return payloadDecipher.decipherPayload(deviceModel, payload);

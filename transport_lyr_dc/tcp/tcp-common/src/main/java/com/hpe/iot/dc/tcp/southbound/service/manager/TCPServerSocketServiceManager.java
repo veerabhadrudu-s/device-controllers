@@ -11,6 +11,7 @@ import javax.enterprise.concurrent.ManagedExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.logger.service.LoggerService;
 import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.dc.northbound.component.manager.outflow.NorthBoundDownlinkComponentManager;
 import com.hpe.iot.dc.tcp.component.model.TCPDCComponentModel;
@@ -20,6 +21,7 @@ import com.hpe.iot.dc.tcp.southbound.service.inflow.TCPDataProcessingService;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.TCPServerSocketReader;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.task.DeviceDataProcessingTask;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.DeviceDataProcessingTaskFactory;
+import com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.DeviceDataProcessingTaskFactoryInput;
 import com.hpe.iot.dc.tcp.southbound.service.outflow.TCPServerSocketWriter;
 import com.hpe.iot.dc.tcp.southbound.socket.TCPServerSocketServiceProvider;
 import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool;
@@ -54,9 +56,9 @@ public class TCPServerSocketServiceManager {
 		this.managedExecutorService = managedExecutorService;
 	}
 
-	public void createTCPServerSocketService(ServerSocketToDeviceModel serverSocketToDeviceModel,
-			TCPDCComponentModel dcComponentModel, ServerClientSocketPool tcpServerClientSocketPool,
-			TCPServerSocketWriter tcpServerSocketWriter) throws IOException {
+	public void createTCPServerSocketService(final ServerSocketToDeviceModel serverSocketToDeviceModel,
+			final TCPDCComponentModel dcComponentModel, final ServerClientSocketPool tcpServerClientSocketPool,
+			final TCPServerSocketWriter tcpServerSocketWriter, final LoggerService loggerService) throws IOException {
 		TCPServerSocketService tcpServerSocketService = tcpServerSocketServices.get(serverSocketToDeviceModel);
 		if (tcpServerSocketService != null) {
 			logger.warn("Port already in use " + serverSocketToDeviceModel);
@@ -66,7 +68,8 @@ public class TCPServerSocketServiceManager {
 				serverSocketToDeviceModel.getPortNumber(), serverSocketToDeviceModel.getBoundLocalAddress(),
 				serverSocketToDeviceModel.getTCPOptions().getSocketBacklogCount());
 		DeviceDataProcessingTask deviceDataProcessingTask = deviceDataProcessingTaskFactory
-				.createDeviceDataProcessingTask(serverSocketToDeviceModel, tcpServerClientSocketPool, dcComponentModel);
+				.createDeviceDataProcessingTask(new DeviceDataProcessingTaskFactoryInput(loggerService,
+						serverSocketToDeviceModel, tcpServerClientSocketPool, dcComponentModel));
 		TCPDataProcessingService tcpDataProcessingService = new TCPDataProcessingService(deviceDataProcessingTask,
 				managedExecutorService);
 		TCPServerSocketReader tcpServerSocketReader = new TCPServerSocketReader(managedExecutorService,

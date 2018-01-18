@@ -11,9 +11,9 @@
 
 	<!-- <context:annotation-config /> -->
 	<!-- <context:component-scan base-package="com.hpe.iot" /> -->
-	
+
 	<bean id="webcontainerPostProcessor" class="com.hpe.iot.dc.tcp.bean.processor.DCBeanPostProcessor" />
-	
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -27,7 +27,7 @@
 
 
 	<bean id="myManagedExecutorService" class="com.hpe.iot.dc.executor.mock.MockManagedExecutorService" />
-	
+
 	<bean id="activeMQProducerService"
 		class="com.hpe.broker.service.producer.activemq.ActiveMQProducerService">
 		<constructor-arg index="0" value="${activemq.brokerURL}" />
@@ -105,8 +105,9 @@
 		class="com.hpe.iot.dc.tcp.southbound.socketpool.factory.impl.TCPServerClientSocketPoolFactoryImpl">
 		<constructor-arg index="0" ref="socketChangeListeners" />
 	</bean>
-	
-	<bean id="deviceDataProcessingTaskFactory" class="com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.impl.DeviceDataProcessingTaskFactoryImpl"/> 
+
+	<bean id="deviceDataProcessingTaskFactory"
+		class="com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.impl.DeviceDataProcessingTaskFactoryImpl" />
 
 	<bean id="tcpServerSocketServiceManager"
 		class="com.hpe.iot.dc.tcp.southbound.service.manager.TCPServerSocketServiceManager">
@@ -116,7 +117,8 @@
 			ref="tcpServerSocketServiceProviderImpl" />
 		<constructor-arg index="2"
 			ref="tcpServerClientSocketPoolFactory" />
-		<constructor-arg index="3" ref="deviceDataProcessingTaskFactory" />	
+		<constructor-arg index="3"
+			ref="deviceDataProcessingTaskFactory" />
 		<constructor-arg index="4" ref="myManagedExecutorService" />
 	</bean>
 
@@ -132,8 +134,7 @@
 
 	<bean id="tcpDCInitializer" class="com.hpe.iot.dc.tcp.initializer.TCPDCInitializer"
 		init-method="startDC" destroy-method="stopDC">
-		<constructor-arg index="0"
-			value="src/test/resources/testGroovy" />
+		<constructor-arg index="0" value="src/test/resources/testGroovy" />
 		<constructor-arg index="1"
 			ref="groovyScriptTCPServiceActivator" />
 	</bean>
@@ -150,8 +151,7 @@
 	</util:list>
 
 	<bean id="directoryWatchService" class="com.hpe.iot.dc.watch.service.DirectoryWatchService">
-		<constructor-arg index="0"
-			value="src/test/resources/testGroovy" />
+		<constructor-arg index="0" value="src/test/resources/testGroovy" />
 		<constructor-arg index="1" ref="watchServcieListners" />
 		<constructor-arg index="2" value="7" />
 	</bean>
@@ -163,5 +163,7 @@
 		<constructor-arg index="1" ref="myManagedExecutorService" />
 	</bean>
 
+	<bean id="loggerService"
+		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
 
 </beans>

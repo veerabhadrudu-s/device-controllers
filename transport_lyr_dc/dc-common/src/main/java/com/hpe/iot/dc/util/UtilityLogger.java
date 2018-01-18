@@ -34,7 +34,7 @@ public final class UtilityLogger {
 		}
 		return dataString;
 	}
-	
+
 	public static String convertArrayOfByteToHexString(final byte[] input) {
 		String datahexString = "";
 		for (byte rawbyte : input) {
@@ -42,13 +42,18 @@ public final class UtilityLogger {
 		}
 		return datahexString;
 	}
-	
 
 	public static void logExceptionStackTrace(Throwable ex, Class<?> classType) {
 		Logger logger = LoggerFactory.getLogger(classType);
 		StringWriter errors = new StringWriter();
 		ex.printStackTrace(new PrintWriter(errors));
 		logger.error(errors.toString());
+	}
+
+	public static String exceptionStackToString(Throwable ex) {
+		StringWriter errors = new StringWriter();
+		ex.printStackTrace(new PrintWriter(errors));
+		return errors.toString();
 	}
 
 	private UtilityLogger() {

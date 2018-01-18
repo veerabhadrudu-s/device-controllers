@@ -20,14 +20,4 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
-	<!-- <websocket:handlers >
-		<websocket:mapping path="/monitorLiveConnectedDevices"
-			handler="liveConnectedDeviceMonitor" />
-	</websocket:handlers>
-
-	<bean id="liveConnectedDeviceMonitor"
-		class="com.hpe.iot.dc.tcp.websocket.plugin.monitor.SpringLiveConnectedDeviceMonitor">
-		<constructor-arg index="0" ref="socketChangePublisherService" />
-	</bean> -->
-
 </beans>

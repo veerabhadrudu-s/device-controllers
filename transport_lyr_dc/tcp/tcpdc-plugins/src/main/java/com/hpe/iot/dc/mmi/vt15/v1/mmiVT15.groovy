@@ -4,11 +4,9 @@
  */
 package com.hpe.iot.dc.mmi.vt15.v1;
 
-import java.util.List
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
+import com.handson.logger.LiveLogger
 import com.hpe.iot.dc.model.Device
 import com.hpe.iot.dc.model.DeviceData
 import com.hpe.iot.dc.model.DeviceDataDeliveryStatus
@@ -967,8 +965,10 @@ public class MMIVT15UplinkMessageService implements ExtendedUplinkMessageService
 
 	private final List<String> supportedMessageServices=new ArrayList<>();
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
+	private final LiveLogger liveLogger;
 
-	public MMIVT15UplinkMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
+	public MMIVT15UplinkMessageService(LiveLogger liveLogger,IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
+		this.liveLogger=liveLogger;
 		this.iotPublisherService = iotPublisherService;
 		this.supportedMessageServices.add("connection_packet");
 		this.supportedMessageServices.add("serial_packet");
@@ -987,6 +987,7 @@ public class MMIVT15UplinkMessageService implements ExtendedUplinkMessageService
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
+		liveLogger.log("Received device uplink payload @ "+new Date()+" with data as "+deviceInfo);
 		return iotPublisherService.receiveDataFromDevice(deviceInfo, deviceInfo.getMessageType());
 	}
 }

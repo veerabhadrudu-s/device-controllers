@@ -6,6 +6,7 @@ package com.hpe.iot.dc.tcp.southbound.service.inflow.task;
 import java.io.IOException;
 import java.util.List;
 
+import com.handson.logger.service.LoggerService;
 import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.southbound.component.model.SouthBoundDCComponentModel;
 import com.hpe.iot.dc.southbound.service.inflow.activator.SouthBoundServiceActivator;
@@ -23,15 +24,14 @@ public class MessageBasedDataProcessingTask extends DeviceDataProcessingTask {
 	private final UplinkDataModelTransformer dataModelTransformer;
 	private final SouthBoundServiceActivator southBoundServiceActivator;
 	private final ServerClientSocketPool tcpServerClientSocketPool;
-	private final ServerSocketToDeviceModel serverSocketToDeviceModel;
 
-	public MessageBasedDataProcessingTask(long pollingPeriod, SouthBoundDCComponentModel southBoundDCComponentModel,
-			ServerClientSocketPool tcpServerClientSocketPool, ServerSocketToDeviceModel serverSocketToDeviceModel) {
-		super(pollingPeriod);
+	public MessageBasedDataProcessingTask(LoggerService loggerService, long pollingPeriod,
+			SouthBoundDCComponentModel southBoundDCComponentModel, ServerClientSocketPool tcpServerClientSocketPool,
+			ServerSocketToDeviceModel serverSocketToDeviceModel) {
+		super(pollingPeriod, loggerService, serverSocketToDeviceModel);
 		this.dataModelTransformer = southBoundDCComponentModel.getDataModelTransformer();
 		this.southBoundServiceActivator = southBoundDCComponentModel.getServiceActivator();
 		this.tcpServerClientSocketPool = tcpServerClientSocketPool;
-		this.serverSocketToDeviceModel = serverSocketToDeviceModel;
 	}
 
 	@Override

@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 
+import com.handson.logger.LiveLogger
+import com.handson.logger.impl.LiveLoggerAdapter
+import com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee
 import com.hpe.iot.dc.mmi.safemate.northbound.mock.MockIOTRequestResponseHandler
 import com.hpe.iot.dc.mmi.vt15.v1.MMIVT15ServerSocketToDeviceModel
 import com.hpe.iot.dc.mmi.vt15.v1.MMIVT15UplinkMessageService
@@ -48,7 +51,8 @@ class MMIVT15UplinkMessageServiceTest {
 		IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService = new IOTPublisherServiceImpl(
 				iotPublisherHandler, new DefaultIOTModelConverterImpl(
 				new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),serverSocketToDeviceModel.getModelId(),serverSocketToDeviceModel.getVersion())));
-		mmivt15UplinkMessageService=new MMIVT15UplinkMessageService(iotPublisherService);
+		LiveLogger LiveLogger=new LiveLoggerAdapter(new Slf4jLoggerServiceAdaptee(), serverSocketToDeviceModel);
+		mmivt15UplinkMessageService=new MMIVT15UplinkMessageService(LiveLogger,iotPublisherService);
 	}
 
 	@Test

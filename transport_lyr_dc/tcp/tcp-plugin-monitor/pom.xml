@@ -7,7 +7,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>tcp-plugin-monitor</artifactId>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
@@ -74,16 +73,11 @@
 		<!-- Undertow WebSockets JSR356 Implementations for wilfly 9.0 Version -->
 		<dependency>
 			<groupId>io.undertow</groupId>
-			<artifactId>undertow-websockets-jsr</artifactId>
-			<version>1.2.9.Final</version>
-			<scope>provided</scope>
+			<artifactId>undertow-servlet</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.undertow</groupId>
-			<artifactId>undertow-servlet</artifactId>
-			<version>1.2.9.Final</version>
-			<scope>provided</scope>
+			<artifactId>undertow-websockets-jsr</artifactId>
 		</dependency>
 	</dependencies>
-
 </project>
