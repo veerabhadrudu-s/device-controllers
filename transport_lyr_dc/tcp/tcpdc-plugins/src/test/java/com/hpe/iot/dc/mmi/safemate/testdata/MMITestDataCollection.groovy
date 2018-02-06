@@ -1,5 +1,8 @@
 package com.hpe.iot.dc.mmi.safemate.testdata;
 
+import com.hpe.iot.dc.model.DeviceModel
+import com.hpe.iot.dc.model.DeviceModelImpl
+
 /**
  * @author sveera
  *
@@ -8,7 +11,8 @@ public class MMITestDataCollection {
 	
 	public static final String MANUFACTURER="MMI";
 	public static final String MODEL_ID="SafeMate";
-	public static final String VERSION="1.0";
+	public static final String VERSION="1.0";	
+	public static final DeviceModel SAFEMATE_DEVICE_MODEL=new DeviceModelImpl(MANUFACTURER, MODEL_ID, VERSION);
 
 	//@formatter:off
 		/*

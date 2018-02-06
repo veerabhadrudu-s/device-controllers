@@ -1,6 +1,7 @@
 package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.NOTIFICATION_MESSAGE_HEX
+import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.SAFEMATE_DEVICE_MODEL
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import com.handson.logger.impl.LiveLoggerAdapter
+import com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm
 import com.hpe.iot.dc.mmi.safemate.MMIServerSocketToDeviceModel
 import com.hpe.iot.dc.mmi.safemate.NotificationMessageConverter
@@ -50,7 +53,8 @@ public class NotificationMessageServiceTest {
 		ServerSocketToDeviceModel serverSocketToDeviceModel=new MMIServerSocketToDeviceModel();
 		IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService = new IOTPublisherServiceImpl(
 				iotPublisherHandler, new DefaultIOTModelConverterImpl(new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),serverSocketToDeviceModel.getModelId(),serverSocketToDeviceModel.getVersion())));
-		notificationMessageService = new NotificationMessageService(iotPublisherService);
+		notificationMessageService = new NotificationMessageService(iotPublisherService,
+				new LiveLoggerAdapter( new Slf4jLoggerServiceAdaptee(),SAFEMATE_DEVICE_MODEL));
 	}
 
 	@Test

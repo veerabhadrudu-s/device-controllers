@@ -25,6 +25,9 @@ export class MockPluginScriptService implements InMemoryDbService {
         // In below example last endpoint path value is getPluginScripts.
         // http://10.3.239.75:8080/tcpdc/getPluginScripts'
         const getPluginScripts = { 'data': mockedScripts };
-        return { getPluginScripts };
+
+        const uploadPluginScript = { 'status': 'Plugin Script uploaded sucessfully.' };
+
+        return { getPluginScripts, uploadPluginScript };
     }
 }

@@ -16,9 +16,9 @@ export class WebsocketServerSocketFactoryService {
     constructor(private socketFactory: WebSocketService) { }
 
     public connect(pathUrl: String): Observable<any> {
-        if (this.outputStream) {
-            return this.outputStream;
-        }
+        // if (this.outputStream) {
+        //     return this.outputStream;
+        // }
 
         // Using share() causes a single websocket to be created when the first
         // observer subscribes. This socket is shared with subsequent observers

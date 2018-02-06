@@ -138,20 +138,26 @@
 		<constructor-arg index="0" ref="tcpServerSocketServiceManager" />
 		<constructor-arg index="1"
 			ref="tcpServerClientSocketPoolFactory" />
-		<constructor-arg index="2" ref="serverBeanPool" />
+		<constructor-arg index="2" ref="deploymentLoggerService" />
+		<constructor-arg index="3" ref="serverBeanPool" />
+	</bean>
+
+	<bean id="pluginScriptsPath" class="java.lang.String">
+		<constructor-arg
+			value="{jboss.home.dir}/standalone/configuration/DC/tcpdc/script" />
 	</bean>
 
 	<bean id="tcpDCInitializer" class="com.hpe.iot.dc.tcp.initializer.TCPDCInitializer"
 		init-method="startDC" destroy-method="stopDC">
-		<constructor-arg index="0"
-			value="{jboss.home.dir}/standalone/configuration/DC/tcpdc/script" />
+		<constructor-arg index="0" ref="pluginScriptsPath" />
 		<constructor-arg index="1"
 			ref="groovyScriptTCPServiceActivator" />
 	</bean>
 
 	<bean id="groovyFileEventListener"
 		class="com.hpe.iot.dc.tcp.groovy.watch.file.listener.GroovyFileEventListener">
-		<constructor-arg index="0"
+		<constructor-arg index="0" ref="deploymentLoggerService" />
+		<constructor-arg index="1"
 			ref="groovyScriptTCPServiceActivator" />
 	</bean>
 
@@ -161,8 +167,7 @@
 	</util:list>
 
 	<bean id="directoryWatchService" class="com.hpe.iot.dc.watch.service.DirectoryWatchService">
-		<constructor-arg index="0"
-			value="{jboss.home.dir}/standalone/configuration/DC/tcpdc/script" />
+		<constructor-arg index="0" ref="pluginScriptsPath" />
 		<constructor-arg index="1" ref="watchServcieListners" />
 		<constructor-arg index="2" value="15" />
 	</bean>

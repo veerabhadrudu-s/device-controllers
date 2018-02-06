@@ -1,6 +1,7 @@
 package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.ALARM_MESSAGE_HEX
+import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.SAFEMATE_DEVICE_MODEL
 import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
@@ -10,11 +11,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mock;
 
+import com.handson.logger.impl.LiveLoggerAdapter
+import com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee
 import com.hpe.iot.dc.mmi.safemate.AlarmMessageConverter
 import com.hpe.iot.dc.mmi.safemate.AlarmMessageService
 import com.hpe.iot.dc.mmi.safemate.MMICRCAlgorithm
 import com.hpe.iot.dc.mmi.safemate.MMIServerSocketToDeviceModel
 import com.hpe.iot.dc.mmi.safemate.TrackerInfoCreator
+import com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection
 import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.model.DeviceModelImpl
@@ -46,7 +50,8 @@ public class AlarmMessageServiceTest {
 		ServerSocketToDeviceModel serverSocketToDeviceModel=new MMIServerSocketToDeviceModel();
 		IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService = new IOTPublisherServiceImpl(
 				iotPublisherHandler, new DefaultIOTModelConverterImpl(new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),serverSocketToDeviceModel.getModelId(),serverSocketToDeviceModel.getVersion())));
-		alarmMessageService = new AlarmMessageService(iotPublisherService);
+		alarmMessageService = new AlarmMessageService(iotPublisherService,
+				new LiveLoggerAdapter( new Slf4jLoggerServiceAdaptee(),SAFEMATE_DEVICE_MODEL));
 	}
 
 	@Test

@@ -4,9 +4,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'banner',
+    selector: 'app-banner',
     templateUrl: './banner.html'
 })
-export class BannerComponent {
-    public bannerImage = './assets/images/service.jpg';
-}
+export class BannerComponent { }

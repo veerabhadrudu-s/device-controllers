@@ -15,7 +15,10 @@
 	<bean id="servletContextAwareImpl"
 		class="com.handson.logger.servlet.context.ServletContextAwareImpl" />
 
-	<bean id="loggerServiceAdaptee"
-		class="com.handson.logger.service.impl.WebsocketLoggerServiceAdaptee" />
+	<bean id="liveLoggerServiceAdaptee"
+		class="com.handson.logger.service.impl.WebsocketLiveLoggerServiceAdaptee" />
+
+	<bean id="deploymentLoggerService"
+		class="com.handson.logger.service.impl.WebsocketDeploymentLoggerService" />
 
 </beans>

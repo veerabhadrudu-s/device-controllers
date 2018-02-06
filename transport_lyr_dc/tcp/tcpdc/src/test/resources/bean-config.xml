@@ -124,12 +124,16 @@
 
 	<bean id="serverBeanPool" class="com.hpe.iot.dc.bean.pool.impl.ServerBeanPoolImpl" />
 
+	<bean id="deploymentLoggerService"
+		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
+
 	<bean id="groovyScriptTCPServiceActivator"
 		class="com.hpe.iot.dc.tcp.initializer.groovy.GroovyScriptTCPServiceActivator">
 		<constructor-arg index="0" ref="tcpServerSocketServiceManager" />
 		<constructor-arg index="1"
 			ref="tcpServerClientSocketPoolFactory" />
-		<constructor-arg index="2" ref="serverBeanPool" />
+		<constructor-arg index="2" ref="deploymentLoggerService" />
+		<constructor-arg index="3" ref="serverBeanPool" />
 	</bean>
 
 	<bean id="tcpDCInitializer" class="com.hpe.iot.dc.tcp.initializer.TCPDCInitializer"
@@ -141,7 +145,8 @@
 
 	<bean id="groovyFileEventListener"
 		class="com.hpe.iot.dc.tcp.groovy.watch.file.listener.GroovyFileEventListener">
-		<constructor-arg index="0"
+		<constructor-arg index="0" ref="deploymentLoggerService" />
+		<constructor-arg index="1"
 			ref="groovyScriptTCPServiceActivator" />
 	</bean>
 

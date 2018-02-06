@@ -278,3 +278,36 @@ header {
 	width: 80%;
 }
 }
+
+/* Changes added by sveera */
+
+
+.liveLogMenuPanel{
+	width:100%;
+	background-color: #6DC7D0;
+}
+
+table.liveLogMenuPanel th {
+	font-weight:lighter;
+	color: #FFFFFF;
+}
+
+table.liveLogMenuPanel th span{
+	font-weight:bold;
+	color: black;
+}
+
+table.liveLogMenuPanel tr td:first-of-type{
+	float: left;
+}
+
+table.liveLogMenuPanel tr td:last-of-type{
+	float: right;
+}
+
+div.logConsole{
+	background: black;
+	color:white;	
+	height:40vh;	
+	overflow: scroll;
+}

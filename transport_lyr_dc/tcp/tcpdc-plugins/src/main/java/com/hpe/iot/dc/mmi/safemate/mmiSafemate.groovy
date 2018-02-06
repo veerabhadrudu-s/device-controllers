@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.handson.logger.LiveLogger
 import com.hpe.iot.dc.mmi.safemate.TrackerNotification.NotificationType;
 import com.hpe.iot.dc.model.Device
 import com.hpe.iot.dc.model.DeviceData;
@@ -1230,12 +1231,14 @@ public class IPConnectMessageService extends AbstractAcknowledgeAndUplinkService
 public class NotificationMessageService implements UplinkMessageService {
 
 	private static final String MESSAGE_TYPE = "0x4206";
-	private static final String CONTAINER_NAME = "notification";	
+	private static final String CONTAINER_NAME = "notification";
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
+	private final LiveLogger liveLogger;
 
-	public NotificationMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
+	public NotificationMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService,LiveLogger liveLogger) {
 		super();
 		this.iotPublisherService = iotPublisherService;
+		this.liveLogger=liveLogger;
 	}
 
 	@Override
@@ -1245,6 +1248,7 @@ public class NotificationMessageService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
+		liveLogger.log(deviceInfo);
 		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
 	}
@@ -1256,10 +1260,12 @@ public class AlarmMessageService implements UplinkMessageService {
 	private static final String MESSAGE_TYPE = "0x4203";
 	private static final String CONTAINER_NAME = "alarm";
 	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
+	private final LiveLogger liveLogger;
 
-	public AlarmMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
+	public AlarmMessageService(IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService,LiveLogger liveLogger) {
 		super();
 		this.iotPublisherService = iotPublisherService;
+		this.liveLogger=liveLogger;
 	}
 
 	@Override
@@ -1269,6 +1275,7 @@ public class AlarmMessageService implements UplinkMessageService {
 
 	@Override
 	public DeviceDataDeliveryStatus executeService(DeviceInfo deviceInfo) {
+		liveLogger.log(deviceInfo);
 		iotPublisherService.receiveDataFromDevice(deviceInfo, CONTAINER_NAME);
 		return new DeviceDataDeliveryStatus();
 	}

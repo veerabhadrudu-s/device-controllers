@@ -3,9 +3,11 @@
  */
 package com.handson.logger.service.impl;
 
+import static com.handson.util.UtilityLogger.logExceptionStackTrace;
+import static java.lang.String.format;
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,33 +18,36 @@ import javax.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonObject;
 import com.handson.logger.service.LoggerService;
-import com.handson.logger.websocket.session.WebSocketSessionPublisher;
+import com.handson.logger.websocket.session.LiveLoggerSessionPublisher;
 import com.hpe.iot.dc.model.DeviceModel;
 
 /**
  * @author sveera
  *
  */
-public class WebsocketLoggerServiceAdaptee implements LoggerService, WebSocketSessionPublisher {
+public class WebsocketLiveLoggerServiceAdaptee implements LoggerService, LiveLoggerSessionPublisher {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final Map<DeviceModel, List<Session>> connectedUsers;
 
-	public WebsocketLoggerServiceAdaptee() {
+	public WebsocketLiveLoggerServiceAdaptee() {
 		connectedUsers = new ConcurrentHashMap<>();
 	}
 
 	@Override
-	public void log(DeviceModel deviceModel, String message) {
+	public void log(DeviceModel deviceModel, String logMessage) {
 		for (Session userSession : readExistingSessions(deviceModel))
 			if (userSession.isOpen())
-				tryPushingMessage(message, userSession);
+				tryPushingMessage(logMessage, userSession);
 	}
 
-	private void tryPushingMessage(String jsonString, Session webSocketSession) {
+	private void tryPushingMessage(String logMessage, Session webSocketSession) {
 		try {
-			webSocketSession.getBasicRemote().sendText(jsonString);
+			JsonObject jsonLog = new JsonObject();
+			jsonLog.addProperty("logMessage", format("%s : %s", new Date().toString(), logMessage));
+			webSocketSession.getBasicRemote().sendText(jsonLog.toString());
 		} catch (IOException e) {
 			logger.error("Failed to Write on websocket Client");
 			logExceptionStackTrace(e, getClass());
@@ -65,18 +70,4 @@ public class WebsocketLoggerServiceAdaptee implements LoggerService, WebSocketSe
 		return connectedUsers.get(deviceModel);
 	}
 
-	public void logExceptionStackTrace(Throwable ex, Class<?> classType) {
-		Logger logger = LoggerFactory.getLogger(classType);
-		StringWriter errors = new StringWriter();
-		ex.printStackTrace(new PrintWriter(errors));
-		logger.error(errors.toString());
-	}
-
-	public String toStringExceptionStackTrace(Throwable ex, Class<?> classType) {
-		Logger logger = LoggerFactory.getLogger(classType);
-		StringWriter errors = new StringWriter();
-		ex.printStackTrace(new PrintWriter(errors));
-		logger.error(errors.toString());
-		return errors.toString();
-	}
 }

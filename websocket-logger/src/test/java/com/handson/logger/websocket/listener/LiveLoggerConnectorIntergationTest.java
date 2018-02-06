@@ -6,8 +6,8 @@ package com.handson.logger.websocket.listener;
 import static com.handson.logger.constants.DeviceModelConstants.MANUFACTURER;
 import static com.handson.logger.constants.DeviceModelConstants.MODEL_ID;
 import static com.handson.logger.constants.DeviceModelConstants.VERSION;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,11 +27,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.handson.logger.LiveLogger;
 import com.handson.logger.constants.DeviceModelConstants;
 import com.handson.logger.impl.LiveLoggerAdapter;
-import com.handson.logger.service.impl.WebsocketLoggerServiceAdaptee;
-import com.handson.logger.websocket.session.WebSocketSessionPublisher;
+import com.handson.logger.service.impl.WebsocketLiveLoggerServiceAdaptee;
+import com.handson.logger.websocket.session.LiveLoggerSessionPublisher;
 import com.handson.websocket.embedded.EmbeddedWebsocketServer;
 import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.dc.model.DeviceImpl;
@@ -45,17 +47,18 @@ import mockit.Mocked;
  * @author sveera
  */
 public class LiveLoggerConnectorIntergationTest {
+	private static final String LOG_MESSAGE_KEY = "logMessage";
 	@Mocked
 	private WebApplicationContext webApplicationContext;
 	private EmbeddedWebsocketServer embeddedWebsocketListener;
-	private WebsocketLoggerServiceAdaptee loggerServiceAdaptee;
+	private WebsocketLiveLoggerServiceAdaptee loggerServiceAdaptee;
 	private LiveLogger liveLogger;
 	private WebsocketClientListenerSpy websocketClientListenerSpy;
 	private Connection clientConnection;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		loggerServiceAdaptee = new WebsocketLoggerServiceAdaptee();
+		loggerServiceAdaptee = new WebsocketLiveLoggerServiceAdaptee();
 		liveLogger = new LiveLoggerAdapter(loggerServiceAdaptee, DeviceModelConstants.DEVICE_MODEL);
 		embeddedWebsocketListener = new EmbeddedWebsocketServer();
 		websocketClientListenerSpy = new WebsocketClientListenerSpy();
@@ -104,7 +107,10 @@ public class LiveLoggerConnectorIntergationTest {
 
 	private void assertLoggedMessages(String expectedLoggedMessage) throws InterruptedException {
 		waitForLogProcessing();
-		assertEquals(expectedLoggedMessage, websocketClientListenerSpy.getLoggedMessage(),
+		String socketMessage = websocketClientListenerSpy.getLoggedMessage();
+		JsonParser parser = new JsonParser();
+		JsonObject jsonLogMessage = (JsonObject) parser.parse(socketMessage);
+		assertTrue(jsonLogMessage.get(LOG_MESSAGE_KEY).getAsString().endsWith(expectedLoggedMessage),
 				"Expected and actual logged messages are not same");
 	}
 
@@ -154,7 +160,7 @@ public class LiveLoggerConnectorIntergationTest {
 		};
 		new Expectations() {
 			{
-				webApplicationContext.getBean(WebSocketSessionPublisher.class);
+				webApplicationContext.getBean(LiveLoggerSessionPublisher.class);
 				result = loggerServiceAdaptee;
 			}
 		};

@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.handson.logger.websocket.session.WebSocketSessionPublisher;
+import com.handson.logger.websocket.session.LiveLoggerSessionPublisher;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.dc.model.DeviceModelImpl;
 
@@ -33,7 +33,7 @@ import io.undertow.websockets.jsr.ServerWebSocketContainer;
 public class LiveLoggerConnector {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private final WebSocketSessionPublisher webSocketSessionPublisher;
+	private final LiveLoggerSessionPublisher webSocketSessionPublisher;
 
 	public LiveLoggerConnector() {
 		super();
@@ -72,7 +72,7 @@ public class LiveLoggerConnector {
 			webSocketSessionPublisher.publishClosedSession(deviceModel, websocketsession);
 	}
 
-	private WebSocketSessionPublisher getWebSocketSessionPublisher() {
+	private LiveLoggerSessionPublisher getWebSocketSessionPublisher() {
 		WebSocketContainer webSocketContainer = ContainerProvider.getWebSocketContainer();
 		logger.trace("Websocket Container Class Name " + webSocketContainer.getClass().getName());
 		if (webSocketContainer instanceof ServerWebSocketContainer) {
@@ -87,10 +87,10 @@ public class LiveLoggerConnector {
 		return null;
 	}
 
-	private WebSocketSessionPublisher extractWebSocketSessionPublisher(WebSocketContainer webSocketContainer) {
+	private LiveLoggerSessionPublisher extractWebSocketSessionPublisher(WebSocketContainer webSocketContainer) {
 		return WebApplicationContextUtils
 				.getWebApplicationContext(((ServerWebSocketContainer) webSocketContainer).getContextToAddFilter())
-				.getBean(WebSocketSessionPublisher.class);
+				.getBean(LiveLoggerSessionPublisher.class);
 	}
 
 }

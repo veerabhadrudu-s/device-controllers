@@ -16,6 +16,11 @@ import { PluginScriptComponent } from './components/plugin/pluginscript.componen
 import { PluginScriptService } from './services/pluginScript.service';
 import { MockPluginScriptService } from './services/mock.pluginScript.service';
 import { WebsocketServerSocketFactoryService } from './services/websocket.service';
+import { UploadPluginComponent } from './components/upload-plugin/upload-plugin.component';
+import { LiveLogMoniterComponent } from './components/live-log-moniter/live-log-moniter.component';
+import { AppRouterModule } from '../app-router/app-router.module';
+import { AbstractTemplateComponent } from './components/abstract-template/abstract-template.component';
+import { PluginDeployMoniterComponent } from './components/live-log-moniter/plugin-deploy-moniter.component';
 
 
 @NgModule({
@@ -23,26 +28,27 @@ import { WebsocketServerSocketFactoryService } from './services/websocket.servic
     CommonModule,
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AppRouterModule
     // Comment the below code after replacing with real webservice url .
-   // , InMemoryWebApiModule.forRoot(MockPluginScriptService)
+    // , InMemoryWebApiModule.forRoot(MockPluginScriptService)
   ],
   declarations: [
     BannerComponent,
     DashboardComponent,
     PluginScriptComponent,
-    FooterComponent
+    FooterComponent,
+    UploadPluginComponent,
+    LiveLogMoniterComponent,
+    AbstractTemplateComponent,
+    PluginDeployMoniterComponent
+
   ],
   providers: [
     WebSocketService,
     Location, { provide: LocationStrategy, useClass: PathLocationStrategy },
     PluginScriptService,
     WebsocketServerSocketFactoryService
-  ],
-  bootstrap: [
-    BannerComponent,
-    DashboardComponent,
-    FooterComponent
   ]
 })
 export class ServiceManagerModule { }

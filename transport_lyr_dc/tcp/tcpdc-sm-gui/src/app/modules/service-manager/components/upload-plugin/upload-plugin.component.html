@@ -1,0 +1,17 @@
+<!--
+ Author: sveera
+ -->
+<section class="intro">
+  <div class="column">
+    <img [src]="bannerImage" alt="Service Image" class="profile"> </div>
+  <div class="column">
+    <p>This is a Admin Console for Managing TCP DC Plugins.</p>
+  </div>
+  <div class="column">
+    <p>
+      <input type="file" (change)="updateChangedFileName($event)" accept=".groovy" />
+      <input type="button" [disabled]="scriptFileToBeUploaded===null?true:null" value="Upload Script" (click)="uploadScriptPlugin()"
+      />
+    </p>
+  </div>
+</section>

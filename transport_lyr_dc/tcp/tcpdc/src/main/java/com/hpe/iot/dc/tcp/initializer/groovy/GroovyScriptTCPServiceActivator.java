@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.handson.logger.LiveLogger;
 import com.handson.logger.impl.LiveLoggerAdapter;
+import com.handson.logger.service.DeploymentLoggerService;
 import com.handson.logger.service.LoggerService;
 import com.hpe.iot.dc.bean.pool.ServerBeanPool;
 import com.hpe.iot.dc.groovy.loader.GroovyScriptClassLoader;
@@ -72,18 +74,21 @@ public class GroovyScriptTCPServiceActivator {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final TCPServerSocketServiceManager tcpServerSocketServiceManager;
+	private final TCPServerClientSocketPoolFactory tcpServerClientSocketPoolFactory;
+	private final DeploymentLoggerService deploymentLoggerService;
 	private final ServerBeanPool serverBeanPool;
 	private final DCComponentValidator dcComponentValidator;
 	private final OptionalDCComponentValidator optionalDCComponentValidator;
 	private final TCPDCComponentMetaModelCreator tcpDCComponentMetaModelCreator;
-	private final TCPServerClientSocketPoolFactory tcpServerClientSocketPoolFactory;
 	private final Map<String, ServerSocketToDeviceModel> startedTcpScripts;
 
 	public GroovyScriptTCPServiceActivator(TCPServerSocketServiceManager tcpServerSocketServiceManager,
-			TCPServerClientSocketPoolFactory tcpServerClientSocketPoolFactory, ServerBeanPool serverBeanPool) {
+			TCPServerClientSocketPoolFactory tcpServerClientSocketPoolFactory,
+			DeploymentLoggerService deploymentLoggerService, ServerBeanPool serverBeanPool) {
 		this.tcpServerSocketServiceManager = tcpServerSocketServiceManager;
-		this.serverBeanPool = serverBeanPool;
 		this.tcpServerClientSocketPoolFactory = tcpServerClientSocketPoolFactory;
+		this.deploymentLoggerService = deploymentLoggerService;
+		this.serverBeanPool = serverBeanPool;
 		this.dcComponentValidator = new DCComponentValidator();
 		this.optionalDCComponentValidator = new OptionalDCComponentValidator();
 		this.tcpDCComponentMetaModelCreator = new TCPDCComponentMetaModelCreator();
@@ -101,7 +106,8 @@ public class GroovyScriptTCPServiceActivator {
 	}
 
 	public void stopTCPService(String groovyScriptFullPath) throws IOException {
-		ServerSocketToDeviceModel serverSocketToDeviceModel = startedTcpScripts.remove(groovyScriptFullPath);
+		ServerSocketToDeviceModel serverSocketToDeviceModel = startedTcpScripts
+				.remove(getFileNameFromFullPath(groovyScriptFullPath));
 		if (serverSocketToDeviceModel != null)
 			tcpServerSocketServiceManager.stopTCPServerSocketService(serverSocketToDeviceModel);
 	}
@@ -111,8 +117,9 @@ public class GroovyScriptTCPServiceActivator {
 		final Class<?>[] loadedClasses = readConcreateClassesFromScript(groovyScriptFullPath);
 		if (loadedClasses == null || loadedClasses.length == 0)
 			return;
-		ServerSocketToDeviceModel serverSocketToDeviceModel = startTCPService(loadedClasses);
-		startedTcpScripts.put(groovyScriptFullPath, serverSocketToDeviceModel);
+		ServerSocketToDeviceModel serverSocketToDeviceModel = startTCPService(
+				getFileNameFromFullPath(groovyScriptFullPath), loadedClasses);
+		startedTcpScripts.put(getFileNameFromFullPath(groovyScriptFullPath), serverSocketToDeviceModel);
 	}
 
 	private Class<?>[] readConcreateClassesFromScript(String groovyScriptFullPath) throws IOException {
@@ -125,29 +132,32 @@ public class GroovyScriptTCPServiceActivator {
 		return loadedClasses;
 	}
 
-	private ServerSocketToDeviceModel startTCPService(final Class<?>[] loadedClasses)
+	private ServerSocketToDeviceModel startTCPService(String scriptFileName, final Class<?>[] loadedClasses)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
 		final Map<Class<?>, Object> intializedObjects = new HashMap<>();
-		final TCPDCComponentMetaModel dcComponentMetaModel = constructTCPDCComponentMetaModel(loadedClasses);
+		final TCPDCComponentMetaModel dcComponentMetaModel = constructTCPDCComponentMetaModel(scriptFileName,
+				loadedClasses);
 		final ServerSocketToDeviceModel serverSocketToDeviceModel = instantiateClassType(
 				dcComponentMetaModel.getServerSocketToDeviceModelClassType(), intializedObjects);
-		startTCPService(loadedClasses, intializedObjects, dcComponentMetaModel, serverSocketToDeviceModel);
+		startTCPService(scriptFileName, loadedClasses, intializedObjects, dcComponentMetaModel,
+				serverSocketToDeviceModel);
 		return serverSocketToDeviceModel;
 	}
 
-	private TCPDCComponentMetaModel constructTCPDCComponentMetaModel(final Class<?>[] loadedClasses) {
+	private TCPDCComponentMetaModel constructTCPDCComponentMetaModel(String scriptFileName,
+			final Class<?>[] loadedClasses) {
 		final TCPDCComponentMetaModel dcComponentMetaModel = tcpDCComponentMetaModelCreator
 				.createDCComponentMetaModel(loadedClasses);
-		validateMandatoryDCMetaComponentModel(dcComponentMetaModel);
-		logIdentifiedClassTypes(dcComponentMetaModel);
+		logIdentifiedClassTypes(scriptFileName, dcComponentMetaModel);
+		validateMandatoryDCMetaComponentModel(scriptFileName, dcComponentMetaModel);
 		return dcComponentMetaModel;
 	}
 
-	private void startTCPService(final Class<?>[] loadedClasses, final Map<Class<?>, Object> intializedObjects,
-			final TCPDCComponentMetaModel dcComponentMetaModel,
+	private void startTCPService(final String scriptFileName, final Class<?>[] loadedClasses,
+			final Map<Class<?>, Object> intializedObjects, final TCPDCComponentMetaModel dcComponentMetaModel,
 			final ServerSocketToDeviceModel serverSocketToDeviceModel)
 			throws IOException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		validateOptionalMetaComponentModel(serverSocketToDeviceModel, dcComponentMetaModel);
+		validateOptionalMetaComponentModel(scriptFileName, serverSocketToDeviceModel, dcComponentMetaModel);
 		final DeviceModel deviceModel = new DeviceModelImpl(serverSocketToDeviceModel.getManufacturer(),
 				serverSocketToDeviceModel.getModelId(), serverSocketToDeviceModel.getVersion());
 		final ServerClientSocketPool tcpServerClientSocketPool = tcpServerClientSocketPoolFactory
@@ -263,24 +273,25 @@ public class GroovyScriptTCPServiceActivator {
 		return southBoundDCComponentModel;
 	}
 
-	private void validateMandatoryDCMetaComponentModel(final TCPDCComponentMetaModel tcpDCComponentMetaModel) {
+	private void validateMandatoryDCMetaComponentModel(String scriptFileName,
+			final TCPDCComponentMetaModel tcpDCComponentMetaModel) {
 		DCComponentValidationStatus dcComponentValidationStatus = dcComponentValidator
 				.validateDCComponentModel(tcpDCComponentMetaModel);
-		if (dcComponentValidationStatus.isInValidDCComponentModel()) {
+		if (dcComponentValidationStatus.isInValidDCComponentModel())
 			throw new InvalidDCComponentModel(dcComponentValidationStatus.getMissingClassTypes());
-		}
+		deploymentLoggerService.log(scriptFileName, "Mandatory validation completed");
 	}
 
-	private void validateOptionalMetaComponentModel(ServerSocketToDeviceModel serverSocketToDeviceModel,
-			TCPDCComponentMetaModel dcComponentMetaModel) {
+	private void validateOptionalMetaComponentModel(String scriptFileName,
+			ServerSocketToDeviceModel serverSocketToDeviceModel, TCPDCComponentMetaModel dcComponentMetaModel) {
 		DCComponentValidationStatus dcComponentValidationStatus = optionalDCComponentValidator
 				.validateDCComponentModel(serverSocketToDeviceModel, dcComponentMetaModel);
-		if (dcComponentValidationStatus.isInValidDCComponentModel()) {
+		if (dcComponentValidationStatus.isInValidDCComponentModel())
 			throw new InvalidDCComponentModel(dcComponentValidationStatus.getMissingClassTypes());
-		}
+		deploymentLoggerService.log(scriptFileName, "Optional validation completed");
 	}
 
-	private void logIdentifiedClassTypes(TCPDCComponentMetaModel dcComponentMetaModel) {
+	private void logIdentifiedClassTypes(String scriptFileName, TCPDCComponentMetaModel dcComponentMetaModel) {
 		logger.info("Identified Message Service Class Types are "
 				+ dcComponentMetaModel.getDcCommonComponentMetaModel().getMessageServiceTypes());
 		logger.info("Identified Uplink Device DataConverter Class Types are "
@@ -290,6 +301,7 @@ public class GroovyScriptTCPServiceActivator {
 		logger.debug("NorthBoundDCComponentMetaModel from the script is  "
 				+ dcComponentMetaModel.getNorthBoundDCComponentMetaModel());
 		logger.debug("DCComponentMetaModel from the script is  " + dcComponentMetaModel);
+		deploymentLoggerService.log(scriptFileName, "Loading script file completed");
 	}
 
 	private Class<?>[] filterAbstractClasses(Class<?>[] allClassesFromScript) {
@@ -364,6 +376,10 @@ public class GroovyScriptTCPServiceActivator {
 		logger.info("Instantiated objects with zero argument constructor are " + zeroArgumentConstructorObjects);
 		return zeroArgumentConstructorObjects;
 
+	}
+
+	private String getFileNameFromFullPath(String fullPath) {
+		return Paths.get(fullPath).getFileName().toString();
 	}
 
 }

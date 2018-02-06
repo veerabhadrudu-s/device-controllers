@@ -7,7 +7,7 @@ import { Input } from '@angular/core';
 import { PluginScript } from './pluginscript';
 
 @Component({
-    selector: 'pluginscript',
+    selector: 'app-pluginscript',
     templateUrl: './pluginscript.html'
 })
 export class PluginScriptComponent {

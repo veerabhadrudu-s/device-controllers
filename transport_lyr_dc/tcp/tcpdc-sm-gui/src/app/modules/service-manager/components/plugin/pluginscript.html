@@ -2,7 +2,9 @@
  Author: sveera
  -->
 <div class="thumbnail" *ngIf="pluginScript">
-    <a href="#"><img src="./assets/images/sample.png" alt="" class="cards" /></a>
+    <a routerLink="/liveLogMoniter/{{pluginScript.manufacturer}}/{{pluginScript.modelId}}/{{pluginScript.version}}">
+        <img src="./assets/images/sensor_3.png" alt="" class="cards" />
+    </a>
     <h4>{{pluginScript.manufacturer}} {{pluginScript.modelId}} {{pluginScript.version}}</h4>
     <p class="tag">Live Connected Devices : {{pluginScript.connectedDevices}}</p>
     <p class="text_column">{{pluginScript.description}}</p>

@@ -18,4 +18,9 @@
 	<bean id="socketChangePublisherService"
 		class="com.hpe.iot.dc.tcp.websocket.plugin.monitor.SocketChangePublisherService" />
 
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="268435456" />
+	</bean>
+
 </beans>

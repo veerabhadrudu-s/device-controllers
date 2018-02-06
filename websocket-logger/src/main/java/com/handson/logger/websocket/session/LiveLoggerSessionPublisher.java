@@ -11,7 +11,7 @@ import com.hpe.iot.dc.model.DeviceModel;
  * @author sveera
  *
  */
-public interface WebSocketSessionPublisher {
+public interface LiveLoggerSessionPublisher {
 
 	void publishNewSession(DeviceModel deviceModel, Session websocketsession);
 
