@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.mqtt.southbound.service.inflow;
 
-import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
 
 /**
  * @author sveera 

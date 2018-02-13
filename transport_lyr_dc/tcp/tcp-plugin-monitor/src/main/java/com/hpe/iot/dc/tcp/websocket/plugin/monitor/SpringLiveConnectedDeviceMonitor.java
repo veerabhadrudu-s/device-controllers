@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.websocket.plugin.monitor;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

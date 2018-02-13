@@ -9,6 +9,16 @@
 	<artifactId>mqtt-dc-web</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
+		<!-- Local jars -->
+		<dependency>
+			<groupId>m2m-common</groupId>
+			<artifactId>m2m-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>application-lyr-dc-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -60,16 +70,6 @@
 			<artifactId>activemq-mqtt</artifactId>
 			<version>${activemq.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<!-- Local jars -->
-		<dependency>
-			<groupId>com.hpe.iot.dc</groupId>
-			<artifactId>application-lyr-dc-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>m2m-common</groupId>
-			<artifactId>m2m-common</artifactId>
 		</dependency>
 		<!-- Server Environment -->
 		<dependency>

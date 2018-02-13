@@ -1,7 +1,7 @@
 package com.hpe.iot.dc.southbound.crypto;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
-import static com.hpe.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

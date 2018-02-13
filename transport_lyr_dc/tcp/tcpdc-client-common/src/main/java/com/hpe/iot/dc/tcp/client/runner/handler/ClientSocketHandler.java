@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.client.runner.handler;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;

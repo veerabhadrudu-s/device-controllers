@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.mqtt.southbound.service.inflow;
 
-import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.util.concurrent.BlockingQueue;

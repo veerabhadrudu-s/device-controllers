@@ -1,12 +1,12 @@
 package com.hpe.iot.dc.trinetra.southbound.transformer.impl;
 
-import static com.hpe.iot.dc.util.DataParserUtility.convertBytesToASCIIString;
-import static com.hpe.iot.dc.util.DataParserUtility.findAllClosingMessageByteIndexes;
-import static com.hpe.iot.dc.util.DataParserUtility.isMessageHasStartingBytes;
-import static com.hpe.iot.dc.util.DataParserUtility.truncateEmptyBytes;
-import static com.hpe.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
-import static com.hpe.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
-import static com.hpe.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
+import static com.handson.iot.dc.util.DataParserUtility.convertBytesToASCIIString;
+import static com.handson.iot.dc.util.DataParserUtility.findAllClosingMessageByteIndexes;
+import static com.handson.iot.dc.util.DataParserUtility.isMessageHasStartingBytes;
+import static com.handson.iot.dc.util.DataParserUtility.truncateEmptyBytes;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;

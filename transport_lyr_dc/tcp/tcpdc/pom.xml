@@ -15,8 +15,14 @@
 			<artifactId>m2m-common</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.handson.iot.dc</groupId>
+			<artifactId>common-util</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
-			<artifactId>dc-common</artifactId>
+			<artifactId>transport-dc-model</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

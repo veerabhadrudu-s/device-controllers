@@ -4,7 +4,7 @@
 package com.hpe.iot.dc.mmi.drivemate
 
 
-import static com.hpe.iot.dc.util.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
+import static com.handson.iot.dc.util.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
 
 import java.nio.channels.SocketChannel
 import java.util.Map.Entry
@@ -26,8 +26,8 @@ import com.hpe.iot.dc.tcp.southbound.model.TCPOptions
 import com.hpe.iot.dc.tcp.southbound.service.inflow.session.DeviceClientSocketExtractor
 import com.hpe.iot.dc.tcp.southbound.service.outflow.TCPServerSocketWriter
 import com.hpe.iot.dc.tcp.southbound.socketpool.ClientSocketDeviceReader
-import com.hpe.iot.dc.util.DataParserUtility
-import com.hpe.iot.dc.util.UtilityLogger
+import com.handson.iot.dc.util.DataParserUtility
+import com.handson.iot.dc.util.UtilityLogger
 
 /**
  * @author sveera

@@ -1,6 +1,6 @@
 package com.hpe.iot.dc.tcp.southbound.service.impl;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -60,7 +60,7 @@ public class TCPServerSocketService {
 
 	private class ServerSocketListener implements Runnable {
 
-		//private static final int POLLING_PERIOD_FOR_NEW_CONNECTIONS = 5000;
+		// private static final int POLLING_PERIOD_FOR_NEW_CONNECTIONS = 5000;
 
 		private volatile boolean isPortListening;
 
@@ -84,11 +84,12 @@ public class TCPServerSocketService {
 
 		private void connectClientSockets() {
 			try {
-				//int channelCount = myServerSocketSelector.select(POLLING_PERIOD_FOR_NEW_CONNECTIONS);
+				// int channelCount =
+				// myServerSocketSelector.select(POLLING_PERIOD_FOR_NEW_CONNECTIONS);
 				int channelCount = myServerSocketSelector.selectNow();
-				if(channelCount>0)
-				logger.trace("No of Clients started connecting to server socket - " + serverSocketToDeviceModel
-						+ " is : " + channelCount);
+				if (channelCount > 0)
+					logger.trace("No of Clients started connecting to server socket - " + serverSocketToDeviceModel
+							+ " is : " + channelCount);
 				Iterator<SelectionKey> selectedKeys = myServerSocketSelector.selectedKeys().iterator();
 				while (selectedKeys.hasNext()) {
 					SelectionKey selectionKey = selectedKeys.next();

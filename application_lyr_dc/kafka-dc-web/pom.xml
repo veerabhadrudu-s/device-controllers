@@ -155,7 +155,7 @@
 				<version>2.6</version>
 				<configuration>
 					<attachClasses>true</attachClasses>
-					<classesClassifier>classes</classesClassifier>
+					<classesClassifier>classes</classesClassifier>					
 				</configuration>
 			</plugin>
 		</plugins>

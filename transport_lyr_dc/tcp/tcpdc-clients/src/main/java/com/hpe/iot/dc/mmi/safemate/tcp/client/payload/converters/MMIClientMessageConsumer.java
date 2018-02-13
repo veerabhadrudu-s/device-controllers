@@ -3,9 +3,9 @@
  */
 package com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters;
 
-import static com.hpe.iot.dc.util.DataParserUtility.convertBytesToASCIIString;
-import static com.hpe.iot.dc.util.DataParserUtility.convertToHexValue;
-import static com.hpe.iot.dc.util.DataParserUtility.truncateEmptyBytes;
+import static com.handson.iot.dc.util.DataParserUtility.convertBytesToASCIIString;
+import static com.handson.iot.dc.util.DataParserUtility.convertToHexValue;
+import static com.handson.iot.dc.util.DataParserUtility.truncateEmptyBytes;
 import static java.lang.Long.parseLong;
 import static java.util.Arrays.copyOfRange;
 

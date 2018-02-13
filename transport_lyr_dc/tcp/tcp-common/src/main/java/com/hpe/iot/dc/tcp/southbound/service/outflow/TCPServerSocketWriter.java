@@ -1,7 +1,8 @@
 package com.hpe.iot.dc.tcp.southbound.service.outflow;
 
-import static com.hpe.iot.dc.util.UtilityLogger.convertArrayOfByteToHexString;
-import static com.hpe.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToHexString;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool;
-import com.hpe.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera
@@ -52,10 +52,10 @@ public class TCPServerSocketWriter {
 			try {
 				clientSocketChannel.write(readBuffer);
 				logger.debug("Completed writing on to client socket " + clientSocketChannel.toString()
-						+ " with message " + UtilityLogger.convertArrayOfByteToString(message));
+						+ " with message " + convertArrayOfByteToString(message));
 			} catch (Exception e) {
 				logger.error("Failed to write message on client socket " + clientSocketChannel.toString());
-				UtilityLogger.logExceptionStackTrace(e, getClass());
+				logExceptionStackTrace(e, getClass());
 			}
 	}
 

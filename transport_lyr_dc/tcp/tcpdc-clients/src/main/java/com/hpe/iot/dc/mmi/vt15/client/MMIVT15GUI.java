@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.mmi.vt15.client;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.awt.Color;
 import java.awt.EventQueue;

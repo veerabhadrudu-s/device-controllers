@@ -13,7 +13,7 @@ import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.dc.southbound.converter.inflow.ExtendedUplinkDeviceDataConverter;
 import com.hpe.iot.dc.trinetra.model.Notification;
 import com.hpe.iot.dc.trinetra.model.NotificationRecord;
-import com.hpe.iot.dc.util.DataParserUtility;
+import com.handson.iot.dc.util.DataParserUtility;
 
 /**
  * @author sveera

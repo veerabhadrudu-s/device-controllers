@@ -1,6 +1,6 @@
 package com.hpe.iot.dc.groovy.loader;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.handson.iot.dc.groovy.loader.GroovyScriptClassLoader;
 
 /**
  * @author sveera

@@ -1,6 +1,6 @@
 package com.hpe.iot.mqtt.initializer;
 
-import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import javax.enterprise.concurrent.ManagedExecutorService;
 

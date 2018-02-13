@@ -9,7 +9,7 @@
 	<artifactId>transport_lyr_dc</artifactId>
 	<packaging>pom</packaging>
 	<modules>
-		<module>dc-common</module>
+		<module>transport-dc-model</module>
 		<module>southbound-common</module>
 		<module>northbound-common</module>
 		<module>tcp</module>

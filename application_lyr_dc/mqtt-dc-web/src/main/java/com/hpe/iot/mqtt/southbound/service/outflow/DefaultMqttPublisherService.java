@@ -3,8 +3,8 @@
  */
 package com.hpe.iot.mqtt.southbound.service.outflow;
 
-import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
-import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClientPersistence;

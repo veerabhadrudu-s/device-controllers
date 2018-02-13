@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.client;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

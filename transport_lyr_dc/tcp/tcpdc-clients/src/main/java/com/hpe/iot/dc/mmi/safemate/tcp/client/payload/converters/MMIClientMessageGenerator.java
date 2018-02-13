@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters;
 
-import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
+import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.copyOfRange;
 

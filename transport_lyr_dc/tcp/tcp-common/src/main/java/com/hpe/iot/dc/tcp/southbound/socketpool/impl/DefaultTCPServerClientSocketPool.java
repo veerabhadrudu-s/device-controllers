@@ -1,5 +1,7 @@
 package com.hpe.iot.dc.tcp.southbound.socketpool.impl;
 
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+
 import java.io.IOException;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -13,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool;
-import com.hpe.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera
@@ -83,7 +84,7 @@ public class DefaultTCPServerClientSocketPool implements ServerClientSocketPool 
 			deviceSockets.clear();
 		} catch (Exception e) {
 			logger.error("Failed to close Server Socket resources ");
-			UtilityLogger.logExceptionStackTrace(e, getClass());
+			logExceptionStackTrace(e, getClass());
 		}
 
 	}

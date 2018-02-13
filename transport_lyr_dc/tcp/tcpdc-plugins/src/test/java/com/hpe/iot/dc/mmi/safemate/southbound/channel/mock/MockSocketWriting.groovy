@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.hpe.iot.dc.util.UtilityLogger;
+import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera

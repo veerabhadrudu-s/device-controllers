@@ -151,11 +151,11 @@
 	</bean>
 
 	<util:list id="watchServcieListners" list-class="java.util.ArrayList"
-		value-type="com.hpe.iot.dc.watch.file.listener.FileEventListener">
+		value-type="com.handson.iot.dc.watch.file.listener.FileEventListener">
 		<ref bean="groovyFileEventListener" />
 	</util:list>
 
-	<bean id="directoryWatchService" class="com.hpe.iot.dc.watch.service.DirectoryWatchService">
+	<bean id="directoryWatchService" class="com.handson.iot.dc.watch.service.DirectoryWatchService">
 		<constructor-arg index="0" value="src/test/resources/testGroovy" />
 		<constructor-arg index="1" ref="watchServcieListners" />
 		<constructor-arg index="2" value="7" />

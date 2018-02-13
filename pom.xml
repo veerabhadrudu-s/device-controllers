@@ -6,12 +6,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>application_lyr_dc</module>
-		<module>transport_lyr_dc</module>
-		<module>message-broker-common</module>
-		<module>device-controllers-ear</module>
 		<module>websocket-logger</module>
 		<module>device-model</module>
+		<module>common-util</module>
+		<module>message-broker-common</module>
+		<module>application_lyr_dc</module>
+		<module>transport_lyr_dc</module>		
+		<module>device-controllers-ear</module>
 	</modules>
 	<properties>
 		<java.version>1.8</java.version>

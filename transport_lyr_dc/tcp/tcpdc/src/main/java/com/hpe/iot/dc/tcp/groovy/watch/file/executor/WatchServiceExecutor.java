@@ -1,6 +1,6 @@
 package com.hpe.iot.dc.tcp.groovy.watch.file.executor;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import javax.enterprise.concurrent.ManagedExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.dc.watch.service.DirectoryWatchService;
+import com.handson.iot.dc.watch.service.DirectoryWatchService;
 
 /**
  * @author sveera

@@ -21,7 +21,7 @@ import com.handson.logger.impl.LiveLoggerAdapter;
 import com.handson.logger.service.DeploymentLoggerService;
 import com.handson.logger.service.LoggerService;
 import com.hpe.iot.dc.bean.pool.ServerBeanPool;
-import com.hpe.iot.dc.groovy.loader.GroovyScriptClassLoader;
+import com.handson.iot.dc.groovy.loader.GroovyScriptClassLoader;
 import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.model.DeviceModel;

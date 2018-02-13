@@ -21,7 +21,7 @@ import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.impl.JsonPathDeviceMetaModel;
 import com.hpe.iot.model.impl.json.marshling.JsonPathDeviceMetaModels;
-import com.hpe.iot.utility.UtilityLogger;
+import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera

@@ -18,7 +18,7 @@ import com.hpe.iot.dc.mmi.drivemate.v1.NotificationRecord
 import com.hpe.iot.dc.mmi.drivemate.v1.UplinkNotificationMessageConverter
 import com.hpe.iot.dc.model.DeviceImpl
 import com.hpe.iot.dc.model.DeviceInfo
-import com.hpe.iot.dc.util.DataParserUtility
+import com.handson.iot.dc.util.DataParserUtility
 
 /**
  * @author sveera

@@ -1,6 +1,6 @@
 package com.hpe.iot.dc.tcp.southbound.service.inflow;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

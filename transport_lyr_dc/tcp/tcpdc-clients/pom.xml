@@ -9,6 +9,11 @@
 	<artifactId>tcpdc-clients</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>com.handson.iot.dc</groupId>
+			<artifactId>common-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>tcpdc-plugins</artifactId>
 			<version>${project.version}</version>

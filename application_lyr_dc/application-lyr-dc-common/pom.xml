@@ -10,14 +10,18 @@
 	<dependencies>
 		<!-- Local jars -->
 		<dependency>
+			<groupId>m2m-common</groupId>
+			<artifactId>m2m-common</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>device-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>m2m-common</groupId>
-			<artifactId>m2m-common</artifactId>
-			<scope>provided</scope>
+			<groupId>com.handson.iot.dc</groupId>
+			<artifactId>common-util</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>

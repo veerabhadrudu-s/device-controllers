@@ -1,7 +1,7 @@
 package com.hpe.iot.dc.valid
 
-import static com.hpe.iot.dc.util.DataParserUtility.convertBytesToASCIIString
-import static com.hpe.iot.dc.util.DataParserUtility.truncateEmptyBytes
+import static com.handson.iot.dc.util.DataParserUtility.convertBytesToASCIIString
+import static com.handson.iot.dc.util.DataParserUtility.truncateEmptyBytes
 import static java.util.Arrays.copyOfRange
 
 import org.slf4j.Logger
@@ -17,8 +17,8 @@ import com.hpe.iot.dc.northbound.service.inflow.IOTPublisherService
 import com.hpe.iot.dc.southbound.service.inflow.UplinkMessageService
 import com.hpe.iot.dc.southbound.transformer.inflow.UplinkDataModelTransformer
 import com.hpe.iot.dc.tcp.southbound.model.AbstractServerSocketToDeviceModel
-import com.hpe.iot.dc.util.DataParserUtility
-import com.hpe.iot.dc.util.UtilityLogger
+import com.handson.iot.dc.util.DataParserUtility
+import com.handson.iot.dc.util.UtilityLogger
 
 /**
  * @author sveera

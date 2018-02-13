@@ -20,7 +20,7 @@ import com.hpe.iot.dc.trinetra.southbound.converter.impl.IpAddressMessageConvert
 import com.hpe.iot.dc.trinetra.southbound.converter.impl.StandardMessageConverter;
 import com.hpe.iot.dc.trinetra.southbound.converter.impl.StandardMessageCreator;
 import com.hpe.iot.dc.udp.utility.TestUtility;
-import com.hpe.iot.dc.util.DataParserUtility;
+import com.handson.iot.dc.util.DataParserUtility;
 
 /**
  * @author sveera

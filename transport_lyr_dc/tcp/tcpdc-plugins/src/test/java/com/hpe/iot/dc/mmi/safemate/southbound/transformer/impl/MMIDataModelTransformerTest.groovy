@@ -3,7 +3,7 @@ package com.hpe.iot.dc.mmi.safemate.southbound.transformer.impl;
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.IPCONNECT_DATA_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.NOTIFICATION_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.utility.TestUtility.createDataWithPaddingBytes
-import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertSame

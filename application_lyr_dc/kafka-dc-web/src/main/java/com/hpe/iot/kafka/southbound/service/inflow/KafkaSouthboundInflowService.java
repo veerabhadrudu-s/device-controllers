@@ -3,7 +3,8 @@
  */
 package com.hpe.iot.kafka.southbound.service.inflow;
 
-import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,6 @@ import com.hpe.broker.service.consumer.kafka.KafkaConsumerService;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.southbound.service.inflow.SouthboundService;
-import com.hpe.iot.utility.UtilityLogger;
 
 /**
  * @author sveera
@@ -96,7 +96,7 @@ public class KafkaSouthboundInflowService {
 			String modelId = topicParts[1];
 			String version = topicParts[2];
 			logger.trace("Received data from Kafka topic " + topic + " with data "
-					+ UtilityLogger.convertArrayOfByteToString(consumerData));
+					+ convertArrayOfByteToString(consumerData));
 			southboundService.processPayload(manufacturer, modelId, version, consumerData);
 		}
 	}

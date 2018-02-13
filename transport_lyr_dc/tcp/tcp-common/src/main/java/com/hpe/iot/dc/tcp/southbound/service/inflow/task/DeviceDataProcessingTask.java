@@ -3,8 +3,8 @@
  */
 package com.hpe.iot.dc.tcp.southbound.service.inflow.task;
 
-import static com.hpe.iot.dc.util.UtilityLogger.exceptionStackToString;
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.exceptionStackToString;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.IOException;

@@ -5,7 +5,7 @@ import static com.hpe.iot.dc.mmi.safemate.TrackerStatus.AlarmStatus.ON
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.ALARM_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
-import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 import org.junit.jupiter.api.Assertions

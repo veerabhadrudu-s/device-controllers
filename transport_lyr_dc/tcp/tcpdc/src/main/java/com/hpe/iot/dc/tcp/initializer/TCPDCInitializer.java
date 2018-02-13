@@ -1,6 +1,6 @@
 package com.hpe.iot.dc.tcp.initializer;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.initializer.DCInitializer;
 import com.hpe.iot.dc.tcp.initializer.groovy.GroovyScriptTCPServiceActivator;
-import com.hpe.iot.dc.util.DirectoryFileScanner;
+import com.handson.iot.dc.util.DirectoryFileScanner;
 
 /**
  * @author sveera

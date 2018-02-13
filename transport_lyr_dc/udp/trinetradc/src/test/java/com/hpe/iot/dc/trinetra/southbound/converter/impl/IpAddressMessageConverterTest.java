@@ -16,7 +16,7 @@ import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.trinetra.model.DeviceAddress;
 import com.hpe.iot.dc.trinetra.model.TrinetraDeviceModel;
 import com.hpe.iot.dc.udp.model.impl.UDPDeviceImpl;
-import com.hpe.iot.dc.util.DataParserUtility;
+import com.handson.iot.dc.util.DataParserUtility;
 
 import mockit.Expectations;
 import mockit.Mocked;

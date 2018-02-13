@@ -13,16 +13,19 @@
 			<artifactId>javax.enterprise.concurrent-api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.handson.iot.dc</groupId>
+			<artifactId>common-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>southbound-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>northbound-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>

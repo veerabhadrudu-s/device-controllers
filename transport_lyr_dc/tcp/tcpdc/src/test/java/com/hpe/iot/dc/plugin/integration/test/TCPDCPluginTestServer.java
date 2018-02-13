@@ -26,7 +26,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel;
 import com.hpe.iot.dc.tcp.southbound.service.manager.TCPServerSocketServiceManager;
-import com.hpe.iot.dc.util.UtilityLogger;
+import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera

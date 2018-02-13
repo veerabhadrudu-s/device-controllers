@@ -1,6 +1,6 @@
 package com.hpe.iot.service.initializer.groovy;
 
-import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +24,7 @@ import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor;
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher;
 import com.hpe.iot.southbound.handler.inflow.UplinkPayloadProcessor;
 import com.hpe.iot.southbound.handler.inflow.factory.impl.SouthboundPayloadExtractorFactory;
-import com.hpe.iot.utility.DirectoryFileScanner;
+import com.handson.iot.dc.util.DirectoryFileScanner;
 
 /**
  * @author sveera

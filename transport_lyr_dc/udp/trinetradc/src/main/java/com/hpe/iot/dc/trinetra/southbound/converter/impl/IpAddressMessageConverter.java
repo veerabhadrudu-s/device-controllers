@@ -10,7 +10,7 @@ import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.dc.southbound.converter.inflow.UplinkDeviceDataConverter;
 import com.hpe.iot.dc.trinetra.model.DeviceAddress;
 import com.hpe.iot.dc.udp.model.UDPDevice;
-import com.hpe.iot.dc.util.DataParserUtility;
+import com.handson.iot.dc.util.DataParserUtility;
 
 /**
  * @author sveera

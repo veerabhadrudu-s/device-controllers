@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.web.plugin.monitor;
 
-import static com.hpe.iot.dc.util.UtilityLogger.exceptionStackToString;
+import static com.handson.iot.dc.util.UtilityLogger.exceptionStackToString;
 import static javax.servlet.http.HttpServletResponse.SC_ACCEPTED;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;

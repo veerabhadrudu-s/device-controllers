@@ -9,6 +9,20 @@
 	<artifactId>northbound-common</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>m2m-common</groupId>
+			<artifactId>m2m-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>transport-dc-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>message-broker-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
@@ -19,20 +33,6 @@
 		<dependency>
 			<groupId>javax.xml</groupId>
 			<artifactId>jaxb-impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>m2m-common</groupId>
-			<artifactId>m2m-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.hpe.iot.dc</groupId>
-			<artifactId>dc-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hpe.iot.dc</groupId>
-			<artifactId>message-broker-common</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<!-- Logging -->
 		<dependency>

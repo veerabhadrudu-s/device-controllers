@@ -26,7 +26,7 @@ import com.hpe.iot.dc.model.Device;
 import com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.mqtt.northbound.sdk.handler.mock.MockNorthboundDownlinkProducerService;
 import com.hpe.iot.mqtt.southbound.service.outflow.MqttDevicePayloadHolder;
-import com.hpe.iot.utility.UtilityLogger;
+import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera

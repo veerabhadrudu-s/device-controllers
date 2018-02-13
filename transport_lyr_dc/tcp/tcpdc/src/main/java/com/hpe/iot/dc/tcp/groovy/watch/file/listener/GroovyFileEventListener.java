@@ -1,7 +1,7 @@
 package com.hpe.iot.dc.tcp.groovy.watch.file.listener;
 
 import static com.hpe.broker.utility.UtilityLogger.toStringExceptionStackTrace;
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.handson.logger.service.DeploymentLoggerService;
 import com.hpe.iot.dc.tcp.initializer.groovy.GroovyScriptTCPServiceActivator;
-import com.hpe.iot.dc.watch.file.listener.FileEventListener;
+import com.handson.iot.dc.watch.file.listener.FileEventListener;
 
 /**
  * @author sveera

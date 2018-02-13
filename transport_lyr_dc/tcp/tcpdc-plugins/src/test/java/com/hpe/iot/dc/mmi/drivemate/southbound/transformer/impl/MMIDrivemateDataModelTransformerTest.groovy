@@ -20,7 +20,7 @@ import com.hpe.iot.dc.model.DeviceInfo
 import com.hpe.iot.dc.southbound.converter.inflow.UplinkDeviceDataConverter
 import com.hpe.iot.dc.southbound.converter.inflow.factory.UplinkDeviceDataConverterFactory
 import com.hpe.iot.dc.southbound.converter.inflow.factory.impl.UplinkDeviceDataConverterFactoryImpl
-import com.hpe.iot.dc.util.DataParserUtility
+import com.handson.iot.dc.util.DataParserUtility
 
 
 

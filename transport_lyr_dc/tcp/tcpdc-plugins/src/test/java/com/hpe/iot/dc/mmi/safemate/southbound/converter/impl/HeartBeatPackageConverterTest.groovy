@@ -4,7 +4,7 @@ import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.HEART_B
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.VERSION
-import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 import org.junit.jupiter.api.BeforeEach

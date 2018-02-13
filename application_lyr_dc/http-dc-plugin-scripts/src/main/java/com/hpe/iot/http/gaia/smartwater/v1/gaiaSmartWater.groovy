@@ -3,9 +3,9 @@
  */
 package com.hpe.iot.http.gaia.smartwater.v1
 
-import static com.hpe.iot.utility.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
-import static com.hpe.iot.utility.UtilityLogger.logRawDataInDecimalFormat
-import static com.hpe.iot.utility.UtilityLogger.logRawDataInHexaDecimalFormat
+import static com.handson.iot.dc.util.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

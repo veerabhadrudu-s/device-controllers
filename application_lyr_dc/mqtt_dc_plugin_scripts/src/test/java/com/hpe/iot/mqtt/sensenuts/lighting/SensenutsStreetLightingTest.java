@@ -7,7 +7,7 @@ import static com.hpe.iot.mqtt.sensenuts.lighting.SensenutsStreetLightingTestDat
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_VERSION;
-import static com.hpe.iot.utility.UtilityLogger.logRawDataInHexaDecimalFormat;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.hpe.iot.model.DeviceInfo;
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
 import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
-import com.hpe.iot.utility.UtilityLogger;
+import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera

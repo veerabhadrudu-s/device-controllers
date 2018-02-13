@@ -3,8 +3,8 @@
  */
 package com.hpe.iot.http.southbound.inflow.web;
 
-import static com.hpe.iot.utility.UtilityLogger.convertArrayOfByteToString;
-import static com.hpe.iot.utility.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

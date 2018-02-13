@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.web.downlink;
 
-import static com.hpe.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import javax.servlet.http.HttpServletRequest;
 

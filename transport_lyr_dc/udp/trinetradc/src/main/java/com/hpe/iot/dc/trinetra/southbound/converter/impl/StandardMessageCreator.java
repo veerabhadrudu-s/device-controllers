@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.hpe.broker.utility.UtilityLogger;
 import com.hpe.iot.dc.trinetra.model.NotificationRecord;
-import com.hpe.iot.dc.util.DataParserUtility;
+import com.handson.iot.dc.util.DataParserUtility;
 
 /**
  * @author sveera

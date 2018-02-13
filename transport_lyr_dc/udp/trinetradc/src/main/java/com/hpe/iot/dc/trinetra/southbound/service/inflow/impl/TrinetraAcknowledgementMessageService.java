@@ -12,7 +12,7 @@ import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.service.MessageService;
 import com.hpe.iot.dc.trinetra.model.DataModelConstants;
 import com.hpe.iot.dc.udp.southbound.service.impl.UDPDatagramSender;
-import com.hpe.iot.dc.util.UtilityLogger;
+import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera

@@ -2,9 +2,9 @@
 
 package com.hpe.iot.mqtt.sensenuts.lighting;
 
-import static com.hpe.iot.utility.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
-import static com.hpe.iot.utility.DataParserUtility.convertBytesToASCIIString
-import static com.hpe.iot.utility.DataParserUtility.convertHexaToFloatPoint
+import static com.handson.iot.dc.util.DataParserUtility.calculateUnsignedDecimalValFromSignedBytes
+import static com.handson.iot.dc.util.DataParserUtility.convertBytesToASCIIString
+import static com.handson.iot.dc.util.DataParserUtility.convertHexaToFloatPoint
 import static java.util.Arrays.copyOfRange
 
 import org.slf4j.Logger

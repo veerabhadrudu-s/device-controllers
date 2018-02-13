@@ -3,6 +3,10 @@
  */
 package com.hpe.iot.dc.southbound.transformer.inflow.session;
 
+import static com.handson.iot.dc.util.DataParserUtility.truncateEmptyBytes;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -14,8 +18,6 @@ import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.dc.southbound.converter.inflow.factory.UplinkDeviceDataConverterFactory;
 import com.hpe.iot.dc.southbound.transformer.inflow.UplinkDataModelTransformer;
-import com.hpe.iot.dc.util.DataParserUtility;
-import com.hpe.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera
@@ -36,9 +38,9 @@ public abstract class SessionBasedUplinkDataModelTransformer implements UplinkDa
 	public List<DeviceInfo> convertToModel(DeviceModel deviceModel, byte[] input) {
 		if (deviceModel==null || !(deviceModel instanceof Device))
 			return Collections.<DeviceInfo> emptyList();
-		byte[] messageBytes = DataParserUtility.truncateEmptyBytes(input);
-		UtilityLogger.logRawDataInDecimalFormat(messageBytes, getClass());
-		UtilityLogger.logRawDataInHexaDecimalFormat(messageBytes, getClass());
+		byte[] messageBytes = truncateEmptyBytes(input);
+		logRawDataInDecimalFormat(messageBytes, getClass());
+		logRawDataInHexaDecimalFormat(messageBytes, getClass());
 		return convertToModelForDevice((Device) deviceModel, messageBytes);
 	}
 

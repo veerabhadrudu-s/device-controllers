@@ -34,7 +34,7 @@ import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel
 import com.hpe.iot.dc.tcp.southbound.service.outflow.TCPServerSocketWriter
 import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool
 import com.hpe.iot.dc.tcp.southbound.socketpool.impl.DefaultTCPServerClientSocketPool
-import com.hpe.iot.dc.util.DataParserUtility
+import com.handson.iot.dc.util.DataParserUtility
 import com.hpe.iot.m2m.common.RequestPrimitive
 
 /**

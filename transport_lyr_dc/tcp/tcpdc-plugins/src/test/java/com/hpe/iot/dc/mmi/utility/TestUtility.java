@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.mmi.utility;
 
-import static com.hpe.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
+import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
 
 import java.util.ArrayList;
 import java.util.List;
