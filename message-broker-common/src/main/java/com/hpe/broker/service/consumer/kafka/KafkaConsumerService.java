@@ -62,9 +62,7 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 	@Override
 	public void consumeData(String destination, BrokerConsumerDataHandler<V> brokerConsumerDataHandler) {
 		KafkaConsumerRunnable kafkaConsumerRunnable = new KafkaConsumerRunnable(destination, brokerConsumerDataHandler);
-		KafkaConsumerRunnable existingKafkaConsumerRunnable = kafkaConsumers.put(destination, kafkaConsumerRunnable);
-		if (existingKafkaConsumerRunnable != null)
-			existingKafkaConsumerRunnable.stopKafkaConsumerRunnable();
+		kafkaConsumers.put(destination, kafkaConsumerRunnable);		
 		logger.debug(
 				"Trying to start new " + KafkaConsumerRunnable.class.getSimpleName() + " : " + kafkaConsumerRunnable);
 		executorService.submit(kafkaConsumerRunnable);
