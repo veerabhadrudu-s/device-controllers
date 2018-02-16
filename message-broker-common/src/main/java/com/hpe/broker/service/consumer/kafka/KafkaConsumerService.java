@@ -4,9 +4,9 @@ import static com.hpe.broker.utility.UtilityLogger.logExceptionStackTrace;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -30,8 +30,8 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 	private final String keyDeSerializerClass;
 	private final String valueDeSerializerClass;
 	private final String consumerGroupId;
-	private final ExecutorService executorService;
-	protected final Map<String, KafkaConsumerRunnable> kafkaConsumers = new ConcurrentHashMap<>();
+	private final List<KafkaConsumerRunnable> kafkaConsumers = new CopyOnWriteArrayList<>();
+	protected final ExecutorService executorService;
 
 	public KafkaConsumerService(String kafkaBootStrapServers, String keyDeSerializerClass,
 			String valueDeSerializerClass, String consumerGroupId, ExecutorService executorService) {
@@ -55,14 +55,14 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 
 	@Override
 	public void stopService() {
-		for (KafkaConsumerRunnable kafkaConsumerRunnable : kafkaConsumers.values())
+		for (KafkaConsumerRunnable kafkaConsumerRunnable : kafkaConsumers)
 			kafkaConsumerRunnable.stopKafkaConsumerRunnable();
 	}
 
 	@Override
 	public void consumeData(String destination, BrokerConsumerDataHandler<V> brokerConsumerDataHandler) {
 		KafkaConsumerRunnable kafkaConsumerRunnable = new KafkaConsumerRunnable(destination, brokerConsumerDataHandler);
-		kafkaConsumers.put(destination, kafkaConsumerRunnable);		
+		kafkaConsumers.add(kafkaConsumerRunnable);
 		logger.debug(
 				"Trying to start new " + KafkaConsumerRunnable.class.getSimpleName() + " : " + kafkaConsumerRunnable);
 		executorService.submit(kafkaConsumerRunnable);
