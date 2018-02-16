@@ -30,6 +30,14 @@ public class NorthboundPayloadExtractorFactory implements PayloadExtractorFactor
 		downlinkPayloadProcessors.put(new DeviceModelImpl(manufacturer, modelId, version), downlinkPayloadProcessor);
 	}
 
+	public void removePayloadCipher(String manufacturer, String modelId, String version) {
+		payloadCiphers.remove(new DeviceModelImpl(manufacturer, modelId, version));
+	}
+
+	public void removeDownlinkPayloadProcessor(String manufacturer, String modelId, String version) {
+		downlinkPayloadProcessors.remove(new DeviceModelImpl(manufacturer, modelId, version));
+	}
+
 	@Override
 	public PayloadCipher getPayloadCipher(String manufacturer, String modelId, String version) {
 		return payloadCiphers.get(new DeviceModelImpl(manufacturer, modelId, version));

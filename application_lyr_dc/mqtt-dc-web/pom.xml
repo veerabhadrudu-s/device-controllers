@@ -16,9 +16,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>websocket-logger</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>application-lyr-dc-common</artifactId>
 			<version>${project.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

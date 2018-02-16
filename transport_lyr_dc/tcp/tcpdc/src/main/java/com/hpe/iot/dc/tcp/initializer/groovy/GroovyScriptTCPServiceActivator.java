@@ -1,11 +1,12 @@
 package com.hpe.iot.dc.tcp.initializer.groovy;
 
+import static com.handson.iot.dc.util.FileUtility.getFileNameFromFullPath;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,12 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.iot.dc.groovy.loader.GroovyScriptClassLoader;
 import com.handson.logger.LiveLogger;
 import com.handson.logger.impl.LiveLoggerAdapter;
 import com.handson.logger.service.DeploymentLoggerService;
 import com.handson.logger.service.LoggerService;
 import com.hpe.iot.dc.bean.pool.ServerBeanPool;
-import com.handson.iot.dc.groovy.loader.GroovyScriptClassLoader;
 import com.hpe.iot.dc.model.DeviceDataDeliveryStatus;
 import com.hpe.iot.dc.model.DeviceInfo;
 import com.hpe.iot.dc.model.DeviceModel;
@@ -376,10 +377,6 @@ public class GroovyScriptTCPServiceActivator {
 		logger.info("Instantiated objects with zero argument constructor are " + zeroArgumentConstructorObjects);
 		return zeroArgumentConstructorObjects;
 
-	}
-
-	private String getFileNameFromFullPath(String fullPath) {
-		return Paths.get(fullPath).getFileName().toString();
 	}
 
 }

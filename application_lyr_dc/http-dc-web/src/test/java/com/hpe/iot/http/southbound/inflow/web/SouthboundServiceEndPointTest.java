@@ -193,28 +193,49 @@ public class SouthboundServiceEndPointTest {
 	}
 
 	private JsonObject getExpectedFailureResponse() {
-		String expectedResponseString = "{\"processingStatus\":\"FAILED\",\"otherInformation\":\"\",\"exceptionReason\":\"Device Model with manufacturer: InvalidManufacturer with modelId : InvalidModel with version :1.0 not supported.\"}";
+		String expectedResponseString = "{\"processingStatus\":\"FAILED\",\"otherInformation\":\"\","
+				+ "\"exceptionReason\":\"Device Model with manufacturer: InvalidManufacturer with modelId : InvalidModel with version :1.0 not supported.\"}";
 		return jsonParser.parse(expectedResponseString).getAsJsonObject();
 	}
 
 	private String getExpectedJSONStringForTrackimoFenceNotification() {
-		return "{\"alarm_type\":\"Fence\",\"device_id\":\"1129388\",\"timestamp\":\"1462193525734\",\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\",\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"name\":\"Test fence\"}}";
+		return "{\"alarm_type\":\"Fence\",\"device_id\":\"1129388\",\"timestamp\":\"1462193525734\","
+				+ "\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\","
+				+ "\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"name\":\"Test fence\"}}";
 	}
 
 	private String getExpectedJSONStringForTrackimoMovingNotification() {
-		return "{\"alarm_type\":\"Moving\",\"device_id\":\"1129388\",\"timestamp\":\"1462193525734\",\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\",\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"name\":\"Test fence\"}}";
+		return "{\"alarm_type\":\"Moving\",\"device_id\":\"1129388\",\"timestamp\":\"1462193525734\","
+				+ "\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\","
+				+ "\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"name\":\"Test fence\"}}";
 	}
 
 	private String getExpectedJSONStringForTrackimoSpeedNotification() {
-		return "{\"alarm_type\":\"Speed\",\"device_id\":\"1129388\",\"timestamp\":\"1462193525734\",\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\",\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"name\":\"Test fence\"}}";
+		return "{\"alarm_type\":\"Speed\",\"device_id\":\"1129388\",\"timestamp\":\"1462193525734\","
+				+ "\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\","
+				+ "\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"name\":\"Test fence\"}}";
 	}
 
 	private String getExpectedJSONStringForSampleNotification() {
-		return "{\"message_type\":\"Notification\",\"sample_id\":\"Sample123354\",\"timestamp\":\"1462193525734\",\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\",\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"type\":\"Notification\"}}";
+		return "{\"message_type\":\"Notification\",\"sample_id\":\"Sample123354\",\"timestamp\":\"1462193525734\","
+				+ "\"address\":\"14/310, ITPL Main Rd, Maheswari Nagar, B Narayanapura, Mahadevapura, Bengaluru, Karnataka 560016, India\","
+				+ "\"lat\":\"12.99726\",\"lng\":\"77.690885\",\"speed\":\"6\",\"extras\":{\"type\":\"Notification\"}}";
 	}
 
 	private String createPayloadForRexaWareBikeNotification() {
-		return "{\"DeviceData\":[{\"DeviceID\":\"999\",\"AQDateTime\":\"dd/MM/yyyyHH:mm:ss\",\"lat\":\"18.27363\",\"lon\":\"78.217891\",\"speed\":\"99\",\"altitude\":\"123\",\"gsmStrength\":\"5\",\"OBDDTCNumber\":\"\",\"OBDFuelSystemStatus\":\"\",\"OBDCalEngineLoadValue\":\"\",\"OBDEngineCoolantTemperature\":\"\",\"OBDShortFuelTrim1\":\"\",\"OBDLongTermFuelAdaption\":\"\",\"OBDIntakeManifoldPressure\":\"\",\"OBDEngineRPM\":\"\",\"OBDVehicleSpeed\":\"\",\"OBDIgnitionAdvance\":\"\",\"OBDIntakAirTemperature\":\"\",\"OBDAbsThrottlePosition\":\"\",\"OBDDistanceTravelledMIL\":\"\",\"OBDCommandedEGR\":\"\"},{\"DeviceID\":\"999\",\"AQDateTime\":\"dd/MM/yyyyHH:mm:ss\",\"lat\":\"18.27363\",\"lon\":\"78.217891\",\"speed\":\"99\",\"altitude\":\"123\",\"gsmStrength\":\"5\",\"OBDDTCNumber\":\"\",\"OBDFuelSystemStatus\":\"\",\"OBDCalEngineLoadValue\":\"\",\"OBDEngineCoolantTemperature\":\"\",\"OBDShortFuelTrim1\":\"\",\"OBDLongTermFuelAdaption\":\"\",\"OBDIntakeManifoldPressure\":\"\",\"OBDEngineRPM\":\"\",\"OBDVehicleSpeed\":\"\",\"OBDIgnitionAdvance\":\"\",\"OBDIntakAirTemperature\":\"\",\"OBDAbsThrottlePosition\":\"\",\"OBDDistanceTravelledMIL\":\"\",\"OBDCommandedEGR\":\"\"}]}";
+		return "{\"DeviceData\":[{\"DeviceID\":\"999\",\"AQDateTime\":\"dd/MM/yyyyHH:mm:ss\","
+				+ "\"lat\":\"18.27363\",\"lon\":\"78.217891\",\"speed\":\"99\",\"altitude\":\"123\","
+				+ "\"gsmStrength\":\"5\",\"OBDDTCNumber\":\"\",\"OBDFuelSystemStatus\":\"\","
+				+ "\"OBDCalEngineLoadValue\":\"\",\"OBDEngineCoolantTemperature\":\"\","
+				+ "\"OBDShortFuelTrim1\":\"\",\"OBDLongTermFuelAdaption\":\"\",\"OBDIntakeManifoldPressure\":\"\","
+				+ "\"OBDEngineRPM\":\"\",\"OBDVehicleSpeed\":\"\",\"OBDIgnitionAdvance\":\"\",\"OBDIntakAirTemperature\":\"\","
+				+ "\"OBDAbsThrottlePosition\":\"\",\"OBDDistanceTravelledMIL\":\"\",\"OBDCommandedEGR\":\"\"},"
+				+ "{\"DeviceID\":\"999\",\"AQDateTime\":\"dd/MM/yyyyHH:mm:ss\",\"lat\":\"18.27363\",\"lon\":\"78.217891\","
+				+ "\"speed\":\"99\",\"altitude\":\"123\",\"gsmStrength\":\"5\",\"OBDDTCNumber\":\"\",\"OBDFuelSystemStatus\":\"\","
+				+ "\"OBDCalEngineLoadValue\":\"\",\"OBDEngineCoolantTemperature\":\"\",\"OBDShortFuelTrim1\":\"\","
+				+ "\"OBDLongTermFuelAdaption\":\"\",\"OBDIntakeManifoldPressure\":\"\",\"OBDEngineRPM\":\"\",\"OBDVehicleSpeed\":\"\","
+				+ "\"OBDIgnitionAdvance\":\"\",\"OBDIntakAirTemperature\":\"\",\"OBDAbsThrottlePosition\":\"\","
+				+ "\"OBDDistanceTravelledMIL\":\"\",\"OBDCommandedEGR\":\"\"}]}";
 	}
 
 	private void waitForDCInitialization() throws InterruptedException {

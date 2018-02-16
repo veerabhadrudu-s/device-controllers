@@ -173,23 +173,29 @@
 		<value>src/main/java/com/hpe/iot/http/libelium/smartagriculture</value>
 		<value>src/main/java/com/hpe/iot/http/pristech/parking/v1</value>
 		<value>src/main/java/com/hpe/iot/http/gaia/smartwater/v1</value>
+		<value>src/main/java/com/hpe/iot/http/vehant/vehiscan</value>		
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
 		class="com.hpe.iot.service.initializer.groovy.DefaultPayloadExtractorFactoryComponentHolder">
 		<constructor-arg index="0" ref="defaultUplinkPayloadProcessor" />
 	</bean>
-
+	
+	<bean id="groovyScriptFileToDeviceModelHolder"
+		class="com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDeviceModelHolderImpl" />	
+	
 	<bean id="groovyScriptMetaModelServiceActivator"
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
 		<constructor-arg index="0" ref="directoriesForGroovyScripts" />
 		<constructor-arg index="1"
-			ref="southboundPayloadExtractorFactory" />
+			ref="groovyScriptFileToDeviceModelHolder" />
 		<constructor-arg index="2"
+			ref="southboundPayloadExtractorFactory" />
+		<constructor-arg index="3"
 			ref="northboundPayloadExtractorFactory" />
-		<constructor-arg index="3" ref="deviceModelFactory" />
-		<constructor-arg index="4" ref="groovyScriptModelCreator" />
-		<constructor-arg index="5"
+		<constructor-arg index="4" ref="deviceModelFactory" />
+		<constructor-arg index="5" ref="groovyScriptModelCreator" />
+		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
 	</bean>
 

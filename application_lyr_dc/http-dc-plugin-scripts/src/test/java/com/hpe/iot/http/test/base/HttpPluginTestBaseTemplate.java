@@ -5,20 +5,14 @@ package com.hpe.iot.http.test.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -38,7 +32,7 @@ import com.hpe.iot.model.DeviceInfo;
 @ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public abstract class HttpPluginTestBaseTemplate {
 
-	private static final String SOUTHBOUND = "/southbound";
+	protected static final String SOUTHBOUND = "/southbound";
 	protected final JsonParser jsonParser = new JsonParser();
 
 	@Autowired
@@ -54,23 +48,6 @@ public abstract class HttpPluginTestBaseTemplate {
 	public void setUp() throws Exception {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		waitForDCInitialization();
-	}
-
-	@Test
-	@DisplayName("test Get DC Info")
-	public void testGetDCInfo() throws Exception {
-		JsonObject expectedResponse = getExpectedDCInfo();
-		MvcResult mvcResult = mockMvc.perform(get(SOUTHBOUND + "/dcinfo").accept("application/json"))
-				.andExpect(status().isOk()).andReturn();
-		MockHttpServletResponse servletResponse = mvcResult.getResponse();
-		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
-
-	}
-
-	private JsonObject getExpectedDCInfo() {
-		String expectedResponseString = "{\"processingStatus\":\"SUCCESS\",\"otherInformation\":\"This is a Generic HTTP DC \",\"exceptionReason\":\"\"}";
-		return jsonParser.parse(expectedResponseString).getAsJsonObject();
 	}
 
 	protected void waitForDCInitialization() throws InterruptedException {

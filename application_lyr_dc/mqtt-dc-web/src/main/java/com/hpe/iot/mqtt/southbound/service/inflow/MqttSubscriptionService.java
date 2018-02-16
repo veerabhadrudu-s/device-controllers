@@ -24,7 +24,7 @@ import com.hpe.iot.mqtt.southbound.security.SecurityLayer;
  * @author sveera
  *
  */
-public class MqttSubscriptionService {
+public class MqttSubscriptionService implements DeviceModelMqttSubscriptionService {
 
 	private static final String GENERIC_MQTTDC_CLIENT_ID = "generic-mqttdc-subscriber";
 
@@ -60,6 +60,35 @@ public class MqttSubscriptionService {
 
 	}
 
+	public void stopService() {
+		try {
+			mqttMessageHandlerService.stopService();
+			mqttClient.unsubscribe(getAllTopicNamesForDeviceModels());
+			mqttClient.disconnect();
+			mqttClient.close();
+			logger.info("MQTT client closed in subscription service");
+		} catch (Throwable e) {
+			logger.error("Failed to close mqtt client");
+			logExceptionStackTrace(e, getClass());
+		}
+	}
+
+	@Override
+	public void subscribeForDeviceModel(final DeviceModel deviceModel) throws MqttException {
+		String uplinkTopicFilter = constructUplinkTopicForDeviceModel(deviceModel);
+		mqttClient.subscribe(uplinkTopicFilter);
+		logger.info("Device model " + deviceModel + " with mqtt topic filter " + uplinkTopicFilter
+				+ " been successfully subscribed");
+	}
+
+	@Override
+	public void unsubscribeForDeviceModel(final DeviceModel deviceModel) throws MqttException {
+		String uplinkTopicFilter = constructUplinkTopicForDeviceModel(deviceModel);
+		mqttClient.unsubscribe(uplinkTopicFilter);
+		logger.info("Device model " + deviceModel + " with mqtt topic filter " + uplinkTopicFilter
+				+ " been successfully unsubscribed");
+	}
+
 	private void subscribeToTopics() throws Exception {
 		MqttConnectOptions connect = new MqttConnectOptions();
 		connect.setCleanSession(true);
@@ -76,22 +105,13 @@ public class MqttSubscriptionService {
 		List<DeviceModel> deviceModels = deviceModelFactory.getAllDeviceModels();
 		String[] topics = new String[deviceModels.size()];
 		for (int i = 0; i < deviceModels.size(); i++)
-			topics[i] = deviceModels.get(i).getManufacturer() + "/" + deviceModels.get(i).getModelId() + "/"
-					+ deviceModels.get(i).getVersion() + "/Up" + "/+";
+			topics[i] = constructUplinkTopicForDeviceModel(deviceModels.get(i));
 		return topics;
 	}
 
-	public void stopService() {
-		try {
-			mqttMessageHandlerService.stopService();
-			mqttClient.unsubscribe(getAllTopicNamesForDeviceModels());
-			mqttClient.disconnect();
-			mqttClient.close();
-			logger.info("MQTT client closed in subscription service");
-		} catch (Throwable e) {
-			logger.error("Failed to close mqtt client");
-			logExceptionStackTrace(e, getClass());
-		}
+	private String constructUplinkTopicForDeviceModel(DeviceModel deviceModel) {
+		return deviceModel.getManufacturer() + "/" + deviceModel.getModelId() + "/" + deviceModel.getVersion() + "/Up"
+				+ "/+";
 	}
 
 	private class MqttSubscriptionMessageHandler implements MqttCallback {

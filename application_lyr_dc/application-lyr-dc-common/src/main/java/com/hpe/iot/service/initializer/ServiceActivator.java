@@ -12,4 +12,5 @@ public interface ServiceActivator {
 	void startAllServices();
 
 	void stopAllServices();
+
 }

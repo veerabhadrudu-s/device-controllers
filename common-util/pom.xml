@@ -32,6 +32,10 @@
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>javax.enterprise.concurrent</groupId>
+			<artifactId>javax.enterprise.concurrent-api</artifactId>
+		</dependency>
 		<!-- Test -->
 		<!-- Junit 5 Dependencies Start -->
 		<dependency>

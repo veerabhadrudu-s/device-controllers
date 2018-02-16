@@ -1,5 +1,6 @@
 package com.handson.iot.dc.watch.service;
 
+import static com.handson.iot.dc.util.FileUtility.findFullPath;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
@@ -44,8 +45,7 @@ public class DirectoryWatchService {
 
 	public DirectoryWatchService(String pathToBeWatched, List<FileEventListener> directoryListeners,
 			int pollingInterval) throws IOException {
-		pathToBeWatched = findPath(pathToBeWatched);
-		this.directoryPathToBeWatched = Paths.get(pathToBeWatched);
+		this.directoryPathToBeWatched = Paths.get(findFullPath(pathToBeWatched));
 		this.watchService = FileSystems.getDefault().newWatchService();
 		this.directoryListeners = directoryListeners;
 		this.pollingInterval = pollingInterval;
@@ -86,16 +86,6 @@ public class DirectoryWatchService {
 		watchService.close();
 	}
 
-	private String findPath(String pathToBeWatched) {
-		String path;
-		String[] pathParts = pathToBeWatched.split("}");
-		if (pathParts.length > 1)
-			path = System.getProperty(pathParts[0].substring(1, pathParts[0].length())) + pathParts[1];
-		else
-			path = pathParts[0];
-		return path;
-	}
-
 	private void resetAndRemoveInaccessableDirectory(WatchKey key) {
 		boolean valid = key.reset();
 		if (!valid) {
@@ -110,9 +100,8 @@ public class DirectoryWatchService {
 			Path absolutePathOfFile = dir.resolve(pathOfFile);
 			logger.info("Identified Watch Event is " + kind.name() + " with file full path "
 					+ absolutePathOfFile.toString());
-			for (FileEventListener directoryListener : directoryListeners) {
+			for (FileEventListener directoryListener : directoryListeners)
 				directoryListener.handleDirectoryChanges(kind, absolutePathOfFile.toString());
-			}
 		}
 	}
 

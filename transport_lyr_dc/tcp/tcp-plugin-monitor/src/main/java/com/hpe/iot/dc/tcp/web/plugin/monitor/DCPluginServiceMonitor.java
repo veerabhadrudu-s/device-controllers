@@ -3,6 +3,7 @@
  */
 package com.hpe.iot.dc.tcp.web.plugin.monitor;
 
+import static com.handson.iot.dc.util.FileUtility.findFullPath;
 import static com.handson.iot.dc.util.UtilityLogger.exceptionStackToString;
 import static javax.servlet.http.HttpServletResponse.SC_ACCEPTED;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -54,19 +55,9 @@ public class DCPluginServiceMonitor {
 	public DCPluginServiceMonitor(@Qualifier("pluginScriptsPath") String pluginScriptsPath,
 			SocketPoolFactoryReader socketPoolFactoryReader) {
 		super();
-		this.pluginScriptsPath = findPath(pluginScriptsPath);
+		this.pluginScriptsPath = findFullPath(pluginScriptsPath);
 		this.socketPoolFactoryReader = socketPoolFactoryReader;
 
-	}
-
-	private String findPath(String pluginScriptsPath) {
-		String path;
-		String[] pathParts = pluginScriptsPath.split("}");
-		if (pathParts.length > 1)
-			path = System.getProperty(pathParts[0].substring(1, pathParts[0].length())) + pathParts[1];
-		else
-			path = pathParts[0];
-		return path;
 	}
 
 	@RequestMapping(value = "/getPluginScripts", method = RequestMethod.GET, produces = "application/json")

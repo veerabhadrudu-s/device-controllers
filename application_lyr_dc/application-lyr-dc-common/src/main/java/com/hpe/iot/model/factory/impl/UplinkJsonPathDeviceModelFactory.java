@@ -3,6 +3,8 @@
  */
 package com.hpe.iot.model.factory.impl;
 
+import static com.handson.iot.dc.util.FileUtility.findFullPath;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +18,12 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.iot.dc.util.UtilityLogger;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.model.impl.JsonPathDeviceMetaModel;
 import com.hpe.iot.model.impl.json.marshling.JsonPathDeviceMetaModels;
-import com.handson.iot.dc.util.UtilityLogger;
 
 /**
  * @author sveera
@@ -61,14 +63,7 @@ public class UplinkJsonPathDeviceModelFactory implements DeviceModelFactory {
 			for (JsonPathDeviceMetaModel deviceMetaModel : deviceMetaModels.getDeviceMetaModels())
 				this.deviceMetaModels.put(new DeviceModelImpl(deviceMetaModel.getManufacturer(),
 						deviceMetaModel.getModelId(), deviceMetaModel.getVersion()), deviceMetaModel);
-	}
-
-	private String findFullPath(String path) {
-		String[] pathParts = path.split("}");
-		return pathParts.length > 1
-				? System.getProperty(pathParts[0].substring(1, pathParts[0].length())) + pathParts[1]
-				: pathParts[0];
-	}
+	}	
 
 	@Override
 	public DeviceModel findDeviceModel(String manufacturer, String modelId, String version) {

@@ -11,20 +11,17 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.hpe.iot" />
+	<import resource="classpath:spring/logger-service.xml" />
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 
 			<list>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/iot-broker.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/activemq.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/kafka.properties
-				</value>
-				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/mqttdc.properties
-				</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/iot-broker.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/activemq.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/kafka.properties</value>
+				<value>file://${jboss.home.dir}/standalone/configuration/DC/mqttdc/mqttdc.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -161,9 +158,14 @@
 		<constructor-arg index="0" ref="serverBeanPool" />
 	</bean>
 
+	<bean id="pluginScriptsPath" class="java.lang.String">
+		<constructor-arg
+			value="${jboss.home.dir}/standalone/configuration/DC/mqttdc/script" />
+	</bean>
+
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
-		<value>${jboss.home.dir}/standalone/configuration/DC/mqttdc/script</value>
+		<ref bean="pluginScriptsPath" />
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
@@ -171,16 +173,21 @@
 		<constructor-arg index="0" ref="defaultUplinkPayloadProcessor" />
 	</bean>
 
+	<bean id="groovyScriptFileToDeviceModelHolder"
+		class="com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDeviceModelHolderImpl" />
+
 	<bean id="groovyScriptMetaModelServiceActivator"
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
 		<constructor-arg index="0" ref="directoriesForGroovyScripts" />
 		<constructor-arg index="1"
-			ref="southboundPayloadExtractorFactory" />
+			ref="groovyScriptFileToDeviceModelHolder" />
 		<constructor-arg index="2"
+			ref="southboundPayloadExtractorFactory" />
+		<constructor-arg index="3"
 			ref="northboundPayloadExtractorFactory" />
-		<constructor-arg index="3" ref="deviceModelFactory" />
-		<constructor-arg index="4" ref="groovyScriptModelCreator" />
-		<constructor-arg index="5"
+		<constructor-arg index="4" ref="deviceModelFactory" />
+		<constructor-arg index="5" ref="groovyScriptModelCreator" />
+		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
 	</bean>
 
@@ -228,6 +235,34 @@
 			ref="groovyScriptMetaModelServiceActivator" />
 		<constructor-arg index="2" ref="mqttSubscriptionService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
+	</bean>
+
+	<bean id="mqttDCGroovyFileEventListener"
+		class="com.hpe.iot.mqtt.groovy.watch.file.listener.MqttDCGroovyFileEventListener">
+		<constructor-arg index="0" ref="deploymentLoggerService" />
+		<constructor-arg index="1"
+			ref="groovyScriptFileToDeviceModelHolder" />
+		<constructor-arg index="2"
+			ref="groovyScriptMetaModelServiceActivator" />
+		<constructor-arg index="3" ref="mqttSubscriptionService" />
+	</bean>
+
+	<util:list id="watchServcieListners" list-class="java.util.ArrayList"
+		value-type="com.handson.iot.dc.watch.file.listener.FileEventListener">
+		<ref bean="mqttDCGroovyFileEventListener" />
+	</util:list>
+
+	<bean id="directoryWatchService" class="com.handson.iot.dc.watch.service.DirectoryWatchService">
+		<constructor-arg index="0" ref="pluginScriptsPath" />
+		<constructor-arg index="1" ref="watchServcieListners" />
+		<constructor-arg index="2" value="7" />
+	</bean>
+
+	<bean id="watchServiceExecutor"
+		class="com.handson.iot.dc.watch.file.executor.WatchServiceExecutor"
+		init-method="startExecutor" destroy-method="stopExecutor">
+		<constructor-arg index="0" ref="directoryWatchService" />
+		<constructor-arg index="1" ref="myManagedExecutorService" />
 	</bean>
 
 </beans>

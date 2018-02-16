@@ -1,5 +1,6 @@
 package com.hpe.iot.dc.tcp.initializer;
 
+import static com.handson.iot.dc.util.FileUtility.findFullPath;
 import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
@@ -9,9 +10,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.iot.dc.util.DirectoryFileScanner;
 import com.hpe.iot.dc.initializer.DCInitializer;
 import com.hpe.iot.dc.tcp.initializer.groovy.GroovyScriptTCPServiceActivator;
-import com.handson.iot.dc.util.DirectoryFileScanner;
 
 /**
  * @author sveera
@@ -27,7 +28,7 @@ public class TCPDCInitializer implements DCInitializer {
 	public TCPDCInitializer(String directoryPathForGroovyScript,
 			GroovyScriptTCPServiceActivator groovyScriptTCPServiceActivator) {
 		super();
-		this.directoryPathForGroovyScript = directoryPathForGroovyScript;
+		this.directoryPathForGroovyScript = findFullPath(directoryPathForGroovyScript);
 		this.groovyScriptTCPServiceActivator = groovyScriptTCPServiceActivator;
 		this.directoryFileScanner = new DirectoryFileScanner();
 
@@ -44,21 +45,11 @@ public class TCPDCInitializer implements DCInitializer {
 	}
 
 	private void loadAllTcpDCPlugins() throws IOException {
-		configureDirectoryPath();
+		logger.trace("Path for script files to be scanned is " + directoryPathForGroovyScript);
 		List<String> fileNames = directoryFileScanner.getDirectoryFileNames(directoryPathForGroovyScript);
 		List<String> groovyFileNames = filterInvalidFileNames(fileNames);
 		for (String groovyScriptName : groovyFileNames)
 			loadTcpPluginScript(groovyScriptName);
-	}
-
-	private void configureDirectoryPath() {
-		String[] pathParts = directoryPathForGroovyScript.split("}");
-		if (pathParts.length > 1)
-			directoryPathForGroovyScript = System.getProperty(pathParts[0].substring(1, pathParts[0].length()))
-					+ pathParts[1];
-		else
-			directoryPathForGroovyScript = pathParts[0];
-		logger.trace("Path for script files to be scanned is " + directoryPathForGroovyScript);
 	}
 
 	private void loadTcpPluginScript(String groovyScriptName) throws IOException {

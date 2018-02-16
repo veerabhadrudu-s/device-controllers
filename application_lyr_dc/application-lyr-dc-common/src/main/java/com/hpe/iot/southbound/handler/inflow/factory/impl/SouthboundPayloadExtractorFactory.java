@@ -45,6 +45,22 @@ public class SouthboundPayloadExtractorFactory implements PayloadExtractorFactor
 		uplinkPayloadProcessors.put(new DeviceModelImpl(manufacturer, modelId, version), uplinkPayloadProcessor);
 	}
 
+	public void removeDeviceIdExtractor(String manufacturer, String modelId, String version) {
+		deviceIdExtractors.remove(new DeviceModelImpl(manufacturer, modelId, version));
+	}
+
+	public void removeMessageTypeExtractor(String manufacturer, String modelId, String version) {
+		messageTypeExtractors.remove(new DeviceModelImpl(manufacturer, modelId, version));
+	}
+
+	public void removePayloadDecipher(String manufacturer, String modelId, String version) {
+		payloadDeciphers.remove(new DeviceModelImpl(manufacturer, modelId, version));
+	}
+
+	public void removeUplinkPayloadProcessor(String manufacturer, String modelId, String version) {
+		uplinkPayloadProcessors.remove(new DeviceModelImpl(manufacturer, modelId, version));
+	}
+
 	@Override
 	public DeviceIdExtractor getDeviceIdExtractor(String manufacturer, String modelId, String version) {
 		return deviceIdExtractors.get(new DeviceModelImpl(manufacturer, modelId, version));

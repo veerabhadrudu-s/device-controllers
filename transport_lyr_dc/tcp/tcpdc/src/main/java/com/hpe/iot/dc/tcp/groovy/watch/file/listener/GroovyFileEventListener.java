@@ -1,13 +1,13 @@
 package com.hpe.iot.dc.tcp.groovy.watch.file.listener;
 
-import static com.hpe.broker.utility.UtilityLogger.toStringExceptionStackTrace;
+import static com.handson.iot.dc.util.FileUtility.getFileNameFromFullPath;
 import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static com.hpe.broker.utility.UtilityLogger.toStringExceptionStackTrace;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.WatchEvent.Kind;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.iot.dc.watch.file.listener.FileEventListener;
 import com.handson.logger.service.DeploymentLoggerService;
 import com.hpe.iot.dc.tcp.initializer.groovy.GroovyScriptTCPServiceActivator;
-import com.handson.iot.dc.watch.file.listener.FileEventListener;
 
 /**
  * @author sveera
@@ -78,10 +78,7 @@ public class GroovyFileEventListener implements FileEventListener {
 		deploymentLoggerService.log(getFileNameFromFullPath(fullPath), toStringExceptionStackTrace(e, getClass()));
 		deploymentLoggerService.log(getFileNameFromFullPath(fullPath), "Failed");
 	}
-
-	private String getFileNameFromFullPath(String fullPath) {
-		return Paths.get(fullPath).getFileName().toString();
-	}
+	
 
 	private interface GroovyFileEventHandler {
 		void execute(String fullPath) throws Exception;

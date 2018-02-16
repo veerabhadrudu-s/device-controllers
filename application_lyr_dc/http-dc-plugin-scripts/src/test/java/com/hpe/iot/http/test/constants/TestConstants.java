@@ -23,4 +23,8 @@ public class TestConstants {
 	public static final String GAIA = "gaia";
 	public static final String GAIA_MODEL = "smartwater";
 	public static final String GAIA_VERSION = "1.0";
+	public static final String VEHANT = "vehant";
+	public static final String VEHANT_MODEL = "vehiscan";
+	public static final String VEHANT_VERSION = "1.0";
+	
 }

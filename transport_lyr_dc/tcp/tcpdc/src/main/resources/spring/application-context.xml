@@ -173,7 +173,7 @@
 	</bean>
 
 	<bean id="watchServiceExecutor"
-		class="com.hpe.iot.dc.tcp.groovy.watch.file.executor.WatchServiceExecutor"
+		class="com.handson.iot.dc.watch.file.executor.WatchServiceExecutor"
 		init-method="startExecutor" destroy-method="stopExecutor">
 		<constructor-arg index="0" ref="directoryWatchService" />
 		<constructor-arg index="1" ref="myManagedExecutorService" />

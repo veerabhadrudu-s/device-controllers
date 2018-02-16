@@ -9,6 +9,22 @@
 	<artifactId>http-dc-web</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
+
+		<!-- Local jars -->
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>websocket-logger</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>application-lyr-dc-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>m2m-common</groupId>
+			<artifactId>m2m-common</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -48,16 +64,7 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-broker</artifactId>
 		</dependency>
-		<!-- Local jars -->
-		<dependency>
-			<groupId>com.hpe.iot.dc</groupId>
-			<artifactId>application-lyr-dc-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>m2m-common</groupId>
-			<artifactId>m2m-common</artifactId>
-		</dependency>
+
 		<!-- Server Environment -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -157,7 +164,7 @@
 					<attachClasses>true</attachClasses>
 					<classesClassifier>classes</classesClassifier>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 </project>

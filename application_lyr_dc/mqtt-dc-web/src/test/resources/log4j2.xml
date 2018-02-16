@@ -6,7 +6,7 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.hpe.iot" level="trace" />
+		<Logger name="com" level="trace" />
 		<Logger name="org.springframework" level="error" />
 		<Logger name="org.apache.activemq" level="debug" />
 		<Logger name="org.apache" level="warn" />
