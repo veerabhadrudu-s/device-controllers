@@ -5,11 +5,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -40,10 +44,10 @@ import com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDevice
 @ContextConfiguration("/spring/application-lyr-dc-plugin-moniter-service.xml")
 public class DCPluginServiceMonitorTest {
 
+	private static final String TMP_SCRIPT_DIR = "target/tmp";
 	private static final String TEST_DIR = "test";
 	private static final String SRC_DIR = "src";
 	private static final String JAVA_DIR = "java";
-	private static final String RESOURCES_DIR = "resources";
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final JsonParser jsonParser = new JsonParser();
 	@Autowired
@@ -66,10 +70,27 @@ public class DCPluginServiceMonitorTest {
 		assertEquals(getExpectedPluginScripts(), actualResponse, "Expected anad actaual responses are not equal");
 	}
 
-	@Test
-	@DisplayName("test upload plug-in script")
-	public final void testUploadPluginScript() throws Exception {
-		try {
+	@Nested
+	@ContextConfiguration("/spring/application-lyr-dc-plugin-moniter-service.xml")
+	class PluginScriptUplaodTest {
+
+		@BeforeEach
+		public void setUp() {
+			File tmpFileDir = new File(TMP_SCRIPT_DIR);
+			if (!tmpFileDir.exists())
+				tmpFileDir.mkdirs();
+		}
+
+		@AfterEach
+		public void tearDown() throws IOException {
+			File tmpFileDir = new File(TMP_SCRIPT_DIR);
+			if (tmpFileDir.exists())
+				FileUtils.deleteDirectory(tmpFileDir);
+		}
+
+		@Test
+		@DisplayName("test upload plug-in script")
+		public final void testUploadPluginScript() throws Exception {
 			MockMultipartFile scriptFile = new MockMultipartFile("file", "sample.groovy", "text/plain",
 					Files.readAllBytes(Paths.get(SRC_DIR + File.separator + TEST_DIR + File.separator + JAVA_DIR
 							+ File.separator + "com/hpe/iot/http/groovyscript/sample/model/sample.groovy")));
@@ -81,9 +102,8 @@ public class DCPluginServiceMonitorTest {
 			logger.trace("Upload Plugin REST response " + actualResponse.toString());
 			assertEquals(getExpectedSuccessResponseForUploadPluginScript(), actualResponse,
 					"Expected anad actaual responses are not equal");
-		} finally {
-			cleanUpUploadedScriptFile();
 		}
+
 	}
 
 	@Test
@@ -97,13 +117,6 @@ public class DCPluginServiceMonitorTest {
 		logger.trace("Upload Plugin REST response " + actualResponse.toString());
 		assertEquals(getExpectedFailureResponseForEmptyUploadedPluginScript(), actualResponse,
 				"Expected anad actaual responses are not equal");
-	}
-
-	private void cleanUpUploadedScriptFile() {
-		File uploadedScriptFIle = new File(SRC_DIR + File.separator + TEST_DIR + File.separator + RESOURCES_DIR
-				+ File.separator + "tempScriptDirectory" + File.separator + "sample.groovy");
-		if (uploadedScriptFIle.exists())
-			uploadedScriptFIle.delete();
 	}
 
 	private JsonObject getExpectedPluginScripts() {
@@ -130,7 +143,7 @@ public class DCPluginServiceMonitorTest {
 
 		@Bean("pluginScriptsPath")
 		public String getPluginScriptsPath() {
-			return "src/test/resources/tempScriptDirectory";
+			return TMP_SCRIPT_DIR;
 		}
 
 		@Bean
