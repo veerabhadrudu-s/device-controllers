@@ -10,6 +10,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>application-lyr-dc-common</module>
+		<module>application-lyr-dc-plugin-moniter</module>
 		<module>http-dc-web</module>
 		<module>mqtt-dc-web</module>
 		<module>kafka-dc-web</module>

@@ -19,21 +19,17 @@ import com.hpe.iot.dc.tcp.southbound.service.inflow.session.DeviceClientSocketEx
  */
 public class OptionalDCComponentValidator {
 
-	public DCComponentValidationStatus validateDCComponentModel(ServerSocketToDeviceModel serverSocketToDeviceModel,
+	public void validateDCComponentModel(String scriptFileName, ServerSocketToDeviceModel serverSocketToDeviceModel,
 			TCPDCComponentMetaModel dcComponentModel) {
 		final List<Class<?>> missingClassTypes = new ArrayList<>();
-		boolean isInvalidStatus = false;
-		if (serverSocketToDeviceModel.getTCPOptions() == null) {
+		if (serverSocketToDeviceModel.getTCPOptions() == null)
 			missingClassTypes.add(TCPOptions.class);
-			isInvalidStatus = true;
-		}
 		if (serverSocketToDeviceModel.getTCPOptions().getProcessingTaskType()
 				.equals(SOCKET_SESSION_BASED_DATA_PROCESSING)
-				&& dcComponentModel.getDeviceClientSocketExtractorClassType() == null) {
+				&& dcComponentModel.getDeviceClientSocketExtractorClassType() == null)
 			missingClassTypes.add(DeviceClientSocketExtractor.class);
-			isInvalidStatus = true;
-		}
-		return new DCComponentValidationStatus(isInvalidStatus, missingClassTypes);
+		if (missingClassTypes.size() > 0)
+			throw new InvalidDCComponentModel(scriptFileName, missingClassTypes);
 	}
 
 }

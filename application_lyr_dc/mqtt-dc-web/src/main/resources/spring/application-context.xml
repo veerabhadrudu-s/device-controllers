@@ -12,6 +12,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="com.hpe.iot" />
 	<import resource="classpath:spring/logger-service.xml" />
+	<import resource="classpath:spring/application-lyr-dc-plugin-moniter-service.xml" />
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -189,6 +190,7 @@
 		<constructor-arg index="5" ref="groovyScriptModelCreator" />
 		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
+		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
 	<bean id="securityLayer" class="com.hpe.iot.mqtt.southbound.security.SecurityLayer" />

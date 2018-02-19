@@ -12,11 +12,12 @@ import static com.hpe.iot.http.test.constants.TestConstants.SAMPLE_VERSION;
 import static com.hpe.iot.http.test.constants.TestConstants.TRACKIMO;
 import static com.hpe.iot.http.test.constants.TestConstants.TRACKIMO_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.TRACKIMO_VERSION;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,7 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 
 	}
 
@@ -95,7 +96,7 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
@@ -108,7 +109,7 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
@@ -121,7 +122,7 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
@@ -134,7 +135,7 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
@@ -147,7 +148,7 @@ public class SouthboundServiceEndPointTest {
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
 	}
 
 	@Test
@@ -166,19 +167,19 @@ public class SouthboundServiceEndPointTest {
 				SAMPLE_VERSION);
 		DownlinkPayloadProcessor downlinkPayloadProcessor = northboundPayloadExtractorFactory
 				.getDownlinkPayloadProcessor(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
-		Assertions.assertEquals(new GroovyScriptDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION), actualDeviceModel,
+		assertEquals(new GroovyScriptDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION), actualDeviceModel,
 				"Expected Device Model and Actual Device Models are not same");
-		Assertions.assertTrue(deviceIdExtractor instanceof DeviceIdExtractor,
+		assertTrue(deviceIdExtractor instanceof DeviceIdExtractor,
 				"Expected DeviceIdExtractor and DeviceIdExtractor are not same");
-		Assertions.assertTrue(messageTypeExtractor instanceof MessageTypeExtractor,
+		assertTrue(messageTypeExtractor instanceof MessageTypeExtractor,
 				"Expected MessageTypeExtractor and MessageTypeExtractor are not same");
-		Assertions.assertTrue(payloadDecipher instanceof PayloadDecipher,
+		assertTrue(payloadDecipher instanceof PayloadDecipher,
 				"Expected PayloadDecipher and PayloadDecipher are not same");
-		Assertions.assertTrue(uplinkPayloadProcessor instanceof UplinkPayloadProcessor,
+		assertTrue(uplinkPayloadProcessor instanceof UplinkPayloadProcessor,
 				"Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same");
-		Assertions.assertTrue(payloadCipher instanceof PayloadCipher,
+		assertTrue(payloadCipher instanceof PayloadCipher,
 				"Expected PayloadCipher and PayloadCipher are not same");
-		Assertions.assertTrue(downlinkPayloadProcessor instanceof DownlinkPayloadProcessor,
+		assertTrue(downlinkPayloadProcessor instanceof DownlinkPayloadProcessor,
 				"Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same");
 	}
 

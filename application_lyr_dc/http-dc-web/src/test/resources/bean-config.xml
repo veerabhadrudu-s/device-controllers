@@ -165,7 +165,7 @@
 
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
-		<ref bean="pluginScriptsPath"/>
+		<ref bean="pluginScriptsPath" />
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
@@ -175,6 +175,12 @@
 
 	<bean id="groovyScriptFileToDeviceModelHolder"
 		class="com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDeviceModelHolderImpl" />
+
+	<bean id="deploymentLoggerService"
+		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
+		
+	<bean id="loggerService"
+		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
 
 	<bean id="groovyScriptMetaModelServiceActivator"
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
@@ -189,6 +195,7 @@
 		<constructor-arg index="5" ref="groovyScriptModelCreator" />
 		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
+		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
 	<bean id="httpDcInitializer" class="com.hpe.iot.http.initializer.HTTPDCInitializer"
@@ -199,9 +206,6 @@
 			ref="groovyScriptMetaModelServiceActivator" />
 		<constructor-arg index="2" ref="myManagedExecutorService" />
 	</bean>
-	
-	<bean id="deploymentLoggerService"
-		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
 
 	<bean id="httpDCGroovyFileEventListener"
 		class="com.hpe.iot.http.groovy.watch.file.listener.HttpDCGroovyFileEventListener">
@@ -227,8 +231,5 @@
 		<constructor-arg index="0" ref="directoryWatchService" />
 		<constructor-arg index="1" ref="myManagedExecutorService" />
 	</bean>
-
-	<bean id="loggerService"
-		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
 
 </beans>

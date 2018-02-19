@@ -9,8 +9,11 @@
 	<artifactId>http-dc-web</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
-
 		<!-- Local jars -->
+		<dependency>
+			<groupId>m2m-common</groupId>
+			<artifactId>m2m-common</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>websocket-logger</artifactId>
@@ -22,9 +25,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>m2m-common</groupId>
-			<artifactId>m2m-common</artifactId>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>application-lyr-dc-plugin-moniter</artifactId>
+			<version>${project.version}</version>
 		</dependency>
+		<!-- Spring jars -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

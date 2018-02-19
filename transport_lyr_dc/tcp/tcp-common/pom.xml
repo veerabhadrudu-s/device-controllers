@@ -26,12 +26,7 @@
 			<groupId>com.hpe.iot.dc</groupId>
 			<artifactId>northbound-common</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hpe.iot.dc</groupId>
-			<artifactId>websocket-logger</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		</dependency>		
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

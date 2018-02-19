@@ -1,8 +1,10 @@
 package com.hpe.iot.dc.tcp.initializer.groovy.validator;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.handson.logger.LiveLogger;
 import com.hpe.iot.dc.service.MessageService;
 import com.hpe.iot.dc.southbound.transformer.inflow.UplinkDataModelTransformer;
 import com.hpe.iot.dc.tcp.component.meta.model.TCPDCComponentMetaModel;
@@ -14,22 +16,32 @@ import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel;
  */
 public class DCComponentValidator {
 
-	public DCComponentValidationStatus validateDCComponentModel(TCPDCComponentMetaModel dcComponentModel) {
+	public void validateDCComponentModel(String scriptFileName, TCPDCComponentMetaModel dcComponentModel) {
 		final List<Class<?>> missingClassTypes = new ArrayList<>();
-		boolean isInvalidStatus = false;
-		if (dcComponentModel.getServerSocketToDeviceModelClassType() == null) {
+		if (dcComponentModel.getServerSocketToDeviceModelClassType() == null)
 			missingClassTypes.add(ServerSocketToDeviceModel.class);
-			isInvalidStatus = true;
-		}
-		if (dcComponentModel.getSouthBoundDCComponentMetaModel().getDataModelTransformerType() == null) {
+		if (dcComponentModel.getSouthBoundDCComponentMetaModel().getDataModelTransformerType() == null)
 			missingClassTypes.add(UplinkDataModelTransformer.class);
-			isInvalidStatus = true;
-		}
-		if (dcComponentModel.getDcCommonComponentMetaModel().getMessageServiceTypes().size() == 0) {
+		if (dcComponentModel.getDcCommonComponentMetaModel().getMessageServiceTypes().size() == 0)
 			missingClassTypes.add(MessageService.class);
-			isInvalidStatus = true;
-		}
-		return new DCComponentValidationStatus(isInvalidStatus, missingClassTypes);
+		if (missingClassTypes.size() > 0)
+			throw new InvalidDCComponentModel(scriptFileName, missingClassTypes);
+		validateServerSocketToDeviceModelTypeToAvoidCircularDependancyWithLiveLoggerAdapter(scriptFileName,
+				dcComponentModel.getServerSocketToDeviceModelClassType());
+	}
+
+	private void validateServerSocketToDeviceModelTypeToAvoidCircularDependancyWithLiveLoggerAdapter(
+			String groovyScriptFileName,
+			Class<? extends ServerSocketToDeviceModel> serverSocketToDeviceModelClassType) {
+		Constructor<?> serverSocketToDeviceModelConstructor = serverSocketToDeviceModelClassType.getConstructors()[0];
+		Class<?>[] constructorParameterTypes = serverSocketToDeviceModelConstructor.getParameterTypes();
+		for (Class<?> constructorParameterType : constructorParameterTypes)
+			if (LiveLogger.class.isAssignableFrom(constructorParameterType))
+				throw new InvalidDCComponentModel(
+						LiveLogger.class.getSimpleName() + " class type can't be constructor argument for class type "
+								+ serverSocketToDeviceModelClassType.getSimpleName()
+								+ " which is an implementation class of " + ServerSocketToDeviceModel.class.getName());
+
 	}
 
 }

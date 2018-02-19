@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.handson.iot.dc.util.DirectoryFileScanner;
+import com.handson.logger.service.DeploymentLoggerService;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.GroovyDeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
@@ -44,6 +45,7 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 	private final GroovyDeviceModelFactory groovyDeviceModelFactory;
 	private final GroovyScriptModelCreator groovyScriptModelCreator;
 	private final DefaultPayloadExtractorFactoryComponentHolder defaultPayloadExtractorFactoryComponentHolder;
+	private final DeploymentLoggerService deploymentLoggerService;
 	private final DirectoryFileScanner directoryFileScanner;
 
 	public GroovyScriptMetaModelServiceActivator(List<String> directoriesForGroovyScripts,
@@ -51,7 +53,8 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 			SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory,
 			NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory,
 			GroovyDeviceModelFactory groovyDeviceModelFactory, GroovyScriptModelCreator groovyScriptModelCreator,
-			DefaultPayloadExtractorFactoryComponentHolder defaultPayloadExtractorFactoryComponentHolder) {
+			DefaultPayloadExtractorFactoryComponentHolder defaultPayloadExtractorFactoryComponentHolder,
+			DeploymentLoggerService deploymentLoggerService) {
 		super();
 		this.directoriesForGroovyScripts = directoriesForGroovyScripts;
 		this.groovyScriptFileToDeviceModelHolderImpl = groovyScriptFileToDeviceModelHolderImpl;
@@ -60,6 +63,7 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 		this.groovyDeviceModelFactory = groovyDeviceModelFactory;
 		this.groovyScriptModelCreator = groovyScriptModelCreator;
 		this.defaultPayloadExtractorFactoryComponentHolder = defaultPayloadExtractorFactoryComponentHolder;
+		this.deploymentLoggerService = deploymentLoggerService;
 		this.directoryFileScanner = new DirectoryFileScanner();
 	}
 
@@ -120,8 +124,9 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 
 	private void startAllServicesForScript(String groovyScriptFullPath) throws IOException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		final String groovyScriptFileName = getFileNameFromFullPath(groovyScriptFullPath);
 		GroovyScriptModel groovyScriptModel = groovyScriptModelCreator.createGroovyScriptModel(groovyScriptFullPath);
-		validateGroovyScriptModel(groovyScriptModel, groovyScriptFullPath);
+		deploymentLoggerService.log(groovyScriptFileName, "Completed loading plugin script and validation");
 		DeviceModel deviceModel = groovyScriptModel.getDeviceModel();
 		GroovyScriptDeviceModel groovyScriptDeviceMetaModel = new GroovyScriptDeviceModel(deviceModel.getManufacturer(),
 				deviceModel.getModelId(), deviceModel.getVersion());
@@ -129,8 +134,8 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 				deviceModel.getVersion(), groovyScriptDeviceMetaModel);
 		loadSouthboundPayloadExtractorFactory(deviceModel, groovyScriptModel.getSouthboundGroovyScriptModel());
 		loadNorthboundPayloadExtractorFactory(deviceModel, groovyScriptModel.getNorthboundGroovyScriptModel());
-		groovyScriptFileToDeviceModelHolderImpl.addScriptDeviceModel(getFileNameFromFullPath(groovyScriptFullPath),
-				deviceModel);
+		groovyScriptFileToDeviceModelHolderImpl.addScriptDeviceModel(groovyScriptFileName, deviceModel);
+		deploymentLoggerService.log(groovyScriptFileName, "Completed registering plugin script model");
 	}
 
 	private void loadSouthboundPayloadExtractorFactory(DeviceModel deviceModel,
@@ -168,20 +173,12 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 					northboundGroovyScriptModel.getDownlinkPayloadProcessor());
 	}
 
-	private void validateGroovyScriptModel(GroovyScriptModel groovyScriptModel, String groovyScriptFullPath) {
-		if (groovyScriptModel.getDeviceModel() == null)
-			throw new RuntimeException(
-					DeviceModel.class.getSimpleName() + " not defined in the groovy script " + groovyScriptFullPath);
-		if (groovyScriptModel.getSouthboundGroovyScriptModel().getDeviceIdExtractor() == null)
-			throw new RuntimeException(DeviceIdExtractor.class.getSimpleName() + " not defined in the groovy script "
-					+ groovyScriptFullPath);
-	}
-
 	private void removeGroovyPluginScript(String scriptFullPath) {
+		String groovyScriptFileName = getFileNameFromFullPath(scriptFullPath);
 		final DeviceModel scriptDeviceModel = groovyScriptFileToDeviceModelHolderImpl
-				.getScriptDeviceModel(getFileNameFromFullPath(scriptFullPath));
+				.getScriptDeviceModel(groovyScriptFileName);
 		logger.info("Identified plugin script model " + scriptDeviceModel + " for the plugin script removal "
-				+ getFileNameFromFullPath(scriptFullPath));
+				+ groovyScriptFileName);
 		if (scriptDeviceModel != null) {
 			southboundPayloadExtractorFactory.removePayloadDecipher(scriptDeviceModel.getManufacturer(),
 					scriptDeviceModel.getModelId(), scriptDeviceModel.getVersion());
@@ -199,7 +196,8 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 					scriptDeviceModel.getModelId(), scriptDeviceModel.getVersion());
 			groovyScriptFileToDeviceModelHolderImpl.removeScriptDeviceModel(scriptFullPath);
 			logger.info("Removed plugin script model/handlers of device model " + scriptDeviceModel
-					+ " for the plugin script " + getFileNameFromFullPath(scriptFullPath));
+					+ " for the plugin script " + groovyScriptFileName);
+			deploymentLoggerService.log(groovyScriptFileName, "Completed de-registering plugin script model");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.hpe.iot.dc.tcp.initializer.groovy;
 
 import static com.handson.iot.dc.util.FileUtility.getFileNameFromFullPath;
+import static java.util.Arrays.deepToString;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +55,7 @@ import com.hpe.iot.dc.southbound.transformer.inflow.UplinkDataModelTransformer;
 import com.hpe.iot.dc.tcp.component.meta.model.TCPDCComponentMetaModel;
 import com.hpe.iot.dc.tcp.component.model.TCPDCComponentModel;
 import com.hpe.iot.dc.tcp.initializer.groovy.creator.TCPDCComponentMetaModelCreator;
-import com.hpe.iot.dc.tcp.initializer.groovy.validator.DCComponentValidationStatus;
 import com.hpe.iot.dc.tcp.initializer.groovy.validator.DCComponentValidator;
-import com.hpe.iot.dc.tcp.initializer.groovy.validator.InvalidDCComponentModel;
 import com.hpe.iot.dc.tcp.initializer.groovy.validator.OptionalDCComponentValidator;
 import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.session.DeviceClientSocketExtractor;
@@ -128,14 +126,14 @@ public class GroovyScriptTCPServiceActivator {
 				new File(groovyScriptFullPath));
 		final Class<?>[] allClassesFromScript = groovyScriptlClassLoader.getLoadedClasses();
 		final Class<?>[] loadedClasses = filterAbstractClasses(allClassesFromScript);
-		logger.trace("All loaded classes from script : " + groovyScriptFullPath + " is "
-				+ Arrays.deepToString(loadedClasses));
+		logger.trace("All loaded classes from script : " + groovyScriptFullPath + " is " + deepToString(loadedClasses));
 		return loadedClasses;
 	}
 
 	private ServerSocketToDeviceModel startTCPService(String scriptFileName, final Class<?>[] loadedClasses)
 			throws InstantiationException, IllegalAccessException, InvocationTargetException, IOException {
 		final Map<Class<?>, Object> intializedObjects = new HashMap<>();
+		intializedObjects.putAll(instantiateZeroArgumentConstructorClasses(loadedClasses));
 		final TCPDCComponentMetaModel dcComponentMetaModel = constructTCPDCComponentMetaModel(scriptFileName,
 				loadedClasses);
 		final ServerSocketToDeviceModel serverSocketToDeviceModel = instantiateClassType(
@@ -166,7 +164,6 @@ public class GroovyScriptTCPServiceActivator {
 		final TCPServerSocketWriter tcpServerSocketWriter = new TCPServerSocketWriter(tcpServerClientSocketPool);
 		intializedObjects.put(LiveLogger.class, instantiateLiveLogger(deviceModel));
 		intializedObjects.put(TCPServerSocketWriter.class, tcpServerSocketWriter);
-		intializedObjects.putAll(instantiateZeroArgumentConstructorClasses(loadedClasses));
 		intializedObjects.put(DeviceModel.class, deviceModel);
 		Class<? extends IOTModelConverter> iotModelConverType = dcComponentMetaModel.getNorthBoundDCComponentMetaModel()
 				.getIotModelConverterClass() == null ? DefaultIOTModelConverterImpl.class
@@ -276,19 +273,14 @@ public class GroovyScriptTCPServiceActivator {
 
 	private void validateMandatoryDCMetaComponentModel(String scriptFileName,
 			final TCPDCComponentMetaModel tcpDCComponentMetaModel) {
-		DCComponentValidationStatus dcComponentValidationStatus = dcComponentValidator
-				.validateDCComponentModel(tcpDCComponentMetaModel);
-		if (dcComponentValidationStatus.isInValidDCComponentModel())
-			throw new InvalidDCComponentModel(dcComponentValidationStatus.getMissingClassTypes());
+		dcComponentValidator.validateDCComponentModel(scriptFileName, tcpDCComponentMetaModel);
 		deploymentLoggerService.log(scriptFileName, "Mandatory validation completed");
 	}
 
 	private void validateOptionalMetaComponentModel(String scriptFileName,
 			ServerSocketToDeviceModel serverSocketToDeviceModel, TCPDCComponentMetaModel dcComponentMetaModel) {
-		DCComponentValidationStatus dcComponentValidationStatus = optionalDCComponentValidator
-				.validateDCComponentModel(serverSocketToDeviceModel, dcComponentMetaModel);
-		if (dcComponentValidationStatus.isInValidDCComponentModel())
-			throw new InvalidDCComponentModel(dcComponentValidationStatus.getMissingClassTypes());
+		optionalDCComponentValidator.validateDCComponentModel(scriptFileName, serverSocketToDeviceModel,
+				dcComponentMetaModel);
 		deploymentLoggerService.log(scriptFileName, "Optional validation completed");
 	}
 
@@ -362,19 +354,14 @@ public class GroovyScriptTCPServiceActivator {
 
 	private Map<Class<?>, Object> instantiateZeroArgumentConstructorClasses(Class<?>[] loadedClasses)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Map<Class<?>, Object> zeroArgumentConstructorObjects = new HashMap<>();
-		for (Class<?> loadedClass : loadedClasses) {
-			/*
-			 * logger.trace("Interfaces represented by class " + loadedClass + " are " +
-			 * ClassUtils.getAllInterfaces(loadedClass));
-			 */
-			for (Constructor<?> constructor : loadedClass.getConstructors()) {
-				if (constructor.getParameterTypes().length == 0) {
-					zeroArgumentConstructorObjects.put(loadedClass, constructor.newInstance(new Object[0]));
-				}
-			}
-		}
-		logger.info("Instantiated objects with zero argument constructor are " + zeroArgumentConstructorObjects);
+		final Map<Class<?>, Object> zeroArgumentConstructorObjects = new HashMap<>();
+		for (Class<?> loadedClass : loadedClasses)
+			if (loadedClass.getConstructors().length == 1
+					&& loadedClass.getConstructors()[0].getParameterTypes().length == 0)
+				zeroArgumentConstructorObjects.put(loadedClass,
+						loadedClass.getConstructors()[0].newInstance(new Object[0]));
+		logger.info(
+				"Instantiated objects with zero argument constructor are " + zeroArgumentConstructorObjects.toString());
 		return zeroArgumentConstructorObjects;
 
 	}

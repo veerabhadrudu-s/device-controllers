@@ -3,7 +3,7 @@
  */
 package com.handson.logger.service.impl;
 
-import static com.handson.util.UtilityLogger.logExceptionStackTrace;
+import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 import static java.lang.String.format;
 
 import java.io.IOException;

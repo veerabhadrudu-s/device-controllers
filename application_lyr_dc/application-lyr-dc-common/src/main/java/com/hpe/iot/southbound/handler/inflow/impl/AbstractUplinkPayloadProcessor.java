@@ -14,7 +14,7 @@ import com.hpe.iot.southbound.handler.inflow.UplinkPayloadProcessor;
  */
 public abstract class AbstractUplinkPayloadProcessor implements UplinkPayloadProcessor {
 
-	private final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
+	protected final IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 
 	public AbstractUplinkPayloadProcessor(
 			IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {

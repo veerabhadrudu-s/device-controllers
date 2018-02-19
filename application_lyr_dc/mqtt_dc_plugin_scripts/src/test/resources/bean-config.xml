@@ -160,21 +160,31 @@
 		<constructor-arg index="0" ref="serverBeanPool" />
 	</bean>
 
+	<bean id="pluginScriptsPath" class="java.lang.String">
+		<constructor-arg value="src/main/java/com/hpe/iot/mqtt/sensenuts/lighting" />
+	</bean>
+
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
+		<ref bean="pluginScriptsPath" />
 		<value>src/main/java/com/hpe/iot/mqtt/motwane/lighting/v1</value>
 		<value>src/main/java/com/hpe/iot/mqtt/motwane/lighting/v2</value>
-		<value>src/main/java/com/hpe/iot/mqtt/sensenuts/lighting</value>
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
 		class="com.hpe.iot.service.initializer.groovy.DefaultPayloadExtractorFactoryComponentHolder">
 		<constructor-arg index="0" ref="defaultUplinkPayloadProcessor" />
 	</bean>
-	
+
 	<bean id="groovyScriptFileToDeviceModelHolder"
 		class="com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDeviceModelHolderImpl" />
-	
+
+	<bean id="deploymentLoggerService"
+		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
+
+	<bean id="loggerService"
+		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
+
 	<bean id="groovyScriptMetaModelServiceActivator"
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
 		<constructor-arg index="0" ref="directoriesForGroovyScripts" />
@@ -188,6 +198,7 @@
 		<constructor-arg index="5" ref="groovyScriptModelCreator" />
 		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
+		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
 	<bean id="securityLayer" class="com.hpe.iot.mqtt.southbound.security.SecurityLayer" />

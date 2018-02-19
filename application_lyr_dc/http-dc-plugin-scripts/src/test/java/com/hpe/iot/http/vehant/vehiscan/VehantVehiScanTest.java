@@ -14,39 +14,55 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.google.gson.JsonObject;
 import com.hpe.iot.http.test.base.HttpPluginTestBaseTemplate;
-import com.hpe.iot.model.DeviceInfo;
 
 public class VehantVehiScanTest extends HttpPluginTestBaseTemplate {
 
 	@Test
-	@DisplayName("test Publish Uplink Notification Scanned By Camera")
-	public void testUplinkNotificationScannedByCamera() throws Exception {
+	@DisplayName("test Publish Uplink Notification Scanned By One Camera")
+	public void testUplinkNotificationScannedByOneCamera() throws Exception {
 
 		JsonObject expectedResponse = getExpectedSuccessResponse();
 		MvcResult mvcResult = mockMvc
 				.perform(post(formUplinkURL(VEHANT, VEHANT_MODEL, VEHANT_VERSION))
-						.content(getPristechSmartParkingUplinkParkingEventMsg()).accept("application/json"))
+						.content(getVehantVehiScanNotficationPayloadCapturedByOneCamera()).accept("application/json"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse servletResponse = mvcResult.getResponse();
 		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
 		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
-		validateConsumedUplinkMessage("AP13X1234");
+		validateConsumedUplinkMessage(VEHANT, VEHANT_MODEL, VEHANT_VERSION, "Lane1");
 
 	}
 
-	private String getPristechSmartParkingUplinkParkingEventMsg() {
-		return "{\"Vehicle\":{\"LicenseNum\":\"AP13X1234\",\"LPCategory\":\"Stolen\","
-				+ "\"Time\":\"2017-05-0413:39:18\",\"TransId\":\"P01C020-2017050407238\","
-				+ "\"VehicleColor\":\"Black\",\"CamName\":\"Lane1\",“Latitude”:”17.4012488”,“Longitude”:”78.4763849”,"
-				+ "\"Description\":\"Vehicleisstolen\",\"imageUrl\":{\"image\":[\"http://10.10.1.119/TransId.jpg\",]}}}";
+	@Test
+	@DisplayName("test Publish Uplink Notification Scanned By Mutliple Cameras")
+	public void testUplinkNotificationScannedByMukltipleCamera() throws Exception {
+		JsonObject expectedResponse = getExpectedSuccessResponse();
+		MvcResult mvcResult = mockMvc.perform(post(formUplinkURL(VEHANT, VEHANT_MODEL, VEHANT_VERSION))
+				.content(getVehantVehiScanNotficationPayloadCapturedByMultipleCameras()).accept("application/json"))
+				.andExpect(status().isOk()).andReturn();
+		MockHttpServletResponse servletResponse = mvcResult.getResponse();
+		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
+		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
+		validateConsumedUplinkMessageDeviceModel(VEHANT, VEHANT_MODEL, VEHANT_VERSION);
+		validateConsumedUplinkMessageDeviceModelWithOutWait(VEHANT, VEHANT_MODEL, VEHANT_VERSION);
 
 	}
 
-	private void validateConsumedUplinkMessage(String vehicleNumber) throws InterruptedException {
-		DeviceInfo deviceInfo = super.validateConsumedUplinkMessage(VEHANT, VEHANT_MODEL, VEHANT_VERSION, "Lane1");
-		assertEquals(vehicleNumber,
-				deviceInfo.getPayload().get("Vehicle").getAsJsonObject().get("LicenseNum").getAsString(),
-				"Expected vehicle and actual numbers are not equal");
+	private String getVehantVehiScanNotficationPayloadCapturedByOneCamera() {
+		return "{\"Vehicle\":[{\"LicenseNum\":\"AP13X1234\",\"LPCategory\":\"Stolen\",\"Time\":\"2017-05-0413:39:18\","
+				+ "\"TransId\":\"P01C020-2017050407238\",\"VehicleColor\":\"Black\",\"CamName\":\"Lane1\","
+				+ "\"Latitude\":\"17.4012488\",\"Longitude\":\"78.4763849\",\"Description\":\"Vehicleisstolen\","
+				+ "\"imageUrl\":{\"image\":[\"http://10.10.1.119/TransId.jpg\"]}}]}";
+
+	}
+
+	private String getVehantVehiScanNotficationPayloadCapturedByMultipleCameras() {
+		return "{\"Vehicle\":[{\"LicenseNum\":\"AP13X1234\",\"LPCategory\":\"Stolen\",\"Time\":\"2017-05-0413:39:18\","
+				+ "\"TransId\":\"P01C020-2017050407238\",\"VehicleColor\":\"Black\",\"CamName\":\"Lane1\",\"Latitude\":\"17.4012488\","
+				+ "\"Longitude\":\"78.4763849\",\"Description\":\"Vehicleisstolen\",\"imageUrl\":{\"image\":[\"http://10.10.1.119/TransId.jpg\"]}},"
+				+ "{\"LicenseNum\":\"AP13X1234\",\"LPCategory\":\"Stolen\",\"Time\":\"2017-05-0413:49:18\",\"TransId\":\"P01C020-2017050407239\","
+				+ "\"VehicleColor\":\"Black\",\"CamName\":\"Lane2\",\"Latitude\":\"17.4013488\",\"Longitude\":\"78.4763849\","
+				+ "\"Description\":\"Vehicleisstolen\",\"imageUrl\":{\"image\":[\"http://10.10.1.119/TransId1.jpg\"]}}]}";
 	}
 
 }

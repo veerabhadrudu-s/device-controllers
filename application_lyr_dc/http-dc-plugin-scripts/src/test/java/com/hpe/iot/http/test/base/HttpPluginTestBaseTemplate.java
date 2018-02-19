@@ -67,22 +67,48 @@ public abstract class HttpPluginTestBaseTemplate {
 		return jsonParser.parse(expectedResponseString).getAsJsonObject();
 	}
 
-	private void validateDeviceModel(Device device, String expectedManufacturer, String expectedModelId,
-			String expectedVersion, String expectedDeviceId) {
-		assertEquals(expectedManufacturer, device.getManufacturer(), "Expected and Actual Manufacturer are not same");
-		assertEquals(expectedModelId, device.getModelId(), "Expected and Actual Model are not same");
-		assertEquals(expectedVersion, device.getVersion(), "Expected and Actual Version are not same");
-		assertEquals(expectedDeviceId, device.getDeviceId(), "Expected and Actual DeviceId are not same");
-	}
-
 	protected DeviceInfo validateConsumedUplinkMessage(String expectedManufacturer, String expectedModelId,
 			String expectedVersion, String expectedDeviceId) throws InterruptedException {
 		waitForDCProcessing();
+		return validateConsumedUplinkMessageWithOutWait(expectedManufacturer, expectedModelId, expectedVersion,
+				expectedDeviceId);
+	}
+
+	protected DeviceInfo validateConsumedUplinkMessageWithOutWait(String expectedManufacturer, String expectedModelId,
+			String expectedVersion, String expectedDeviceId) throws InterruptedException {
 		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
 		assertNotNull(deviceInfo, "Device info cannot be null");
-		validateDeviceModel(deviceInfo.getDevice(), expectedManufacturer, expectedModelId, expectedVersion,
+		validateDevice(deviceInfo.getDevice(), expectedManufacturer, expectedModelId, expectedVersion,
 				expectedDeviceId);
 		return deviceInfo;
+	}
+
+	protected DeviceInfo validateConsumedUplinkMessageDeviceModel(String expectedManufacturer, String expectedModelId,
+			String expectedVersion) throws InterruptedException {
+		waitForDCProcessing();
+		return validateConsumedUplinkMessageDeviceModelWithOutWait(expectedManufacturer, expectedModelId,
+				expectedVersion);
+	}
+
+	protected DeviceInfo validateConsumedUplinkMessageDeviceModelWithOutWait(String expectedManufacturer,
+			String expectedModelId, String expectedVersion) throws InterruptedException {
+		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
+		assertNotNull(deviceInfo, "Device info cannot be null");
+		validateDeviceModel(deviceInfo.getDevice(), expectedManufacturer, expectedModelId, expectedVersion);
+		return deviceInfo;
+	}
+
+	private void validateDevice(Device device, String expectedManufacturer, String expectedModelId,
+			String expectedVersion, String expectedDeviceId) {
+		validateDeviceModel(device, expectedManufacturer, expectedModelId, expectedVersion);
+		assertEquals(expectedDeviceId, device.getDeviceId(), "Expected and Actual DeviceId are not same");
+	}
+
+	private void validateDeviceModel(Device device, String expectedManufacturer, String expectedModelId,
+			String expectedVersion) {
+		assertEquals(expectedManufacturer, device.getManufacturer(), "Expected and Actual Manufacturer are not same");
+		assertEquals(expectedModelId, device.getModelId(), "Expected and Actual Model are not same");
+		assertEquals(expectedVersion, device.getVersion(), "Expected and Actual Version are not same");
 	}
 
 }

@@ -25,6 +25,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.hpe.iot.dc</groupId>
+			<artifactId>application-lyr-dc-plugin-moniter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Spring jars -->
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>

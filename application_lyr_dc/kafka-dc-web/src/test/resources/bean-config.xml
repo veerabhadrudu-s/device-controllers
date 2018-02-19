@@ -177,6 +177,11 @@
 	<bean id="groovyScriptFileToDeviceModelHolder"
 		class="com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDeviceModelHolderImpl" />
 
+	<bean id="deploymentLoggerService"
+		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
+	<bean id="loggerService"
+		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
+
 	<bean id="groovyScriptMetaModelServiceActivator"
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
 		<constructor-arg index="0" ref="directoriesForGroovyScripts" />
@@ -190,6 +195,7 @@
 		<constructor-arg index="5" ref="groovyScriptModelCreator" />
 		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
+		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
 	<bean id="kafkaSouthboundInflowService"
@@ -209,9 +215,6 @@
 		<constructor-arg index="2" ref="kafkaSouthboundInflowService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
 	</bean>
-
-	<bean id="deploymentLoggerService"
-		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
 
 	<bean id="kafkaDCGroovyFileEventListener"
 		class="com.hpe.iot.kafka.groovy.watch.file.listener.KafkaDCGroovyFileEventListener">
@@ -241,7 +244,6 @@
 		<constructor-arg index="1" ref="myManagedExecutorService" />
 	</bean>
 
-	<bean id="loggerService"
-		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
+
 
 </beans>

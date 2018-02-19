@@ -73,7 +73,7 @@
 		init-method="startAllServices" destroy-method="stopAllServices">
 		<constructor-arg index="0" ref="brokerProducerServices" />
 	</bean>
-		
+
 	<bean id="activeMQConsumerService"
 		class="com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService">
 		<constructor-arg index="0" value="${activemq.brokerURL}" />
@@ -127,7 +127,7 @@
 		<constructor-arg index="1"
 			ref="northboundPayloadExtractorFactory" />
 	</bean>
-	
+
 	<bean id="downlinkCommandService"
 		class="com.hpe.iot.northbound.service.outflow.impl.DownlinkCommandServiceImpl"
 		init-method="startService" destroy-method="stopService">
@@ -159,20 +159,31 @@
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptModelCreator">
 		<constructor-arg index="0" ref="serverBeanPool" />
 	</bean>
+	
+	<bean id="pluginScriptsPath" class="java.lang.String">
+		<constructor-arg
+			value="src/main/java/com/hpe/iot/kafka/groovyscript/pristech/parking/v1" />
+	</bean>
 
 	<util:list id="directoriesForGroovyScripts" list-class="java.util.ArrayList"
 		value-type="java.lang.String">
-		<value>src/main/java/com/hpe/iot/kafka/groovyscript/pristech/parking/v1</value>
+		<ref bean="pluginScriptsPath" />		
 	</util:list>
 
 	<bean id="defaultPayloadExtractorFactoryComponentHolder"
 		class="com.hpe.iot.service.initializer.groovy.DefaultPayloadExtractorFactoryComponentHolder">
 		<constructor-arg index="0" ref="defaultUplinkPayloadProcessor" />
 	</bean>
-	
+
 	<bean id="groovyScriptFileToDeviceModelHolder"
 		class="com.hpe.iot.service.initializer.groovy.file.impl.GroovyScriptFileToDeviceModelHolderImpl" />
-	
+
+	<bean id="deploymentLoggerService"
+		class="com.handson.logger.service.impl.Slf4jDeploymentLoggerService" />
+
+	<bean id="loggerService"
+		class="com.handson.logger.service.impl.Slf4jLoggerServiceAdaptee" />
+
 	<bean id="groovyScriptMetaModelServiceActivator"
 		class="com.hpe.iot.service.initializer.groovy.GroovyScriptMetaModelServiceActivator">
 		<constructor-arg index="0" ref="directoriesForGroovyScripts" />
@@ -186,6 +197,7 @@
 		<constructor-arg index="5" ref="groovyScriptModelCreator" />
 		<constructor-arg index="6"
 			ref="defaultPayloadExtractorFactoryComponentHolder" />
+		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
 	<bean id="kafkaBrokerService" class="com.hpe.broker.service.kafka.KafkaBrokerService">

@@ -3,13 +3,15 @@
  */
 package com.hpe.iot.service.initializer.groovy;
 
+import static com.handson.iot.dc.util.FileUtility.getFileNameFromFullPath;
+import static java.util.Arrays.deepToString;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.logger.LiveLogger;
+import com.handson.logger.impl.LiveLoggerAdapter;
+import com.handson.logger.service.LoggerService;
 import com.hpe.iot.bean.pool.ServerBeanPool;
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.groovy.loader.GroovyScriptClassLoader;
@@ -49,15 +54,16 @@ public class GroovyScriptModelCreator {
 
 	public GroovyScriptModel createGroovyScriptModel(String groovyScriptFullPath) throws IOException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		String groovyScriptFileName = getFileNameFromFullPath(groovyScriptFullPath);
 		Class<?>[] allClassTypes = readConcreateClassesFromScript(groovyScriptFullPath);
 		if (allClassTypes.length == 0)
-			throw new RuntimeException(
-					"Groovy Script file " + groovyScriptFullPath + " is either empty or it has only abstract classes.");
+			throw new ScriptFileValidationError(
+					"Groovy Script file " + groovyScriptFileName + " is either empty or it has only abstract classes.");
 
-		return constractGroovyScriptModel(allClassTypes);
+		return constructGroovyScriptModel(groovyScriptFileName, allClassTypes);
 	}
 
-	private GroovyScriptModel constractGroovyScriptModel(Class<?>[] allClassTypes)
+	private GroovyScriptModel constructGroovyScriptModel(String groovyScriptFileName, Class<?>[] allClassTypes)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		GroovyScriptMetaModel groovyScriptMetaModel = new GroovyScriptMetaModel();
 		for (Class<?> classType : allClassTypes) {
@@ -82,23 +88,56 @@ public class GroovyScriptModelCreator {
 				groovyScriptMetaModel.getNorthboundGroovyScriptMetaModel()
 						.setDownlinkPayloadProcessorClasstype((Class<? extends DownlinkPayloadProcessor>) classType);
 		}
-		return constructGroovyScriptModelFromScriptMetaModel(groovyScriptMetaModel, allClassTypes);
+		return constructGroovyScriptModelFromScriptMetaModel(groovyScriptFileName, groovyScriptMetaModel,
+				allClassTypes);
 	}
 
-	private GroovyScriptModel constructGroovyScriptModelFromScriptMetaModel(GroovyScriptMetaModel groovyScriptMetaModel,
-			Class<?>[] allClassTypes)
+	private GroovyScriptModel constructGroovyScriptModelFromScriptMetaModel(String groovyScriptFileName,
+			GroovyScriptMetaModel groovyScriptMetaModel, Class<?>[] allClassTypes)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		GroovyScriptModel groovyScriptModel = new GroovyScriptModel();
 		Map<Class<?>, Object> allObjects = new HashMap<>();
 		allObjects.putAll(instantiateZeroArgumentConstructorClasses(allClassTypes));
-		if (groovyScriptMetaModel.getDeviceModelClasstype() != null)
-			groovyScriptModel
-					.setDeviceModel(instantiateClassType(groovyScriptMetaModel.getDeviceModelClasstype(), allObjects));
+		loadDeviceModelClassType(groovyScriptFileName, groovyScriptMetaModel, groovyScriptModel, allObjects);
 		loadSouthboundGroovyScriptModel(groovyScriptMetaModel.getSouthboundGroovyScriptMetaModel(),
 				groovyScriptModel.getSouthboundGroovyScriptModel(), allObjects);
 		loadNorthboundGroovyScriptModel(groovyScriptMetaModel.getNorthboundGroovyScriptMetaModel(),
 				groovyScriptModel.getNorthboundGroovyScriptModel(), allObjects);
+		validateGroovyScriptModel(groovyScriptFileName, groovyScriptModel);
 		return groovyScriptModel;
+	}
+
+	private void loadDeviceModelClassType(String groovyScriptFileName, GroovyScriptMetaModel groovyScriptMetaModel,
+			GroovyScriptModel groovyScriptModel, Map<Class<?>, Object> allObjects)
+			throws InstantiationException, IllegalAccessException, InvocationTargetException {
+		if (groovyScriptMetaModel.getDeviceModelClasstype() == null)
+			throw new ScriptFileValidationError(
+					DeviceModel.class.getSimpleName() + " not defined in the groovy script " + groovyScriptFileName);
+		Constructor<?> deviceModelConstructor = groovyScriptMetaModel.getDeviceModelClasstype().getConstructors()[0];
+		Class<?>[] constructorParameterTypes = deviceModelConstructor.getParameterTypes();
+		validateDeviceModelClassTypeToAvoidCircularDependancyWithLiveLoggerAdapter(groovyScriptMetaModel,
+				constructorParameterTypes);
+		groovyScriptModel
+				.setDeviceModel(instantiateClassType(groovyScriptMetaModel.getDeviceModelClasstype(), allObjects));
+		allObjects.put(LiveLogger.class,
+				new LiveLoggerAdapter(serverBeanPool.getBean(LoggerService.class), groovyScriptModel.getDeviceModel()));
+
+	}
+
+	private void validateDeviceModelClassTypeToAvoidCircularDependancyWithLiveLoggerAdapter(
+			GroovyScriptMetaModel groovyScriptMetaModel, Class<?>[] constructorParameterTypes) {
+		for (Class<?> constructorParameterType : constructorParameterTypes)
+			if (LiveLogger.class.isAssignableFrom(constructorParameterType))
+				throw new ScriptFileValidationError(
+						LiveLogger.class.getSimpleName() + " class type can't be constructor argument for class type "
+								+ groovyScriptMetaModel.getDeviceModelClasstype().getSimpleName()
+								+ " which is an implementation class for " + DeviceModel.class.getName());
+	}
+
+	private void validateGroovyScriptModel(String groovyScriptFileName, GroovyScriptModel groovyScriptModel) {
+		if (groovyScriptModel.getSouthboundGroovyScriptModel().getDeviceIdExtractor() == null)
+			throw new ScriptFileValidationError(DeviceIdExtractor.class.getSimpleName()
+					+ " not defined in the groovy script " + groovyScriptFileName);
 	}
 
 	private void loadSouthboundGroovyScriptModel(SouthboundGroovyScriptMetaModel southboundGroovyScriptMetaModel,
@@ -135,8 +174,7 @@ public class GroovyScriptModelCreator {
 				new File(groovyScriptFullPath));
 		final Class<?>[] allClassesFromScript = groovyScriptlClassLoader.getLoadedClasses();
 		final Class<?>[] loadedClasses = filterAbstractClasses(allClassesFromScript);
-		logger.trace("All loaded classes from script : " + groovyScriptFullPath + " is "
-				+ Arrays.deepToString(loadedClasses));
+		logger.trace("All loaded classes from script : " + groovyScriptFullPath + " is " + deepToString(loadedClasses));
 		return loadedClasses;
 	}
 
@@ -184,18 +222,25 @@ public class GroovyScriptModelCreator {
 
 	private Map<Class<?>, Object> instantiateZeroArgumentConstructorClasses(Class<?>[] loadedClasses)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Map<Class<?>, Object> zeroArgumentConstructorObjects = new HashMap<>();
-		for (Class<?> loadedClass : loadedClasses) {
-			/*logger.trace("Interfaces represented by class " + loadedClass + " are "
-					+ ClassUtils.getAllInterfaces(loadedClass));*/
-			for (Constructor<?> constructor : loadedClass.getConstructors()) {
-				if (constructor.getParameterTypes().length == 0) {
-					zeroArgumentConstructorObjects.put(loadedClass, constructor.newInstance(new Object[0]));
-				}
-			}
-		}
-		logger.info("Instantiated objects with zero argument constructor are " + zeroArgumentConstructorObjects);
+		final Map<Class<?>, Object> zeroArgumentConstructorObjects = new HashMap<>();
+		for (Class<?> loadedClass : loadedClasses)
+			if (loadedClass.getConstructors().length == 1
+					&& loadedClass.getConstructors()[0].getParameterTypes().length == 0)
+				zeroArgumentConstructorObjects.put(loadedClass,
+						loadedClass.getConstructors()[0].newInstance(new Object[0]));
+		logger.info(
+				"Instantiated objects with zero argument constructor are " + zeroArgumentConstructorObjects.toString());
 		return zeroArgumentConstructorObjects;
+
+	}
+
+	class ScriptFileValidationError extends RuntimeException {
+
+		private static final long serialVersionUID = 1L;
+
+		public ScriptFileValidationError(String message) {
+			super(message);
+		}
 
 	}
 
