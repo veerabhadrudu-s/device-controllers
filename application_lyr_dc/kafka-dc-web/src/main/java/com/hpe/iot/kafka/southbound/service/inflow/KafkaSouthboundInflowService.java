@@ -4,6 +4,7 @@
 package com.hpe.iot.kafka.southbound.service.inflow;
 
 import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
+import static com.handson.iot.dc.util.UtilityLogger.exceptionStackToString;
 import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.util.Arrays;
@@ -14,8 +15,10 @@ import javax.enterprise.concurrent.ManagedExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.logger.service.LoggerService;
 import com.hpe.broker.service.consumer.handler.BrokerConsumerDataHandler;
 import com.hpe.iot.dc.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.kafka.southbound.consumer.KafkaSouthboundConsumerService;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.southbound.service.inflow.SouthboundService;
@@ -29,6 +32,7 @@ public class KafkaSouthboundInflowService implements DeviceModelkafkaSubscriptio
 	private static final String GENERIC_KAFKA_DC_CONSUMER_GROUP_ID = "generic-kafkadc-consumer-group";
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final LoggerService loggerService;
 	private final String kafkaBrokerUrl;
 	private final DeviceModelFactory deviceModelFactory;
 	private final KafkaSouthboundConsumerService<String, byte[]> kafkaSouthboundConsumerService;
@@ -36,8 +40,9 @@ public class KafkaSouthboundInflowService implements DeviceModelkafkaSubscriptio
 	private final SouthboundService southboundService;
 
 	public KafkaSouthboundInflowService(String kafkaBrokerUrl, DeviceModelFactory deviceModelFactory,
-			SouthboundService southboundService, ManagedExecutorService executorService) {
+			SouthboundService southboundService, ManagedExecutorService executorService, LoggerService loggerService) {
 		super();
+		this.loggerService = loggerService;
 		this.kafkaBrokerUrl = kafkaBrokerUrl;
 		this.deviceModelFactory = deviceModelFactory;
 		this.southboundService = southboundService;
@@ -111,9 +116,18 @@ public class KafkaSouthboundInflowService implements DeviceModelkafkaSubscriptio
 			String manufacturer = topicParts[0];
 			String modelId = topicParts[1];
 			String version = topicParts[2];
-			logger.trace("Received data from Kafka topic " + topic + " with data "
-					+ convertArrayOfByteToString(consumerData));
-			southboundService.processPayload(manufacturer, modelId, version, consumerData);
+			DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId, version);
+
+			try {
+				logger.trace("Received data from Kafka topic " + topic + " with data "
+						+ convertArrayOfByteToString(consumerData));
+				southboundService.processPayload(deviceModel.getManufacturer(), deviceModel.getModelId(),
+						deviceModel.getVersion(), consumerData);
+			} catch (Throwable throwable) {
+				logExceptionStackTrace(throwable, getClass());
+				loggerService.log(deviceModel, exceptionStackToString(throwable));
+			}
+
 		}
 	}
 }

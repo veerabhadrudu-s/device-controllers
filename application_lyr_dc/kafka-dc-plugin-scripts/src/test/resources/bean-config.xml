@@ -213,6 +213,7 @@
 		<constructor-arg index="2" ref="southboundService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
 		<constructor-arg index="4" ref="kafkaBrokerService" />
+		<constructor-arg index="5" ref="loggerService" />
 	</bean>
 
 	<bean id="kafkaDcInitializer" class="com.hpe.iot.kafka.initializer.KafkaDCInitializer"

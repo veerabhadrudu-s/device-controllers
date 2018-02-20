@@ -197,6 +197,7 @@
 		<constructor-arg index="1" ref="deviceModelFactory" />
 		<constructor-arg index="2" ref="southboundService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
+		<constructor-arg index="4" ref="liveLoggerServiceAdaptee" />
 	</bean>
 
 	<bean id="kafkaDcInitializer" class="com.hpe.iot.kafka.initializer.KafkaDCInitializer"

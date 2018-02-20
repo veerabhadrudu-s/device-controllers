@@ -201,11 +201,12 @@
 		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
-	<bean id="securityLayer" class="com.hpe.iot.mqtt.southbound.security.SecurityLayer" />
-
+	<bean id="securityLayer" class="com.hpe.iot.mqtt.southbound.security.SecurityLayer" />	
+	
 	<bean id="mqttMessageHandler"
 		class="com.hpe.iot.mqtt.southbound.service.inflow.MqttMessageHandler">
-		<constructor-arg index="0" ref="southboundService" />
+		<constructor-arg index="0" ref="loggerService" />
+		<constructor-arg index="1" ref="southboundService" />
 	</bean>
 
 	<bean id="mqttMessageHandlerService"

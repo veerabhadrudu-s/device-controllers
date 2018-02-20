@@ -8,6 +8,7 @@ import javax.enterprise.concurrent.ManagedExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.handson.logger.service.LoggerService;
 import com.hpe.broker.service.kafka.KafkaBrokerService;
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.southbound.service.inflow.SouthboundService;
@@ -24,8 +25,8 @@ public class EmbeddedKafkaBrokerSouthboundInflowService extends KafkaSouthboundI
 
 	public EmbeddedKafkaBrokerSouthboundInflowService(String kafkaBrokerUrl, DeviceModelFactory deviceModelFactory,
 			SouthboundService southboundService, ManagedExecutorService executorService,
-			KafkaBrokerService kafkaBrokerService) {
-		super(kafkaBrokerUrl, deviceModelFactory, southboundService, executorService);
+			KafkaBrokerService kafkaBrokerService, LoggerService loggerService) {
+		super(kafkaBrokerUrl, deviceModelFactory, southboundService, executorService, loggerService);
 		this.kafkaBrokerService = kafkaBrokerService;
 	}
 

@@ -204,7 +204,8 @@
 
 	<bean id="mqttMessageHandler"
 		class="com.hpe.iot.mqtt.southbound.service.inflow.MqttMessageHandler">
-		<constructor-arg index="0" ref="southboundService" />
+		<constructor-arg index="0" ref="loggerService" />
+		<constructor-arg index="1" ref="southboundService" />
 	</bean>
 
 	<bean id="mqttMessageHandlerService"
