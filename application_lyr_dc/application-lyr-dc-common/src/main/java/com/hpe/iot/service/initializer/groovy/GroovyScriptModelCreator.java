@@ -24,6 +24,7 @@ import com.handson.logger.impl.LiveLoggerAdapter;
 import com.handson.logger.service.LoggerService;
 import com.hpe.iot.bean.pool.ServerBeanPool;
 import com.hpe.iot.dc.model.DeviceModel;
+import com.hpe.iot.dc.model.DeviceModelImpl;
 import com.hpe.iot.groovy.loader.GroovyScriptClassLoader;
 import com.hpe.iot.northbound.handler.outflow.DownlinkPayloadProcessor;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
@@ -120,7 +121,10 @@ public class GroovyScriptModelCreator {
 		groovyScriptModel
 				.setDeviceModel(instantiateClassType(groovyScriptMetaModel.getDeviceModelClasstype(), allObjects));
 		allObjects.put(LiveLogger.class,
-				new LiveLoggerAdapter(serverBeanPool.getBean(LoggerService.class), groovyScriptModel.getDeviceModel()));
+				new LiveLoggerAdapter(serverBeanPool.getBean(LoggerService.class),
+						new DeviceModelImpl(groovyScriptModel.getDeviceModel().getManufacturer(),
+								groovyScriptModel.getDeviceModel().getModelId(),
+								groovyScriptModel.getDeviceModel().getVersion())));
 
 	}
 
