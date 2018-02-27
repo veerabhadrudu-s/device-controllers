@@ -3,6 +3,9 @@
  */
 package com.hpe.iot.http.vehant.vehiscan
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -50,6 +53,7 @@ public class VehantVehiScanDeviceIdExtractor extends AbstractJsonPathDeviceIdExt
 public class  VehantVehiScanUplinkPayloadProcessor extends  AbstractUplinkPayloadProcessor{
 
 	private final LiveLogger liveLogger;
+	private final Logger logger=LoggerFactory.getLogger(this.getClass());
 
 	public VehantVehiScanUplinkPayloadProcessor(LiveLogger liveLogger,IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService) {
 		super(iotPublisherService);
@@ -61,7 +65,9 @@ public class  VehantVehiScanUplinkPayloadProcessor extends  AbstractUplinkPayloa
 		JsonObject vehicleNotificationsCaptuaredByCamaras=decipheredPayload.getPayload();
 		List<DeviceInfo> camerasDeviceInfo=convertOneVehicleNotficationsCaptuaredByCamarasToIndividualCamarasPayload(
 				decipheredPayload.getDevice(),vehicleNotificationsCaptuaredByCamaras);
-		liveLogger.log("Vehicle notifications captured by cameras "+camerasDeviceInfo)
+		logger.trace(""+liveLogger);
+		liveLogger.log("Vehicle notifications captured by cameras "+camerasDeviceInfo);
+		logger.trace("Vehicle notifications captured by cameras "+camerasDeviceInfo);
 		for (DeviceInfo cameraDeviceInfo: camerasDeviceInfo)
 			this.iotPublisherService.receiveDataFromDevice(cameraDeviceInfo, "notification");
 	}

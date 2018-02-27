@@ -1,7 +1,7 @@
 /*
  * Author: sveera
  */
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
@@ -14,13 +14,14 @@ import { FooterComponent } from './components/footer/footer.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PluginScriptComponent } from './components/plugin/pluginscript.component';
 import { PluginScriptService } from './services/pluginScript.service';
-import { MockPluginScriptService } from './services/mock.pluginScript.service';
+import { MockHTTPGetServices } from './services/mock.pluginScript.service';
 import { WebsocketServerSocketFactoryService } from './services/websocket.service';
 import { UploadPluginComponent } from './components/upload-plugin/upload-plugin.component';
 import { LiveLogMoniterComponent } from './components/live-log-moniter/live-log-moniter.component';
 import { AppRouterModule } from '../app-router/app-router.module';
 import { AbstractTemplateComponent } from './components/abstract-template/abstract-template.component';
 import { PluginDeployMoniterComponent } from './components/live-log-moniter/plugin-deploy-moniter.component';
+import { BaseHrefProviderService } from './services/base.href.service';
 
 
 @NgModule({
@@ -31,13 +32,13 @@ import { PluginDeployMoniterComponent } from './components/live-log-moniter/plug
     HttpModule,
     AppRouterModule
     // Comment the below code after replacing with real webservice url .
-    //, InMemoryWebApiModule.forRoot(MockPluginScriptService)
+    // , InMemoryWebApiModule.forRoot(MockHTTPGetServices)
   ],
   declarations: [
     BannerComponent,
+    FooterComponent,
     DashboardComponent,
     PluginScriptComponent,
-    FooterComponent,
     UploadPluginComponent,
     LiveLogMoniterComponent,
     AbstractTemplateComponent,
@@ -48,7 +49,8 @@ import { PluginDeployMoniterComponent } from './components/live-log-moniter/plug
     WebSocketService,
     Location, { provide: LocationStrategy, useClass: PathLocationStrategy },
     PluginScriptService,
-    WebsocketServerSocketFactoryService
+    WebsocketServerSocketFactoryService,
+    BaseHrefProviderService
   ]
 })
 export class ServiceManagerModule { }

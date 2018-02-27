@@ -1,0 +1,27 @@
+<!--
+ Author: sveera
+ -->
+<app-abstract-template>
+  <table class="liveLogMenuPanel">
+    <thead>
+      <tr>
+        <th colspan="2">Uploaded {{dcName | uppercase}} plugin script
+          <span>{{scriptFileName}}</span> deployment status logs
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <input type="button" value="Go Back to Dashboard" (click)="goBackToDashboard()" />
+        </td>
+        <td>
+          <input type="button" value="Clear Logs" (click)="clearLogs()" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="logConsole">
+    <p *ngFor="let logMessage of liveLogMessages">{{logMessage}}</p>
+  </div>
+</app-abstract-template>

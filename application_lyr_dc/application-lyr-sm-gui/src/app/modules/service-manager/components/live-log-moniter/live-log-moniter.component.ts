@@ -3,10 +3,10 @@
  */
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Location } from '@angular/common';
 import { AbstractLiveLogger } from './abstract-live-logger.component';
 import { WebsocketServerSocketFactoryService } from '../../services/websocket.service';
-
+import { Location } from '@angular/common';
+import { BaseHrefProviderService } from '../../services/base.href.service';
 
 @Component({
   selector: 'app-live-log-moniter',
@@ -18,9 +18,10 @@ export class LiveLogMoniterComponent extends AbstractLiveLogger {
   version: String;
   private liveLoggerUrlPath: String = '/liveLoggerConnector';
 
-  constructor(websocketServerSocketFactoryService: WebsocketServerSocketFactoryService,
+  constructor(baseHrefProviderService: BaseHrefProviderService,
+    websocketServerSocketFactoryService: WebsocketServerSocketFactoryService,
     location: Location, activatedRoute: ActivatedRoute) {
-    super(websocketServerSocketFactoryService, location, activatedRoute);
+    super(baseHrefProviderService, websocketServerSocketFactoryService, location, activatedRoute);
   }
 
   protected getWebsocketConnectionUrl(activatedRoute: ActivatedRoute): String {

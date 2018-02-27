@@ -8,6 +8,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { WebsocketServerSocketFactoryService } from '../../services/websocket.service';
 import { AbstractLiveLogger } from './abstract-live-logger.component';
+import { BaseHrefProviderService } from '../../services/base.href.service';
 
 @Component({
   selector: 'app-plugin-deploy-moniter',
@@ -18,10 +19,12 @@ export class PluginDeployMoniterComponent extends AbstractLiveLogger {
   scriptFileName: String;
   private liveLoggerUrlPath: String = '/pluginScriptDeploymentStatus';
 
-  constructor(websocketServerSocketFactoryService: WebsocketServerSocketFactoryService,
+  constructor(baseHrefProviderService: BaseHrefProviderService,
+    websocketServerSocketFactoryService: WebsocketServerSocketFactoryService,
     location: Location, activatedRoute: ActivatedRoute) {
-    super(websocketServerSocketFactoryService, location, activatedRoute);
+    super(baseHrefProviderService, websocketServerSocketFactoryService, location, activatedRoute);
   }
+
 
   protected getWebsocketConnectionUrl(activatedRoute: ActivatedRoute): String {
     const paramMap: ParamMap = activatedRoute.snapshot.paramMap;

@@ -1,0 +1,10 @@
+<!--
+ Author: sveera
+ -->
+<div class="thumbnail" *ngIf="pluginScript">
+    <a routerLink="/liveLogMoniter/{{pluginScript.manufacturer}}/{{pluginScript.modelId}}/{{pluginScript.version}}">
+        <img src="./assets/images/sensor_3.png" alt="" class="cards" />
+    </a>
+    <h4>{{pluginScript.manufacturer}} {{pluginScript.modelId}} {{pluginScript.version}}</h4>
+    <p class="tag">Script File Name : {{pluginScript.pluginScriptFileName}}</p>
+</div>
