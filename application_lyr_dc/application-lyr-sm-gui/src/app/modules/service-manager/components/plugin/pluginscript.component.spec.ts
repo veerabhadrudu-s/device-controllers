@@ -18,7 +18,7 @@ fdescribe('Plugin script component', () => {
         pluginScriptComponentFixture = TestBed.createComponent(PluginScriptComponent);
     });
 
-    fit('Is Plugin Script not null', () => {
+    fit('Is ' + PluginScriptComponent.name + ' not null', () => {
         const pluginScriptComponent: PluginScriptComponent = pluginScriptComponentFixture.componentInstance;
         expect(pluginScriptComponent).not.toBeNull();
     });

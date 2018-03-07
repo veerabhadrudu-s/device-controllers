@@ -69,7 +69,7 @@ public class GroovyScriptModelCreator {
 		GroovyScriptMetaModel groovyScriptMetaModel = new GroovyScriptMetaModel();
 		for (Class<?> classType : allClassTypes) {
 			if (DeviceModel.class.isAssignableFrom(classType))
-				groovyScriptMetaModel.setDeviceModelClasstype((Class<? extends DeviceModel>) classType);
+				groovyScriptMetaModel.setDeviceModelClasstype((Class<DeviceModel>) classType);
 			if (DeviceIdExtractor.class.isAssignableFrom(classType))
 				groovyScriptMetaModel.getSouthboundGroovyScriptMetaModel()
 						.setDeviceIdExtractorClasstype((Class<? extends DeviceIdExtractor>) classType);

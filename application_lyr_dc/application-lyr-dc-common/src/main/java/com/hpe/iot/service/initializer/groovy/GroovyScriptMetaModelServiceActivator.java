@@ -194,7 +194,7 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 					scriptDeviceModel.getModelId(), scriptDeviceModel.getVersion());
 			northboundPayloadExtractorFactory.removeDownlinkPayloadProcessor(scriptDeviceModel.getManufacturer(),
 					scriptDeviceModel.getModelId(), scriptDeviceModel.getVersion());
-			groovyScriptFileToDeviceModelHolderImpl.removeScriptDeviceModel(scriptFullPath);
+			groovyScriptFileToDeviceModelHolderImpl.removeScriptDeviceModel(groovyScriptFileName);
 			logger.info("Removed plugin script model/handlers of device model " + scriptDeviceModel
 					+ " for the plugin script " + groovyScriptFileName);
 			deploymentLoggerService.log(groovyScriptFileName, "Completed de-registering plugin script model");

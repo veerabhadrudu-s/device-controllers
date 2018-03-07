@@ -21,7 +21,7 @@ export class BaseHrefProviderService {
         //  Using this name we form remaning Rest Url's dynamically.
         // --base-href is not provided we assume default name as mqtt
         console.log('base href ' + this.location.prepareExternalUrl(''));
-        this.baseHref = this.location.prepareExternalUrl('') === '/' ? 'mqtt' :
+        this.baseHref = this.location.prepareExternalUrl('') === '/' || this.location.prepareExternalUrl('') === '' ? 'mqtt' :
             this.location.prepareExternalUrl('').split('/')[1];
     }
 

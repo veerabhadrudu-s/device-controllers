@@ -1,25 +1,35 @@
+/*
+ * Author: sveera
+ */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { UploadPluginComponent } from './upload-plugin.component';
+import { BaseHrefProviderService } from '../../services/base.href.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { PluginScriptService } from '../../services/pluginScript.service';
 
-describe('UploadPluginComponent', () => {
-  let component: UploadPluginComponent;
-  let fixture: ComponentFixture<UploadPluginComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ UploadPluginComponent ]
-    })
-    .compileComponents();
-  }));
+class MockPluginScriptService { }
+
+fdescribe('test cases related to ' + UploadPluginComponent.name, () => {
+
+  let uploadPluginComponentFixture: ComponentFixture<UploadPluginComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadPluginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [UploadPluginComponent],
+      providers: [BaseHrefProviderService, {
+        provide: PluginScriptService, useclass: MockPluginScriptService
+      }]
+    });
+    uploadPluginComponentFixture = TestBed.createComponent(UploadPluginComponent);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  fit('Is ' + UploadPluginComponent.name + ' not null', () => {
+    const uploadPluginComponent: UploadPluginComponent = uploadPluginComponentFixture.componentInstance;
+    uploadPluginComponentFixture.whenStable().then(() => {
+      uploadPluginComponentFixture.detectChanges();
+      expect(uploadPluginComponent).not.toBeNull();
+    });
   });
 });
