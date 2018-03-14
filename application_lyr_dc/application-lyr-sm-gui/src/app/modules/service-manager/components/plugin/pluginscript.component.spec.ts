@@ -6,7 +6,7 @@ import { PluginScriptComponent } from './pluginscript.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PluginScript } from './pluginscript';
 
-fdescribe('Plugin script component', () => {
+fdescribe('Test cases related to ' + PluginScriptComponent.name, () => {
 
     let pluginScriptComponentFixture: ComponentFixture<PluginScriptComponent>;
 

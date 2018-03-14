@@ -20,7 +20,7 @@ export class PluginScriptService {
 
     constructor(private baseHrefProviderService: BaseHrefProviderService, private http: Http) { }
 
-    getScriptInstalledScripts(): Promise<PluginScript[]> {
+    getInstalledPlugins(): Promise<PluginScript[]> {
         const promiseResponse: Promise<Response> = this.http.get(this.readplugins).toPromise();
         return promiseResponse.
             then((response) => {

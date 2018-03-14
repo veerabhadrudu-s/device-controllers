@@ -10,7 +10,7 @@ import { PluginScriptService } from '../../services/pluginScript.service';
 
 class MockPluginScriptService { }
 
-fdescribe('test cases related to ' + UploadPluginComponent.name, () => {
+fdescribe('Test cases related to ' + UploadPluginComponent.name, () => {
 
   let uploadPluginComponentFixture: ComponentFixture<UploadPluginComponent>;
 

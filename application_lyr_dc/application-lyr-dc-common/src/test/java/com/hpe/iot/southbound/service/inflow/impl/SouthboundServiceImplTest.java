@@ -60,7 +60,7 @@ public class SouthboundServiceImplTest {
 	private IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 	private UplinkPayloadProcessor uplinkPayloadProcessor;
 	private final DeviceModelFactory deviceMetaModelFactory = new UplinkJsonPathDeviceModelFactory(
-			TestConstants.FULL_PATH);
+			TestConstants.DEVICE_MODELS_FULL_PATH);
 	private final SouthboundPayloadExtractorFactory payloadExtractorFactory = new SouthboundPayloadExtractorFactory();
 	private final JsonPathDeviceIdExtractor deviceIdExtractor = new JsonPathDeviceIdExtractor();
 	private final MessageTypeExtractor messageTypeExtractor = new JsonPathMessageTypeExtractor();

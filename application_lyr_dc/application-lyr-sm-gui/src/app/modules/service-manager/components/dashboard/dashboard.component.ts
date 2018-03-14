@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private initializeDashBoardComponent() {
-        this.pluginScriptService.getScriptInstalledScripts().then((pluginScripts) => {
+        this.pluginScriptService.getInstalledPlugins().then((pluginScripts) => {
             this.logAvailablePlugins(pluginScripts);
             if (this.pluginScripts != null && this.pluginScripts.length > 0) {
                 this.convertOneDimentionalArrayToTwoDimensional();

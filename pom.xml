@@ -11,7 +11,7 @@
 		<module>common-util</module>
 		<module>message-broker-common</module>
 		<module>application_lyr_dc</module>
-		<module>transport_lyr_dc</module>		
+		<module>transport_lyr_dc</module>
 		<module>device-controllers-ear</module>
 	</modules>
 	<properties>
@@ -228,6 +228,12 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
 				<version>${junit.jupiter.version}</version>
 				<scope>test</scope>
 			</dependency>
