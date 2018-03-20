@@ -3,10 +3,9 @@
  */
 package com.hpe.iot.mqtt.southbound.service.outflow;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedTransferQueue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
 
@@ -16,20 +15,22 @@ import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
  */
 public class MqttDevicePayloadHolder {
 
-	private final BlockingQueue<ReceivedMqttMessage> mqttDeviceData;
-	private final long pollingPeriod = 5000l;
+	private final List<ReceivedMqttMessage> mqttDeviceData;
+	private final CountDownLatch countDownLatch;
 
-	public MqttDevicePayloadHolder() {
+	public MqttDevicePayloadHolder(CountDownLatch countDownLatch) {
 		super();
-		this.mqttDeviceData = new LinkedTransferQueue<>();
+		this.mqttDeviceData = new LinkedList<>();
+		this.countDownLatch = countDownLatch;
 	}
 
-	public ReceivedMqttMessage getMqttDeviceData() throws InterruptedException {
-		return mqttDeviceData.poll(pollingPeriod, MILLISECONDS);
+	public List<ReceivedMqttMessage> getMqttDeviceData() throws InterruptedException {
+		return mqttDeviceData;
 	}
 
 	public void holdMqttDeviceData(ReceivedMqttMessage receivedMqttMessage) {
 		mqttDeviceData.add(receivedMqttMessage);
+		countDownLatch.countDown();
 	}
-	
+
 }

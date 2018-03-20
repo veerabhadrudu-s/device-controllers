@@ -7,16 +7,12 @@ import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH;
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.PRISTECH_VERSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MvcResult;
 
-import com.google.gson.JsonObject;
+import com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.http.test.base.HttpPluginTestBaseTemplate;
 import com.hpe.iot.model.DeviceInfo;
 
@@ -31,30 +27,17 @@ public class PristechSmartParkingTest extends HttpPluginTestBaseTemplate {
 	@Test
 	@DisplayName("test Process DevicePayload For Pristech Smart Parking Uplink Parking Event")
 	public void testPristechSmartParkingUplinkParkingEvent() throws Exception {
-		JsonObject expectedResponse = getExpectedSuccessResponse();
-		MvcResult mvcResult = mockMvc
-				.perform(post(formUplinkURL(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION))
-						.content(getPristechSmartParkingUplinkParkingEventMsg()).accept("application/json"))
-				.andExpect(status().isOk()).andReturn();
-		MockHttpServletResponse servletResponse = mvcResult.getResponse();
-		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
-		validateConsumedPristechUplinkMessage("PARKING_EVENT");
-
+		IOTDevicePayloadHolder iotDevicePayloadHolder = postUplinkMessages(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION,
+				getPristechSmartParkingUplinkParkingEventMsg());
+		validateConsumedPristechUplinkMessage("PARKING_EVENT", iotDevicePayloadHolder.getIOTDeviceData().get(0));
 	}
 
 	@Test
 	@DisplayName("test Process DevicePayload For Pristech Smart Parking Uplink Health Check")
 	public void testPristechSmartParkingUplinkHealthCheck() throws Exception {
-		JsonObject expectedResponse = getExpectedSuccessResponse();
-		MvcResult mvcResult = mockMvc
-				.perform(post(formUplinkURL(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION))
-						.content(getPristechSmartParkingUplinkHealthCheckMsg()).accept("application/json"))
-				.andExpect(status().isOk()).andReturn();
-		MockHttpServletResponse servletResponse = mvcResult.getResponse();
-		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
-		validateConsumedPristechUplinkMessage("PARKING_HEALTH");
+		IOTDevicePayloadHolder iotDevicePayloadHolder = postUplinkMessages(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION,
+				getPristechSmartParkingUplinkHealthCheckMsg());
+		validateConsumedPristechUplinkMessage("PARKING_HEALTH", iotDevicePayloadHolder.getIOTDeviceData().get(0));
 	}
 
 	@Test
@@ -78,8 +61,9 @@ public class PristechSmartParkingTest extends HttpPluginTestBaseTemplate {
 				+ " \"location\": { \"longitude\": 77.6113940000000040, \"latitude\": 12.9344900000000000 }, \"current_status\": 1, \"last_tx_status\": 0}";
 	}
 
-	private void validateConsumedPristechUplinkMessage(String expectedMessageType) throws InterruptedException {
-		DeviceInfo deviceInfo = validateConsumedUplinkMessage(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION, DEVICE_ID);
+	private void validateConsumedPristechUplinkMessage(String expectedMessageType, DeviceInfo deviceInfo)
+			throws InterruptedException {
+		validateConsumedUplinkMessage(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION, DEVICE_ID, deviceInfo);
 		assertEquals(expectedMessageType, deviceInfo.getMessageType(), "Expected and actual Message Type are not same");
 	}
 

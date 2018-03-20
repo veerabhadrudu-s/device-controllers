@@ -4,54 +4,83 @@
 package com.hpe.iot.kafka.test.base;
 
 import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.JsonParser;
+import com.hpe.broker.service.consumer.BrokerConsumerService;
+import com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService;
 import com.hpe.broker.service.producer.kafka.KafkaProducerService;
 import com.hpe.iot.kafka.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
-import com.hpe.iot.kafka.northbound.sdk.handler.mock.MockNorthboundDownlinkProducerService;
+import com.hpe.iot.kafka.northbound.sdk.handler.mock.MockNorthboundUplinkConsumerService;
 
 /**
  * @author sveera
  *
  */
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public abstract class KafkaDCPluginScriptTestBaseTemplate {
 
+	private static final int PAYLOAD_PROCESSING_WAIT_TIME = 10000;
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	protected final JsonParser jsonParser = new JsonParser();
+	private static ClassPathXmlApplicationContext applicationContext;
 
-	@Autowired
-	protected IOTDevicePayloadHolder iotDevicePayloadHolder;
-	@Autowired
-	protected MockNorthboundDownlinkProducerService mockNorthboundDownlinkProducerService;
-	@Autowired
-	protected KafkaProducerService<String, String> kafkaDevicePublisherService;
-	
-	@BeforeEach
-	public void beforeTest() throws InterruptedException {
-		waitForDCInitialization();
+	@BeforeAll
+	public static void beforeClass() throws InterruptedException {
+		applicationContext = new ClassPathXmlApplicationContext("/bean-config.xml");
+		waitForKafkaInitialization();
 	}
 
-	protected void tryPublishingMessage(String topicName, String payload) {
+	private static void waitForKafkaInitialization() throws InterruptedException {
+		Thread.sleep(5000);
+	}
+
+	@AfterAll
+	public static void afterClass() {
+		applicationContext.close();
+	}
+
+	protected IOTDevicePayloadHolder tryPublishingUplinkMessage(String topicName, String... uplinkPayloads) {
+		return tryPublishingUplinkMessage(topicName, uplinkPayloads.length, uplinkPayloads);
+	}
+
+	protected IOTDevicePayloadHolder tryPublishingUplinkMessage(String topicName, int expectedUplinkMessagesCount,
+			String... uplinkPayloads) {
+		CountDownLatch countDownLatch = new CountDownLatch(expectedUplinkMessagesCount);
+		IOTDevicePayloadHolder iotDevicePayloadHolder = new IOTDevicePayloadHolder(countDownLatch);
+		BrokerConsumerService<String> brokerConsumerService = new ActiveMQConsumerService(
+				getSpringPropertyFileValue("${activemq.brokerURL}"), getSpringPropertyFileValue("${activemq.usename}"),
+				getSpringPropertyFileValue("${activemq.password}"));
+
+		MockNorthboundUplinkConsumerService mockNorthboundUplinkConsumerService = new MockNorthboundUplinkConsumerService(
+				getSpringPropertyFileValue("${iot.device.uplink.destination}"), brokerConsumerService,
+				iotDevicePayloadHolder);
 		try {
-			kafkaDevicePublisherService.publishData(topicName, payload);
-			waitForDCToCompletePayloadProcessing();
+			KafkaProducerService<String, String> kafkaProducerService = (KafkaProducerService<String, String>) applicationContext
+					.getBean("kafkaDevicePublisherService", KafkaProducerService.class);
+			mockNorthboundUplinkConsumerService.startService();
+			for (String uplinkPayload : uplinkPayloads)
+				kafkaProducerService.publishData(topicName, uplinkPayload);
+			countDownLatch.await(PAYLOAD_PROCESSING_WAIT_TIME, MILLISECONDS);
 		} catch (Throwable e) {
 			logExceptionStackTrace(e, getClass());
 			fail("Failed to run JUNIT Test case ");
+		} finally {
+			mockNorthboundUplinkConsumerService.stopService();
 		}
+		return iotDevicePayloadHolder;
+	}
+
+	private String getSpringPropertyFileValue(String propertyName) {
+		return applicationContext.getBeanFactory().resolveEmbeddedValue(propertyName);
 	}
 
 	protected String formUplinkTopicName(String manufacturer, String model, String version) {
@@ -66,14 +95,6 @@ public abstract class KafkaDCPluginScriptTestBaseTemplate {
 
 	private String formTopicName(String manufacturer, String model, String version, String flow) {
 		return manufacturer + "_" + model + "_" + version + "_" + flow;
-	}
-
-	private void waitForDCInitialization() throws InterruptedException {
-		Thread.sleep(20000);
-	}
-
-	protected void waitForDCToCompletePayloadProcessing() throws InterruptedException {
-		Thread.sleep(5000);
 	}
 
 }

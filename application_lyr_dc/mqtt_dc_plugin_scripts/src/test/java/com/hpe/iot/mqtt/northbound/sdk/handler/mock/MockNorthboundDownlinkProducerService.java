@@ -15,10 +15,10 @@ public class MockNorthboundDownlinkProducerService {
 	private final BrokerProducerService<String> brokerProducerService;
 
 	public MockNorthboundDownlinkProducerService(String destination,
-			BrokerProducerService<String> brokerConsumerService) {
+			BrokerProducerService<String> brokerProducerService) {
 		super();
 		this.destination = destination;
-		this.brokerProducerService = brokerConsumerService;
+		this.brokerProducerService = brokerProducerService;
 	}
 
 	public void startService() {

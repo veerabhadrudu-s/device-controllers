@@ -18,16 +18,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.dc.model.DeviceModelImpl;
@@ -39,15 +36,12 @@ import com.hpe.iot.southbound.handler.inflow.DeviceIdExtractor;
 import com.hpe.iot.southbound.handler.inflow.MessageTypeExtractor;
 import com.hpe.iot.southbound.handler.inflow.PayloadDecipher;
 import com.hpe.iot.southbound.handler.inflow.UplinkPayloadProcessor;
-import com.hpe.iot.southbound.handler.inflow.factory.PayloadExtractorFactory;
+import com.hpe.iot.southbound.handler.inflow.factory.impl.SouthboundPayloadExtractorFactory;
 
 /**
  * @author sveera
  *
  */
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public class MqttDCGroovyFileEventListenerTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static final String SRC_DIR = "src";
@@ -62,16 +56,24 @@ public class MqttDCGroovyFileEventListenerTest {
 	private static final String SAMPLE_GROOVY_BACKUP = "sample_Backup.groovy";
 	private static final String SAMPLE_GROOVY = "sample.groovy";
 	private static final String MODIFIED_SCRIPT_CLASS_TYPE = "com.hpe.iot.mqtt.groovyscript.sample.model.modified.SampleDeviceModelHandler";
-	@Autowired
+	private ClassPathXmlApplicationContext classPathXmlApplicationContext;
 	private DeviceModelFactory deviceModelFactory;
-	@Autowired
-	private PayloadExtractorFactory southboundPayloadExtractorFactory;
-	@Autowired
+	private SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory;
 	private NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory;
 
 	@BeforeEach
-	public void setUp() throws InterruptedException {
-		waitForDCLoading();
+	public void setUp() {
+		classPathXmlApplicationContext = new ClassPathXmlApplicationContext("/bean-config.xml");
+		deviceModelFactory = classPathXmlApplicationContext.getBean(DeviceModelFactory.class);
+		southboundPayloadExtractorFactory = classPathXmlApplicationContext
+				.getBean(SouthboundPayloadExtractorFactory.class);
+		northboundPayloadExtractorFactory = classPathXmlApplicationContext
+				.getBean(NorthboundPayloadExtractorFactory.class);
+	}
+
+	@AfterEach
+	public void tearDown() {
+		classPathXmlApplicationContext.close();
 	}
 
 	@Test
@@ -112,11 +114,7 @@ public class MqttDCGroovyFileEventListenerTest {
 	}
 
 	private void waitForScriptLoading() throws InterruptedException {
-		Thread.sleep(10000);
-	}
-
-	private void waitForDCLoading() throws InterruptedException {
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 	}
 
 	private void copyModifiedScript() throws IOException, URISyntaxException {

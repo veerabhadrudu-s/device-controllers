@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 
 import com.hpe.broker.service.consumer.BrokerConsumerService;
 import com.hpe.broker.service.consumer.handler.BrokerConsumerDataHandler;
-import com.hpe.broker.utility.UtilityLogger;
 
 /**
  * @author sveera
@@ -62,6 +61,10 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 	@Override
 	public void consumeData(String destination, BrokerConsumerDataHandler<V> brokerConsumerDataHandler) {
 		KafkaConsumerRunnable kafkaConsumerRunnable = new KafkaConsumerRunnable(destination, brokerConsumerDataHandler);
+		startConsumerThread(kafkaConsumerRunnable);
+	}
+
+	protected void startConsumerThread(KafkaConsumerRunnable kafkaConsumerRunnable) {
 		kafkaConsumers.add(kafkaConsumerRunnable);
 		logger.debug(
 				"Trying to start new " + KafkaConsumerRunnable.class.getSimpleName() + " : " + kafkaConsumerRunnable);
@@ -86,27 +89,12 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 		public void run() {
 			try {
 				tryInstantiatingKafkaConsumer();
-				while (isConsumerRunnable) {
-					ConsumerRecords<K, V> records = kafkaConsumer.poll(polling_interval);
-					for (ConsumerRecord<K, V> consumerRecord : records)
-						tryProcessingMessage(consumerRecord);
-					kafkaConsumer.commitSync();
-					// kafkaConsumer.unsubscribe();
-				}
+				while (isConsumerRunnable)
+					startPollingForRecords();
 			} catch (Throwable th) {
 				logExceptionStackTrace(th, getClass());
 			} finally {
 				closingKafkaConsumer();
-			}
-		}
-
-		private void tryProcessingMessage(ConsumerRecord<K, V> consumerRecord) {
-			try {
-				logger.trace("Received consumer record in " + this.getClass().getSimpleName() + " with value "
-						+ consumerRecord.toString());
-				brokerConsumerDataHandler.handleConsumerMessage(consumerRecord.topic(), consumerRecord.value());
-			} catch (Throwable e) {
-				UtilityLogger.logExceptionStackTrace(e, getClass());
 			}
 		}
 
@@ -141,6 +129,23 @@ public class KafkaConsumerService<K, V> implements BrokerConsumerService<V> {
 					: (Deserializer<V>) Class.forName(valueDeSerializerClass).newInstance();
 			kafkaConsumer = new KafkaConsumer<>(properties, keySerializer, valueSerializer);
 			logger.trace("Kafka Consumer Instance been created " + kafkaConsumer);
+		}
+
+		protected void startPollingForRecords() {
+			ConsumerRecords<K, V> records = kafkaConsumer.poll(polling_interval);
+			for (ConsumerRecord<K, V> consumerRecord : records)
+				tryProcessingMessage(consumerRecord);
+			kafkaConsumer.commitSync();
+		}
+
+		private void tryProcessingMessage(ConsumerRecord<K, V> consumerRecord) {
+			try {
+				logger.trace("Received consumer record in " + this.getClass().getSimpleName() + " with value "
+						+ consumerRecord.toString());
+				brokerConsumerDataHandler.handleConsumerMessage(consumerRecord.topic(), consumerRecord.value());
+			} catch (Throwable e) {
+				logExceptionStackTrace(e, getClass());
+			}
 		}
 
 		private void closingKafkaConsumer() {

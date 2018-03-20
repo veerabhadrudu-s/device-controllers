@@ -6,16 +6,11 @@ package com.hpe.iot.http.avanseus.videoanalytics;
 import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS;
 import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.AVANSEUS_VERSION;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MvcResult;
 
-import com.google.gson.JsonObject;
+import com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.http.test.base.HttpPluginTestBaseTemplate;
 
 /**
@@ -32,16 +27,10 @@ public class AvanseusTest extends HttpPluginTestBaseTemplate {
 	@Test
 	@DisplayName("test Process DevicePayload For Avanseus Script")
 	public void testProcessDevicePayloadForAvanseusScript() throws Exception {
-		JsonObject expectedResponse = getExpectedSuccessResponse();
-		waitForDCInitialization();
-		MvcResult mvcResult = mockMvc
-				.perform(post(formUplinkURL(AVANSEUS, AVANSEUS_MODEL, AVANSEUS_VERSION))
-						.content(createPayloadForPayloadForAvanseusNotification()).accept("application/json"))
-				.andExpect(status().isOk()).andReturn();
-		MockHttpServletResponse servletResponse = mvcResult.getResponse();
-		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		Assertions.assertEquals(expectedResponse, actualResponse);
-		validateConsumedUplinkMessage(AVANSEUS, AVANSEUS_MODEL, AVANSEUS_VERSION, DEVICE_ID);
+		IOTDevicePayloadHolder iotDevicePayloadHolder = postUplinkMessages(AVANSEUS, AVANSEUS_MODEL, AVANSEUS_VERSION,
+				createPayloadForPayloadForAvanseusNotification());
+		validateConsumedUplinkMessage(AVANSEUS, AVANSEUS_MODEL, AVANSEUS_VERSION, DEVICE_ID,
+				iotDevicePayloadHolder.getIOTDeviceData().get(0));
 	}
 
 	private String createPayloadForPayloadForAvanseusNotification() {

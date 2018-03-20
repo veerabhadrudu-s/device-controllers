@@ -6,16 +6,11 @@ package com.hpe.iot.http.libelium.smartagriculture;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.LIBELIUM_VERSION;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MvcResult;
 
-import com.google.gson.JsonObject;
+import com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.http.test.base.HttpPluginTestBaseTemplate;
 
 /**
@@ -29,15 +24,10 @@ public class LibeliumSmartAgricultureProTest extends HttpPluginTestBaseTemplate 
 	@Test
 	@DisplayName("test Process DevicePayload For Libelium Smart AgriculturePro Notification Msg Typ")
 	public void testHttpSouthboundServiceForLibeliumSmartAgricultureProForNotificationMsgTyp() throws Exception {
-		JsonObject expectedResponse = getExpectedSuccessResponse();
-		MvcResult mvcResult = mockMvc
-				.perform(put(formUplinkURL(LIBELIUM, LIBELIUM_MODEL, LIBELIUM_VERSION))
-						.content(getLibeliumSmartAgricultureProForNotificationMsgTyp()).accept("application/json"))
-				.andExpect(status().isOk()).andReturn();
-		MockHttpServletResponse servletResponse = mvcResult.getResponse();
-		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
-		validateConsumedUplinkMessage(LIBELIUM, LIBELIUM_MODEL, LIBELIUM_VERSION, DEVICE_ID);
+		IOTDevicePayloadHolder iotDevicePayloadHolder = putUplinkMessages(LIBELIUM, LIBELIUM_MODEL, LIBELIUM_VERSION,
+				getLibeliumSmartAgricultureProForNotificationMsgTyp());
+		validateConsumedUplinkMessage(LIBELIUM, LIBELIUM_MODEL, LIBELIUM_VERSION, DEVICE_ID,
+				iotDevicePayloadHolder.getIOTDeviceData().get(0));
 	}
 
 	private String getLibeliumSmartAgricultureProForNotificationMsgTyp() {

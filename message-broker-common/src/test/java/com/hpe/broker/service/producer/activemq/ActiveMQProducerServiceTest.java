@@ -1,9 +1,11 @@
 package com.hpe.broker.service.producer.activemq;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,13 +40,13 @@ public class ActiveMQProducerServiceTest {
 
 	@Test
 	public void testActiveMQProducerService() {
-		assertNotNull(activeMQProducerService,"activeMQProducerService Cannot be null");
+		assertNotNull(activeMQProducerService, "activeMQProducerService Cannot be null");
 	}
 
 	@Test
 	public void testActiveMQProducerServiceGetName() {
-		assertEquals( "activemq",
-				activeMQProducerService.getName(),"Expected ActiveMQProducerService name and actual name are not same");
+		assertEquals("activemq", activeMQProducerService.getName(),
+				"Expected ActiveMQProducerService name and actual name are not same");
 	}
 
 	@Test
@@ -52,11 +54,7 @@ public class ActiveMQProducerServiceTest {
 		for (int deviceMessageIndex = 0; deviceMessageIndex < 100; deviceMessageIndex++)
 			activeMQProducerService.publishData("activeMQTestQueue",
 					"This device data generated  @ " + new Date().toString());
-		waitForProducerToFinish();
-	}
-
-	private void waitForProducerToFinish() throws InterruptedException {
-		Thread.sleep(3000);
+		new CountDownLatch(1).await(1000, MILLISECONDS);
 	}
 
 }

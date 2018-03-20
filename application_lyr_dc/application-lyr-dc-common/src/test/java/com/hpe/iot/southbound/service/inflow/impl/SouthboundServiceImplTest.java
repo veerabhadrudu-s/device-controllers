@@ -3,6 +3,7 @@
  */
 package com.hpe.iot.southbound.service.inflow.impl;
 
+import static com.hpe.iot.test.constants.TestConstants.DEVICE_MODELS_FULL_PATH;
 import static com.hpe.iot.test.constants.TestConstants.REXAWARE;
 import static com.hpe.iot.test.constants.TestConstants.REXAWARE_MODEL;
 import static com.hpe.iot.test.constants.TestConstants.REXAWARE_VERSION;
@@ -12,6 +13,7 @@ import static com.hpe.iot.test.constants.TestConstants.SAMPLE_VERSION;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_MODEL;
 import static com.hpe.iot.test.constants.TestConstants.TRACKIMO_VERSION;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,6 @@ import com.hpe.iot.southbound.handler.inflow.impl.DefaultUplinkPayloadProcessor;
 import com.hpe.iot.southbound.handler.inflow.impl.JsonPathDeviceIdExtractor;
 import com.hpe.iot.southbound.handler.inflow.impl.JsonPathMessageTypeExtractor;
 import com.hpe.iot.southbound.service.inflow.SouthboundService;
-import com.hpe.iot.test.constants.TestConstants;
 
 /**
  * @author sveera
@@ -54,13 +55,14 @@ import com.hpe.iot.test.constants.TestConstants;
 public class SouthboundServiceImplTest {
 
 	private final String brokerURL = "failover://(tcp://localhost:61616)?initialReconnectDelay=2000";
-	private final String embeddedBrokerUrl = "tcp://localhost:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600&amp;wireFormat.maxInactivityDuration=120000";
+	private final String embeddedBrokerUrl = "tcp://localhost:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600&amp;"
+			+ "wireFormat.maxInactivityDuration=120000";
 	private EmbeddedActivemqBroker embeddedActivemqBroker;
 	private BrokerProducerServiceFactoryImpl<String> brokerProducerServiceFactory;
 	private IOTPublisherService<DeviceInfo, DeviceDataDeliveryStatus> iotPublisherService;
 	private UplinkPayloadProcessor uplinkPayloadProcessor;
 	private final DeviceModelFactory deviceMetaModelFactory = new UplinkJsonPathDeviceModelFactory(
-			TestConstants.DEVICE_MODELS_FULL_PATH);
+			DEVICE_MODELS_FULL_PATH);
 	private final SouthboundPayloadExtractorFactory payloadExtractorFactory = new SouthboundPayloadExtractorFactory();
 	private final JsonPathDeviceIdExtractor deviceIdExtractor = new JsonPathDeviceIdExtractor();
 	private final MessageTypeExtractor messageTypeExtractor = new JsonPathMessageTypeExtractor();
@@ -108,7 +110,7 @@ public class SouthboundServiceImplTest {
 
 	@Test
 	public void testProcessDevicePayloadForInvalidDeviceModel() {
-		Assertions.assertThrows(SouthboundServiceImpl.DeviceModelNotSuported.class, () -> {
+		assertThrows(SouthboundServiceImpl.DeviceModelNotSuported.class, () -> {
 			southboundService.processPayload("TestManufacturer", "TestModel", "1.0", new byte[] {});
 		});
 	}

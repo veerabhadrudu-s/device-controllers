@@ -78,7 +78,7 @@ public class UDPDataReceiver {
 
 		private void readDataFromSocket() {
 			try {
-				readDataUsingDatagramPacket(datagramSocket);
+				readDataUsingDatagramPacket();
 			} catch (IOException e) {
 				logger.error("Error processing UDP message", e);
 			} catch (Throwable e) {
@@ -87,7 +87,7 @@ public class UDPDataReceiver {
 
 		}
 
-		private void readDataUsingDatagramPacket(DatagramSocket datagramSocket) throws IOException {
+		private void readDataUsingDatagramPacket() throws IOException {
 			DatagramPacket datagramPacket = new DatagramPacket(new byte[1024], 1024);
 			datagramSocket.receive(datagramPacket);
 			logger.trace("Datagram Packet received from IP address " + datagramPacket.getAddress());

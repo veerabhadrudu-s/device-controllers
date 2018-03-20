@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -53,15 +54,17 @@ public class LiveLoggerConnectorIntergationTest {
 	private EmbeddedWebsocketServer embeddedWebsocketListener;
 	private WebsocketLiveLoggerServiceAdaptee loggerServiceAdaptee;
 	private LiveLogger liveLogger;
+	private CountDownLatch countDownLatch;
 	private WebsocketClientListenerSpy websocketClientListenerSpy;
 	private Connection clientConnection;
 
 	@BeforeEach
 	public void setUp() throws Exception {
+		countDownLatch = new CountDownLatch(1);
 		loggerServiceAdaptee = new WebsocketLiveLoggerServiceAdaptee();
 		liveLogger = new LiveLoggerAdapter(loggerServiceAdaptee, DeviceModelConstants.DEVICE_MODEL);
 		embeddedWebsocketListener = new EmbeddedWebsocketServer();
-		websocketClientListenerSpy = new WebsocketClientListenerSpy();
+		websocketClientListenerSpy = new WebsocketClientListenerSpy(countDownLatch);
 		embeddedWebsocketListener.start();
 		mockSpringContainer();
 		clientConnection = connectToLoggerWebsocketService();
@@ -106,7 +109,7 @@ public class LiveLoggerConnectorIntergationTest {
 	}
 
 	private void assertLoggedMessages(String expectedLoggedMessage) throws InterruptedException {
-		waitForLogProcessing();
+		countDownLatch.await(1000, TimeUnit.MILLISECONDS);
 		String socketMessage = websocketClientListenerSpy.getLoggedMessage();
 		JsonParser parser = new JsonParser();
 		JsonObject jsonLogMessage = (JsonObject) parser.parse(socketMessage);
@@ -118,7 +121,7 @@ public class LiveLoggerConnectorIntergationTest {
 		// WebSocketClient client = new WebSocketClientFactory().newWebSocketClient();
 		WebSocketClient client = new WebSocketClient();
 		Future<Connection> connectionFuture = client.open(new URI(getConnectionString()), websocketClientListenerSpy);
-		Thread.sleep(1000);
+		new CountDownLatch(1).await(1000, TimeUnit.MILLISECONDS);
 		return connectionFuture.get(2, TimeUnit.SECONDS);
 	}
 
@@ -126,13 +129,14 @@ public class LiveLoggerConnectorIntergationTest {
 		return "ws://localhost:8080" + "/liveLoggerConnector/" + MANUFACTURER + "/" + MODEL_ID + "/" + VERSION;
 	}
 
-	private void waitForLogProcessing() throws InterruptedException {
-		Thread.sleep(1000);
-	}
-
 	private class WebsocketClientListenerSpy implements WebSocket.OnTextMessage {
 
 		private String loggedMessage;
+		private final CountDownLatch countDownLatch;
+
+		public WebsocketClientListenerSpy(CountDownLatch countDownLatch) {
+			this.countDownLatch = countDownLatch;
+		}
 
 		public void onClose(int arg0, String arg1) {
 		}
@@ -144,6 +148,7 @@ public class LiveLoggerConnectorIntergationTest {
 		@Override
 		public void onMessage(String loggedMessage) {
 			this.loggedMessage = loggedMessage;
+			this.countDownLatch.countDown();
 		}
 
 		public String getLoggedMessage() {

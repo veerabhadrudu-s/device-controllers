@@ -3,23 +3,28 @@
  */
 package com.hpe.iot.mqtt.sensenuts.lighting;
 
+import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
 import static com.hpe.iot.mqtt.sensenuts.lighting.SensenutsStreetLightingTestData.DEVICE_ID;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_MODEL;
 import static com.hpe.iot.mqtt.test.constants.TestConstants.SENSENUTS_VERSION;
-import static com.handson.iot.dc.util.UtilityLogger.logRawDataInHexaDecimalFormat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hpe.iot.model.DeviceInfo;
-import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
-import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
 import com.handson.iot.dc.util.UtilityLogger;
+import com.hpe.iot.model.DeviceInfo;
+import com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
+import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
+import com.hpe.iot.mqtt.southbound.service.outflow.MqttDevicePayloadHolder;
+import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
 
 /**
  * @author sveera
@@ -34,51 +39,57 @@ public class SensenutsStreetLightingTest extends MqttBaseTestTemplate {
 	@DisplayName("test Sensenuts Street Lighting For Uplink Notification")
 	public void testSensenutsStreetLightingForUplinkNotification() throws InterruptedException {
 		logRawDataInHexaDecimalFormat(sensenutsStreetLightingTestData.constructPeriodicMessage(), getClass());
-		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
+		IOTDevicePayloadHolder iotDevicePayloadHolder = tryPublishingUplinkMessages(
+				formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				sensenutsStreetLightingTestData.constructPeriodicMessage());
-		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		assertNotNull(deviceInfo, "Device info cannot be null");
-		validateDeviceModel(deviceInfo.getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID);
-		logger.debug("Received Device Info is " + deviceInfo);
+		List<DeviceInfo> devicePayloads = iotDevicePayloadHolder.getIOTDeviceData();
+		assertNotNull(devicePayloads.get(0), "Device info cannot be null");
+		validateDeviceModel(devicePayloads.get(0).getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION,
+				DEVICE_ID);
+		logger.debug("Received Device Info is " + devicePayloads);
 	}
 
 	@Test
 	@DisplayName("test Sensenuts Street Lighting For Uplink Power Outage Alert")
 	public void testSensenutsStreetLightingForUplinkPowerOutageAlert() throws InterruptedException {
 		logRawDataInHexaDecimalFormat(sensenutsStreetLightingTestData.constructPowerOutageAlertMessage(), getClass());
-		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
+		IOTDevicePayloadHolder iotDevicePayloadHolder = tryPublishingUplinkMessages(
+				formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				sensenutsStreetLightingTestData.constructPowerOutageAlertMessage());
-		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		assertNotNull(deviceInfo, "Device info cannot be null");
-		validateDeviceModel(deviceInfo.getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID);
-		logger.debug("Received Device Info is " + deviceInfo);
+		List<DeviceInfo> devicePayloads = iotDevicePayloadHolder.getIOTDeviceData();
+		assertNotNull(devicePayloads.get(0), "Device info cannot be null");
+		validateDeviceModel(devicePayloads.get(0).getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION,
+				DEVICE_ID);
+		logger.debug("Received Device Info is " + devicePayloads);
 	}
 
 	@Test
 	@DisplayName("test Sensenuts Street Lighting For Uplink Luminaire Failure Alert")
 	public void testSensenutsStreetLightingForUplinkLuminaireFailureAlert() throws InterruptedException {
 		logRawDataInHexaDecimalFormat(sensenutsStreetLightingTestData.constructLuminaireFailureMessage(), getClass());
-		tryPublishingMessage(formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
+		IOTDevicePayloadHolder iotDevicePayloadHolder = tryPublishingUplinkMessages(
+				formUplinkTopicName(SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID),
 				sensenutsStreetLightingTestData.constructLuminaireFailureMessage());
-		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		assertNotNull(deviceInfo, "Device info cannot be null");
-		validateDeviceModel(deviceInfo.getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION, DEVICE_ID);
-		logger.debug("Received Device Info is " + deviceInfo);
+		List<DeviceInfo> devicePayloads = iotDevicePayloadHolder.getIOTDeviceData();
+		assertNotNull(devicePayloads, "Device info cannot be null");
+		validateDeviceModel(devicePayloads.get(0).getDevice(), SENSENUTS, SENSENUTS_MODEL, SENSENUTS_VERSION,
+				DEVICE_ID);
+		logger.debug("Received Device Info is " + devicePayloads);
 	}
 
 	@Test
 	@DisplayName("test Sensenuts Street Lighting Change Brightness Of Light Downlink Command")
 	public void testSensenutsStreetLightingChangeBrightnessOfLight_DownlinkCommand() throws InterruptedException {
-		mockNorthboundDownlinkProducerService
-				.publishDownlinkData(createNorthboundOneM2MDownlinkCommandForSensenutsChangeBrightness());
-		waitForDCToCompletePayloadProcessing();
-		ReceivedMqttMessage downlinkCommand = mqttDevicePayloadHolder.getMqttDeviceData();
+		List<String> downlinkMessages = new ArrayList<>();
+		downlinkMessages.add(createNorthboundOneM2MDownlinkCommandForSensenutsChangeBrightness());
+		MqttDevicePayloadHolder mqttDevicePayloadHolder = tryPublishingDownlinkMessages(downlinkMessages);
+		List<ReceivedMqttMessage> downlinkCommands = mqttDevicePayloadHolder.getMqttDeviceData();
 		logger.trace("Expected downlinkCommand bytes are " + UtilityLogger.convertArrayOfByteToString(
 				sensenutsStreetLightingTestData.constructChangeLightBrightnessDownlinkCommandMessage()));
 		logger.trace("Actual downlinkCommand bytes are "
-				+ UtilityLogger.convertArrayOfByteToString(downlinkCommand.getMqttMessage()));
+				+ UtilityLogger.convertArrayOfByteToString(downlinkCommands.get(0).getMqttMessage()));
 		assertArrayEquals(sensenutsStreetLightingTestData.constructChangeLightBrightnessDownlinkCommandMessage(),
-				downlinkCommand.getMqttMessage(), "Expected and actual downlink commands are not same");
+				downlinkCommands.get(0).getMqttMessage(), "Expected and actual downlink commands are not same");
 	}
 
 	private String createNorthboundOneM2MDownlinkCommandForSensenutsChangeBrightness() {

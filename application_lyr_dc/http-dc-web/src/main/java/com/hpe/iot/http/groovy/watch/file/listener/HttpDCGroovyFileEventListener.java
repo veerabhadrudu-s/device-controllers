@@ -52,12 +52,12 @@ public class HttpDCGroovyFileEventListener implements FileEventListener {
 	}
 
 	private void initializeFileEventHandlers() {
-		fileEventHandlers.put(ENTRY_CREATE, (fullPath) -> scriptServiceActivator.startService(fullPath));
+		fileEventHandlers.put(ENTRY_CREATE, scriptServiceActivator::startService);
 		fileEventHandlers.put(ENTRY_MODIFY, (fullPath) -> {
 			scriptServiceActivator.stopService(fullPath);
 			scriptServiceActivator.startService(fullPath);
 		});
-		fileEventHandlers.put(ENTRY_DELETE, (fullPath) -> scriptServiceActivator.stopService(fullPath));
+		fileEventHandlers.put(ENTRY_DELETE, scriptServiceActivator::stopService);
 	}
 
 	private void executeServiceForEventType(Kind<?> kind, String fullPath) {

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.handson.iot.dc.util.DirectoryFileScanner;
 import com.handson.logger.service.DeploymentLoggerService;
 import com.hpe.iot.dc.model.DeviceModel;
-import com.hpe.iot.model.factory.GroovyDeviceModelFactory;
+import com.hpe.iot.model.factory.impl.GroovyAndUplinkJsonPathDeviceModelFactory;
 import com.hpe.iot.model.impl.GroovyScriptDeviceModel;
 import com.hpe.iot.northbound.handler.outflow.PayloadCipher;
 import com.hpe.iot.northbound.handler.outflow.factory.impl.NorthboundPayloadExtractorFactory;
@@ -42,7 +42,7 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 	private final GroovyScriptFileToDeviceModelHolderImpl groovyScriptFileToDeviceModelHolderImpl;
 	private final SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory;
 	private final NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory;
-	private final GroovyDeviceModelFactory groovyDeviceModelFactory;
+	private final GroovyAndUplinkJsonPathDeviceModelFactory groovyAndUplinkJsonPathDeviceModelFactory;
 	private final GroovyScriptModelCreator groovyScriptModelCreator;
 	private final DefaultPayloadExtractorFactoryComponentHolder defaultPayloadExtractorFactoryComponentHolder;
 	private final DeploymentLoggerService deploymentLoggerService;
@@ -52,7 +52,8 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 			GroovyScriptFileToDeviceModelHolderImpl groovyScriptFileToDeviceModelHolderImpl,
 			SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory,
 			NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory,
-			GroovyDeviceModelFactory groovyDeviceModelFactory, GroovyScriptModelCreator groovyScriptModelCreator,
+			GroovyAndUplinkJsonPathDeviceModelFactory groovyAndUplinkJsonPathDeviceModelFactory,
+			GroovyScriptModelCreator groovyScriptModelCreator,
 			DefaultPayloadExtractorFactoryComponentHolder defaultPayloadExtractorFactoryComponentHolder,
 			DeploymentLoggerService deploymentLoggerService) {
 		super();
@@ -60,7 +61,7 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 		this.groovyScriptFileToDeviceModelHolderImpl = groovyScriptFileToDeviceModelHolderImpl;
 		this.southboundPayloadExtractorFactory = southboundPayloadExtractorFactory;
 		this.northboundPayloadExtractorFactory = northboundPayloadExtractorFactory;
-		this.groovyDeviceModelFactory = groovyDeviceModelFactory;
+		this.groovyAndUplinkJsonPathDeviceModelFactory = groovyAndUplinkJsonPathDeviceModelFactory;
 		this.groovyScriptModelCreator = groovyScriptModelCreator;
 		this.defaultPayloadExtractorFactoryComponentHolder = defaultPayloadExtractorFactoryComponentHolder;
 		this.deploymentLoggerService = deploymentLoggerService;
@@ -130,8 +131,8 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 		DeviceModel deviceModel = groovyScriptModel.getDeviceModel();
 		GroovyScriptDeviceModel groovyScriptDeviceMetaModel = new GroovyScriptDeviceModel(deviceModel.getManufacturer(),
 				deviceModel.getModelId(), deviceModel.getVersion());
-		groovyDeviceModelFactory.addGroovyDeviceModel(deviceModel.getManufacturer(), deviceModel.getModelId(),
-				deviceModel.getVersion(), groovyScriptDeviceMetaModel);
+		groovyAndUplinkJsonPathDeviceModelFactory.addGroovyDeviceModel(deviceModel.getManufacturer(),
+				deviceModel.getModelId(), deviceModel.getVersion(), groovyScriptDeviceMetaModel);
 		loadSouthboundPayloadExtractorFactory(deviceModel, groovyScriptModel.getSouthboundGroovyScriptModel());
 		loadNorthboundPayloadExtractorFactory(deviceModel, groovyScriptModel.getNorthboundGroovyScriptModel());
 		groovyScriptFileToDeviceModelHolderImpl.addScriptDeviceModel(groovyScriptFileName, deviceModel);
@@ -180,6 +181,8 @@ public class GroovyScriptMetaModelServiceActivator implements ScriptServiceActiv
 		logger.info("Identified plugin script model " + scriptDeviceModel + " for the plugin script removal "
 				+ groovyScriptFileName);
 		if (scriptDeviceModel != null) {
+			groovyAndUplinkJsonPathDeviceModelFactory.removeGroovyDeviceModel(scriptDeviceModel.getManufacturer(),
+					scriptDeviceModel.getModelId(), scriptDeviceModel.getVersion());
 			southboundPayloadExtractorFactory.removePayloadDecipher(scriptDeviceModel.getManufacturer(),
 					scriptDeviceModel.getModelId(), scriptDeviceModel.getVersion());
 			southboundPayloadExtractorFactory.removeDeviceIdExtractor(scriptDeviceModel.getManufacturer(),

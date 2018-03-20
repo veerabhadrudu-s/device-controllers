@@ -59,7 +59,7 @@ public class GroovyFileEventListenerTest {
 	}
 
 	private void waitForProcessing() throws InterruptedException {
-		Thread.sleep(20000);
+		Thread.sleep(5000);
 	}
 
 	private void copyModifiedScript() throws IOException, URISyntaxException {

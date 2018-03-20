@@ -3,10 +3,9 @@
  */
 package com.hpe.iot.http.northbound.sdk.handler.mock;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedTransferQueue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import com.hpe.iot.model.DeviceInfo;
 
@@ -16,20 +15,22 @@ import com.hpe.iot.model.DeviceInfo;
  */
 public class IOTDevicePayloadHolder {
 
-	private final BlockingQueue<DeviceInfo> iotDeviceData;
-	private final long pollingPeriod = 5000l;
+	private final List<DeviceInfo> iotDeviceData;
+	private final CountDownLatch countDownLatch;
 
-	public IOTDevicePayloadHolder() {
+	public IOTDevicePayloadHolder(CountDownLatch countDownLatch) {
 		super();
-		this.iotDeviceData = new LinkedTransferQueue<>();
+		this.iotDeviceData = new LinkedList<>();
+		this.countDownLatch = countDownLatch;
 	}
 
-	public DeviceInfo getIOTDeviceData() throws InterruptedException {
-		return iotDeviceData.poll(pollingPeriod, MILLISECONDS);
+	public List<DeviceInfo> getIOTDeviceData() throws InterruptedException {
+		return iotDeviceData;
 	}
 
 	public void holdIOTDeviceData(DeviceInfo deviceInfo) {
 		iotDeviceData.add(deviceInfo);
+		countDownLatch.countDown();
 	}
-	
+
 }

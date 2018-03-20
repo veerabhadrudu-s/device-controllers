@@ -201,8 +201,8 @@
 		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
-	<bean id="securityLayer" class="com.hpe.iot.mqtt.southbound.security.SecurityLayer" />	
-	
+	<bean id="securityLayer" class="com.hpe.iot.mqtt.southbound.security.SecurityLayer" />
+
 	<bean id="mqttMessageHandler"
 		class="com.hpe.iot.mqtt.southbound.service.inflow.MqttMessageHandler">
 		<constructor-arg index="0" ref="loggerService" />
@@ -215,17 +215,6 @@
 		<constructor-arg index="1" ref="myManagedExecutorService" />
 	</bean>
 
-	<bean id="mqttDevicePayloadHolder"
-		class="com.hpe.iot.mqtt.southbound.service.outflow.MqttDevicePayloadHolder" />
-
-	<bean id="mqttDeviceSubscriptionService"
-		class="com.hpe.iot.mqtt.southbound.service.outflow.MqttDeviceSubscriptionService">
-		<constructor-arg index="0" value="${mqtt.broker.url}" />
-		<constructor-arg index="1" ref="securityLayer" />
-		<constructor-arg index="2" ref="deviceModelFactory" />
-		<constructor-arg index="3" ref="mqttDevicePayloadHolder" />
-	</bean>
-
 	<bean id="mqttSubscriptionService"
 		class="com.hpe.iot.mqtt.southbound.service.inflow.MqttSubscriptionServiceWithEmbeddedMQTTBroker">
 		<constructor-arg index="0" value="${mqtt.broker.url}" />
@@ -233,7 +222,6 @@
 		<constructor-arg index="2" ref="deviceModelFactory" />
 		<constructor-arg index="3" ref="mqttMessageHandlerService" />
 		<constructor-arg index="4" value="${mqtt.broker.connector.uri}" />
-		<constructor-arg index="5" ref="mqttDeviceSubscriptionService" />
 	</bean>
 
 	<bean id="mqttPublisherService"
@@ -251,7 +239,8 @@
 		<constructor-arg index="2" ref="httpClientUtility" />
 	</bean>
 
-	<bean id="mqttDcInitializer" class="com.hpe.iot.mqtt.initializer.MQTTDCInitializer"
+	<bean id="mqttDcInitializer"
+		class="com.hpe.iot.mqtt.initializer.SynchronousMQTTDCInitializer"
 		init-method="startDC" destroy-method="stopDC">
 		<constructor-arg index="0"
 			ref="uplinkJsonPathMetaModelServiceActivator" />
@@ -259,25 +248,6 @@
 			ref="groovyScriptMetaModelServiceActivator" />
 		<constructor-arg index="2" ref="mqttSubscriptionService" />
 		<constructor-arg index="3" ref="myManagedExecutorService" />
-	</bean>
-
-	<bean id="iotDevicePayloadHolder"
-		class="com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder" />
-
-	<bean id="mockIotConsumerService"
-		class="com.hpe.broker.service.consumer.activemq.ActiveMQConsumerService">
-		<constructor-arg index="0" value="${activemq.brokerURL}" />
-		<constructor-arg index="1" value="${activemq.usename}" />
-		<constructor-arg index="2" value="${activemq.password}" />
-	</bean>
-
-	<bean id="mockNorthboundPayloadConsumerService"
-		class="com.hpe.iot.mqtt.northbound.sdk.handler.mock.MockNorthboundUplinkConsumerService"
-		init-method="startService" destroy-method="stopService">
-		<constructor-arg index="0"
-			value="${iot.device.uplink.destination}" />
-		<constructor-arg index="1" ref="mockIotConsumerService" />
-		<constructor-arg index="2" ref="iotDevicePayloadHolder" />
 	</bean>
 
 	<bean id="mockIotProducerService"

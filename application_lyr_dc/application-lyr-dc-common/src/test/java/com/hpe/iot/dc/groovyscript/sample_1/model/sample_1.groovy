@@ -1,4 +1,4 @@
-package com.hpe.iot.dc.groovyscript.sample.model;
+package com.hpe.iot.dc.groovyscript.sample_1.model;
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -22,7 +22,7 @@ public class SampleDeviceModel implements DeviceModel{
 
 	@Override
 	public String getManufacturer(){
-		return "Sample"
+		return "Sample_1"
 	}
 
 	@Override

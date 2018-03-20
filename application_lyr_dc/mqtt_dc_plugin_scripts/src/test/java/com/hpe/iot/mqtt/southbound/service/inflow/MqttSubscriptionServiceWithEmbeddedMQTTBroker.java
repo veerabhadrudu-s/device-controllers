@@ -11,9 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.model.factory.DeviceModelFactory;
 import com.hpe.iot.mqtt.southbound.security.SecurityLayer;
-import com.hpe.iot.mqtt.southbound.service.inflow.MqttMessageHandlerService;
-import com.hpe.iot.mqtt.southbound.service.inflow.MqttSubscriptionService;
-import com.hpe.iot.mqtt.southbound.service.outflow.MqttDeviceSubscriptionService;
 
 /**
  * @author sveera
@@ -21,22 +18,19 @@ import com.hpe.iot.mqtt.southbound.service.outflow.MqttDeviceSubscriptionService
  */
 public class MqttSubscriptionServiceWithEmbeddedMQTTBroker extends MqttSubscriptionService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private final MqttDeviceSubscriptionService mqttDeviceSubscriptionService;
 	private final String mqttBrokerURI;
 	private BrokerService brokerService;
 
 	public MqttSubscriptionServiceWithEmbeddedMQTTBroker(String mqttBrokerUrl, SecurityLayer securityLayer,
 			DeviceModelFactory deviceModelFactory, MqttMessageHandlerService mqttMessageHandlerService,
-			String mqttBrokerURI, MqttDeviceSubscriptionService mqttDeviceSubscriptionService) {
+			String mqttBrokerURI) {
 		super(mqttBrokerUrl, securityLayer, deviceModelFactory, mqttMessageHandlerService);
 		this.mqttBrokerURI = mqttBrokerURI;
-		this.mqttDeviceSubscriptionService = mqttDeviceSubscriptionService;
 	}
 
 	@Override
 	public void startService() {
 		initializeEmbeddedMqttBroker();
-		mqttDeviceSubscriptionService.startService();
 		super.startService();
 	}
 
@@ -59,7 +53,6 @@ public class MqttSubscriptionServiceWithEmbeddedMQTTBroker extends MqttSubscript
 	@Override
 	public void stopService() {
 		super.stopService();
-		mqttDeviceSubscriptionService.stopService();
 		try {
 			brokerService.stop();
 		} catch (Exception e) {

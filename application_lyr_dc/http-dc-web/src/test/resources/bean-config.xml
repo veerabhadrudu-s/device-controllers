@@ -198,7 +198,7 @@
 		<constructor-arg index="7" ref="deploymentLoggerService" />
 	</bean>
 
-	<bean id="httpDcInitializer" class="com.hpe.iot.http.initializer.HTTPDCInitializer"
+	<bean id="httpDcInitializer" class="com.hpe.iot.http.initializer.SynchronousHTTPDCInitializer"
 		init-method="startDC" destroy-method="stopDC">
 		<constructor-arg index="0"
 			ref="uplinkJsonPathMetaModelServiceActivator" />

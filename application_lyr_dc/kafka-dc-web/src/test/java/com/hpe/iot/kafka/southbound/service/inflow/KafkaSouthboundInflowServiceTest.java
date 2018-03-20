@@ -9,14 +9,11 @@ import static com.hpe.iot.kafka.test.constants.TestConstants.SAMPLE_VERSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
@@ -34,27 +31,31 @@ import com.hpe.iot.southbound.handler.inflow.factory.impl.SouthboundPayloadExtra
  * @author sveera
  *
  */
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public class KafkaSouthboundInflowServiceTest {
 
-	@Autowired
+	private ClassPathXmlApplicationContext classPathXmlApplicationContext;
 	private DeviceModelFactory deviceModelFactory;
-	@Autowired
 	private SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory;
-	@Autowired
 	private NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		waitForDCInitialization();
+		classPathXmlApplicationContext = new ClassPathXmlApplicationContext("/bean-config.xml");
+		deviceModelFactory = classPathXmlApplicationContext.getBean(DeviceModelFactory.class);
+		southboundPayloadExtractorFactory = classPathXmlApplicationContext
+				.getBean(SouthboundPayloadExtractorFactory.class);
+		northboundPayloadExtractorFactory = classPathXmlApplicationContext
+				.getBean(NorthboundPayloadExtractorFactory.class);
+	}
+
+	@AfterEach
+	public void tearDown() {
+		classPathXmlApplicationContext.close();
 	}
 
 	@Test
 	@DisplayName("test DC Initialization")
 	public void testDcInitialization() throws InterruptedException {
-		waitForPayloadProcessing();
 		DeviceModel deviceModel = deviceModelFactory.findDeviceModel(SAMPLE, SAMPLE_MODEL, SAMPLE_VERSION);
 		DeviceIdExtractor deviceIdExtractor = southboundPayloadExtractorFactory.getDeviceIdExtractor(SAMPLE,
 				SAMPLE_MODEL, SAMPLE_VERSION);
@@ -81,14 +82,6 @@ public class KafkaSouthboundInflowServiceTest {
 		assertTrue(payloadCipher instanceof PayloadCipher, "Expected PayloadCipher and PayloadCipher are not same");
 		assertTrue(downlinkPayloadProcessor instanceof DownlinkPayloadProcessor,
 				"Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same");
-	}
-
-	private void waitForDCInitialization() throws InterruptedException {
-		Thread.sleep(1000);
-	}
-
-	private void waitForPayloadProcessing() throws InterruptedException {
-		Thread.sleep(2000);
 	}
 
 }

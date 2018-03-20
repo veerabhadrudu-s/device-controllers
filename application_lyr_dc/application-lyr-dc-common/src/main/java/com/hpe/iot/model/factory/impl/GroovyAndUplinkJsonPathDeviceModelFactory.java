@@ -32,6 +32,11 @@ public class GroovyAndUplinkJsonPathDeviceModelFactory implements GroovyDeviceMo
 		groovyDeviceMetaModels.put(deviceModel, groovyScriptDeviceMetaModel);
 	}
 
+	public void removeGroovyDeviceModel(String manufacturer, String modelId, String version) {
+		DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId, version);
+		groovyDeviceMetaModels.remove(deviceModel);
+	}
+
 	@Override
 	public DeviceModel findDeviceModel(String manufacturer, String modelId, String version) {
 		DeviceModel deviceModel = new DeviceModelImpl(manufacturer, modelId, version);

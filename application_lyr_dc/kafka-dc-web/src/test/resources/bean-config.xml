@@ -207,7 +207,8 @@
 		<constructor-arg index="4" ref="loggerService" />
 	</bean>
 
-	<bean id="kafkaDcInitializer" class="com.hpe.iot.kafka.initializer.KafkaDCInitializer"
+	<bean id="kafkaDcInitializer"
+		class="com.hpe.iot.kafka.initializer.SynchronousKafkaDCInitializer"
 		init-method="startDC" destroy-method="stopDC">
 		<constructor-arg index="0"
 			ref="uplinkJsonPathMetaModelServiceActivator" />

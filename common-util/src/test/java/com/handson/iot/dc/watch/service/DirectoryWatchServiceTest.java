@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +50,7 @@ public class DirectoryWatchServiceTest {
 
 	@Test
 	public void testDirectoryWatchService() {
-		assertNotNull(directoryWatchService,"DirectoryWatchService can not be null");
+		assertNotNull(directoryWatchService, "DirectoryWatchService can not be null");
 	}
 
 	@Test
@@ -60,7 +61,7 @@ public class DirectoryWatchServiceTest {
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		executeFileWatchingThread(executorService, countDownLatch);
 		executeFileWritingThread(executorService, countDownLatch);
-		countDownLatch.await();
+		countDownLatch.await(1000, TimeUnit.MILLISECONDS);
 		logger.info("Completed executing watch service");
 	}
 

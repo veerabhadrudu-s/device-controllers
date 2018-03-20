@@ -250,7 +250,8 @@
 		<constructor-arg index="2" ref="httpClientUtility" />
 	</bean>
 
-	<bean id="mqttDcInitializer" class="com.hpe.iot.mqtt.initializer.MQTTDCInitializer"
+	<bean id="mqttDcInitializer"
+		class="com.hpe.iot.mqtt.initializer.SynchronousMQTTDCInitializer"
 		init-method="startDC" destroy-method="stopDC">
 		<constructor-arg index="0"
 			ref="uplinkJsonPathMetaModelServiceActivator" />

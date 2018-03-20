@@ -78,7 +78,6 @@ public class HttpDCGroovyFileEventListenerTest {
 	@BeforeEach
 	public void setUp() throws InterruptedException {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		waitForDCLoading();
 	}
 
 	@Test
@@ -119,11 +118,7 @@ public class HttpDCGroovyFileEventListenerTest {
 	}
 
 	private void waitForScriptLoading() throws InterruptedException {
-		Thread.sleep(10000);
-	}
-
-	private void waitForDCLoading() throws InterruptedException {
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 	}
 
 	private void copyModifiedScript() throws IOException, URISyntaxException {

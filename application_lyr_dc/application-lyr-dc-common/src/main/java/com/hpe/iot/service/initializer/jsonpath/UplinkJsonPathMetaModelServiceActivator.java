@@ -22,15 +22,15 @@ import com.hpe.iot.southbound.handler.inflow.impl.JsonPathMessageTypeExtractor;
 public class UplinkJsonPathMetaModelServiceActivator implements ServiceActivator {
 
 	private final DeviceModelFactory deviceModelFactory;
-	private final SouthboundPayloadExtractorFactory payloadExtractorFactoryImpl;
+	private final SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory;
 	private final UplinkPayloadProcessor defaultUplinkPayloadProcessor;
 
 	public UplinkJsonPathMetaModelServiceActivator(DeviceModelFactory deviceModelFactory,
-			SouthboundPayloadExtractorFactory payloadExtractorFactoryImpl,
+			SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory,
 			UplinkPayloadProcessor defaultUplinkPayloadProcessor) {
 		super();
 		this.deviceModelFactory = deviceModelFactory;
-		this.payloadExtractorFactoryImpl = payloadExtractorFactoryImpl;
+		this.southboundPayloadExtractorFactory = southboundPayloadExtractorFactory;
 		this.defaultUplinkPayloadProcessor = defaultUplinkPayloadProcessor;
 	}
 
@@ -50,13 +50,13 @@ public class UplinkJsonPathMetaModelServiceActivator implements ServiceActivator
 		JsonPathMessageTypeExtractor jsonPathMessageTypeExtractor = new JsonPathMessageTypeExtractor();
 		PayloadDecipher payloadDecipher = new DefaultPayloadDecipher();
 		for (DeviceModel deviceModel : jsonPathDeviceModels) {
-			payloadExtractorFactoryImpl.addDeviceIdExtractor(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					deviceModel.getVersion(), jsonPathDeviceIdExtractor);
-			payloadExtractorFactoryImpl.addMessageTypeExtractor(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					deviceModel.getVersion(), jsonPathMessageTypeExtractor);
-			payloadExtractorFactoryImpl.addPayloadDecipher(deviceModel.getManufacturer(), deviceModel.getModelId(),
-					deviceModel.getVersion(), payloadDecipher);
-			payloadExtractorFactoryImpl.addUplinkPayloadProcessor(deviceModel.getManufacturer(),
+			southboundPayloadExtractorFactory.addDeviceIdExtractor(deviceModel.getManufacturer(),
+					deviceModel.getModelId(), deviceModel.getVersion(), jsonPathDeviceIdExtractor);
+			southboundPayloadExtractorFactory.addMessageTypeExtractor(deviceModel.getManufacturer(),
+					deviceModel.getModelId(), deviceModel.getVersion(), jsonPathMessageTypeExtractor);
+			southboundPayloadExtractorFactory.addPayloadDecipher(deviceModel.getManufacturer(),
+					deviceModel.getModelId(), deviceModel.getVersion(), payloadDecipher);
+			southboundPayloadExtractorFactory.addUplinkPayloadProcessor(deviceModel.getManufacturer(),
 					deviceModel.getModelId(), deviceModel.getVersion(), defaultUplinkPayloadProcessor);
 		}
 	}

@@ -64,11 +64,11 @@ public class DownlinkCommandServiceImpl implements DownlinkCommandService {
 
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-		private final DownlinkCommandServiceHandler northboundService;
+		private final DownlinkCommandServiceHandler downlinkCommandServiceHandler;
 		private Unmarshaller unmarshaller;
 
-		public BrokerConsumerDataHandlerImpl(DownlinkCommandServiceHandler northboundService) {
-			this.northboundService = northboundService;
+		public BrokerConsumerDataHandlerImpl(DownlinkCommandServiceHandler downlinkCommandServiceHandler) {
+			this.downlinkCommandServiceHandler = downlinkCommandServiceHandler;
 		}
 
 		@Override
@@ -103,7 +103,7 @@ public class DownlinkCommandServiceImpl implements DownlinkCommandService {
 			if (jax.getValue() instanceof Notification) {
 				Notification notification = (Notification) jax.getValue();
 				if (notification.getNotificationEvent().getRepresentation() instanceof String)
-					northboundService.processPayload(constructDeviceInfoFromJsonPayload(
+					downlinkCommandServiceHandler.processPayload(constructDeviceInfoFromJsonPayload(
 							(String) notification.getNotificationEvent().getRepresentation()));
 			}
 

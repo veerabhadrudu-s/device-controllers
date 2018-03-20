@@ -37,17 +37,19 @@ public class KafkaDCInitializer implements DCInitializer {
 
 	@Override
 	public void startDC() {
-		executorService.submit(() -> {
-			try {
-				jsonPathMetaModelServiceActivator.startAllServices();
-				groovyScriptServiceActivator.startAllServices();
-				kafkaSouthboundInflowService.startService();
-				logger.info("Kafka DC Initialization completed successfully");
-			} catch (Exception e) {
-				logger.error("Failed to start DC services");
-				logExceptionStackTrace(e, getClass());
-			}
-		});
+		executorService.submit(this::startKafkaDC);
+	}
+
+	protected void startKafkaDC() {
+		try {
+			jsonPathMetaModelServiceActivator.startAllServices();
+			groovyScriptServiceActivator.startAllServices();
+			kafkaSouthboundInflowService.startService();
+			logger.info("Kafka DC Initialization completed successfully");
+		} catch (Exception e) {
+			logger.error("Failed to start DC services");
+			logExceptionStackTrace(e, getClass());
+		}
 	}
 
 	@Override

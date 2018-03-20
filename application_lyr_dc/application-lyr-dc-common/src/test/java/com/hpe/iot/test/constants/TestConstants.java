@@ -19,6 +19,8 @@ public class TestConstants {
 	public static final String TRACKIMO_DEV_ID_JPATH = "$.device_id";
 	public static final String TRACKIMO_MSG_TYP_JPATH = "$.alarm_type";
 	public static final String SAMPLE = "Sample";
+	public static final String SAMPLE_1 = "Sample_1";
+	public static final String SAMPLE_2 = "Sample_2";
 	public static final String SAMPLE_MODEL = "SampleModel";
 	public static final String SAMPLE_VERSION = "1.0";
 	public static final String SAMPLE_DEV_ID_JPATH = "$.sample_id";

@@ -9,20 +9,12 @@ import static com.hpe.iot.mqtt.test.constants.TestConstants.SAMPLE_VERSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.hpe.iot.dc.model.DeviceModel;
 import com.hpe.iot.model.factory.DeviceModelFactory;
@@ -40,28 +32,26 @@ import com.hpe.iot.southbound.handler.inflow.factory.impl.SouthboundPayloadExtra
  * @author sveera
  *
  */
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration({ "/bean-servlet-context.xml", "/bean-config.xml" })
 public class MqttSouthboundServiceTest {
-	private final MqttClientPersistence persistence = new MemoryPersistence();
-	private MqttClient mqttClient;
 
-	@Value("${mqtt.broker.url}")
-	private String mqttServerUrl;
-
-	@Autowired
+	private ClassPathXmlApplicationContext classPathXmlApplicationContext;
 	private DeviceModelFactory deviceModelFactory;
-	@Autowired
 	private SouthboundPayloadExtractorFactory southboundPayloadExtractorFactory;
-	@Autowired
 	private NorthboundPayloadExtractorFactory northboundPayloadExtractorFactory;
 
 	@BeforeEach
-	public void beforeTest() throws InterruptedException, MqttException {
-		waitForDCInitialization();
-		mqttClient = new MqttClient(mqttServerUrl, "testcase-client", persistence);
-		mqttClient.connect();
+	public void setUp() {
+		classPathXmlApplicationContext = new ClassPathXmlApplicationContext("/bean-config.xml");
+		deviceModelFactory = classPathXmlApplicationContext.getBean(DeviceModelFactory.class);
+		southboundPayloadExtractorFactory = classPathXmlApplicationContext
+				.getBean(SouthboundPayloadExtractorFactory.class);
+		northboundPayloadExtractorFactory = classPathXmlApplicationContext
+				.getBean(NorthboundPayloadExtractorFactory.class);
+	}
+
+	@AfterEach
+	public void tearDown() {
+		classPathXmlApplicationContext.close();
 	}
 
 	@Test
@@ -71,23 +61,34 @@ public class MqttSouthboundServiceTest {
 	@DisplayName("test verify DC Sample Plugin Script With Script Class Types")
 	public void verifyDCSamplePluginScriptWithScriptClassTypes() {
 
-		/*DeviceModel actualDeviceModel = deviceModelFactory.findDeviceModel(SAMPLE, SAMPLE_MODEL);
-		DeviceIdExtractor deviceIdExtractor = payloadExtractorFactory.getDeviceIdExtractor(SAMPLE, SAMPLE_MODEL);
-		MessageTypeExtractor messageTypeExtractor = payloadExtractorFactory.getMessageTypeExtractor(SAMPLE,
-				SAMPLE_MODEL);
-		PayloadDecipher payloadDecipher = payloadExtractorFactory.getPayloadDecipher(SAMPLE, SAMPLE_MODEL);
-		UplinkPayloadProcessor uplinkPayloadProcessor = payloadExtractorFactory.getUplinkPayloadProcessor(SAMPLE,
-				SAMPLE_MODEL);
-		Assert.assertEquals("Expected Device Model and Actual Device Models are not same",
-				new GroovyScriptDeviceModel(TestConstants.SAMPLE, TestConstants.SAMPLE_MODEL), actualDeviceModel);
-		Assert.assertTrue("Expected DeviceIdExtractor and DeviceIdExtractor are not same",
-				deviceIdExtractor.getClass().getName().equals(SampleModelDeviceIdExtractor.class.getName()));
-		Assert.assertTrue("Expected MessageTypeExtractor and MessageTypeExtractor are not same",
-				messageTypeExtractor.getClass().getName().equals(SampleModelMessageTypeExtractor.class.getName()));
-		Assert.assertTrue("Expected PayloadDecipher and PayloadDecipher are not same",
-				payloadDecipher.getClass().getName().equals(SampleModelPayloadDecipher.class.getName()));
-		Assert.assertTrue("Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same",
-				uplinkPayloadProcessor.getClass().getName().equals(SampleModelPayloadProcessor.class.getName()));*/
+		/*
+		 * DeviceModel actualDeviceModel = deviceModelFactory.findDeviceModel(SAMPLE,
+		 * SAMPLE_MODEL); DeviceIdExtractor deviceIdExtractor =
+		 * payloadExtractorFactory.getDeviceIdExtractor(SAMPLE, SAMPLE_MODEL);
+		 * MessageTypeExtractor messageTypeExtractor =
+		 * payloadExtractorFactory.getMessageTypeExtractor(SAMPLE, SAMPLE_MODEL);
+		 * PayloadDecipher payloadDecipher =
+		 * payloadExtractorFactory.getPayloadDecipher(SAMPLE, SAMPLE_MODEL);
+		 * UplinkPayloadProcessor uplinkPayloadProcessor =
+		 * payloadExtractorFactory.getUplinkPayloadProcessor(SAMPLE, SAMPLE_MODEL);
+		 * Assert.
+		 * assertEquals("Expected Device Model and Actual Device Models are not same",
+		 * new GroovyScriptDeviceModel(TestConstants.SAMPLE,
+		 * TestConstants.SAMPLE_MODEL), actualDeviceModel); Assert.
+		 * assertTrue("Expected DeviceIdExtractor and DeviceIdExtractor are not same",
+		 * deviceIdExtractor.getClass().getName().equals(SampleModelDeviceIdExtractor.
+		 * class.getName())); Assert.
+		 * assertTrue("Expected MessageTypeExtractor and MessageTypeExtractor are not same"
+		 * , messageTypeExtractor.getClass().getName().equals(
+		 * SampleModelMessageTypeExtractor.class.getName()));
+		 * Assert.assertTrue("Expected PayloadDecipher and PayloadDecipher are not same"
+		 * ,
+		 * payloadDecipher.getClass().getName().equals(SampleModelPayloadDecipher.class.
+		 * getName())); Assert.
+		 * assertTrue("Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same"
+		 * , uplinkPayloadProcessor.getClass().getName().equals(
+		 * SampleModelPayloadProcessor.class.getName()));
+		 */
 
 	}
 
@@ -121,10 +122,6 @@ public class MqttSouthboundServiceTest {
 		assertTrue(downlinkPayloadProcessor instanceof DownlinkPayloadProcessor,
 				"Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same");
 
-	}
-
-	private void waitForDCInitialization() throws InterruptedException {
-		Thread.sleep(3000);
 	}
 
 }

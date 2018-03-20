@@ -11,13 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Base64;
 import java.util.Base64.Encoder;
+import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 import com.hpe.iot.model.DeviceInfo;
+import com.hpe.iot.mqtt.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.mqtt.southbound.service.inflow.ReceivedMqttMessage;
+import com.hpe.iot.mqtt.southbound.service.outflow.MqttDevicePayloadHolder;
 import com.hpe.iot.mqtt.test.base.MqttBaseTestTemplate;
 
 /**
@@ -32,22 +35,25 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 	@Test
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForALAMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForALAMessageType();
-		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
-				payload.get("SwitchInternalId").getAsString()), encoder.encode(payload.toString().getBytes()));
-		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		assertNotNull(deviceInfo, "Device info cannot be null");
-		validateDeviceModel(deviceInfo.getDevice(), MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, DEVICE_ID);
-		logger.debug("Received Device Info is " + deviceInfo);
+		IOTDevicePayloadHolder iotDevicePayloadHolder = tryPublishingUplinkMessages(formUplinkTopicName(MOTWANE,
+				MOTWANE_MODEL, MOTWANE_VERSION_2, payload.get("SwitchInternalId").getAsString()),
+				encoder.encode(payload.toString().getBytes()));
+		List<DeviceInfo> devicePayloads = iotDevicePayloadHolder.getIOTDeviceData();
+		assertNotNull(devicePayloads.get(0), "Device info cannot be null");
+		validateDeviceModel(devicePayloads.get(0).getDevice(), MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2, DEVICE_ID);
+		logger.debug("Received Device Info is " + devicePayloads);
 	}
 
 	@Test
 	@Disabled
 	public void testMqttSouthboundServiceForMotwaneStreetLightingForGSSMessageType() throws InterruptedException {
 		JsonObject payload = getMotwaneStreetLightingForGSSMessageType();
-		tryPublishingMessage(formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
-				payload.get("SwitchInternalId").getAsString()), encoder.encode(payload.toString().getBytes()));
-		ReceivedMqttMessage receivedMqttMessage = mqttDevicePayloadHolder.getMqttDeviceData();
-		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), receivedMqttMessage);
+		MqttDevicePayloadHolder mqttDevicePayloadHolder = tryPublishingUplinMessagesForAcknowledgement(
+				formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
+						payload.get("SwitchInternalId").getAsString()),
+				encoder.encode(payload.toString().getBytes()));
+		List<ReceivedMqttMessage> receivedMqttMessages = mqttDevicePayloadHolder.getMqttDeviceData();
+		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), receivedMqttMessages.get(0));
 	}
 
 	@Test
@@ -56,12 +62,14 @@ public class MotwaneStreetLightingTest extends MqttBaseTestTemplate {
 		JsonObject payload = getMotwaneStreetLightingForCOAMessageType();
 		String uplinkTopicName = formUplinkTopicName(MOTWANE, MOTWANE_MODEL, MOTWANE_VERSION_2,
 				payload.get("SwitchInternalId").getAsString());
-		tryPublishingMessage(uplinkTopicName, encoder.encode(payload.toString().getBytes()));
-		ReceivedMqttMessage downlinkSYDMessage = mqttDevicePayloadHolder.getMqttDeviceData();
+		MqttDevicePayloadHolder mqttDevicePayloadHolder = tryPublishingUplinMessagesForAcknowledgement(uplinkTopicName,
+				encoder.encode(payload.toString().getBytes()), 3);
+		List<ReceivedMqttMessage> receivedMqttMessages = mqttDevicePayloadHolder.getMqttDeviceData();
+		ReceivedMqttMessage downlinkSYDMessage = receivedMqttMessages.get(0);
 		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), downlinkSYDMessage);
-		ReceivedMqttMessage downlinkSPSMessage = mqttDevicePayloadHolder.getMqttDeviceData();
+		ReceivedMqttMessage downlinkSPSMessage = receivedMqttMessages.get(1);
 		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), downlinkSPSMessage);
-		ReceivedMqttMessage downlinkSSSMessage = mqttDevicePayloadHolder.getMqttDeviceData();
+		ReceivedMqttMessage downlinkSSSMessage = receivedMqttMessages.get(2);
 		validateDownlinkMessage(payload.get("SwitchInternalId").getAsString(), downlinkSSSMessage);
 	}
 

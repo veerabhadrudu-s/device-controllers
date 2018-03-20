@@ -71,7 +71,6 @@ public class SouthboundServiceEndPointTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-		waitForDCInitialization();
 	}
 
 	@Test
@@ -177,8 +176,7 @@ public class SouthboundServiceEndPointTest {
 				"Expected PayloadDecipher and PayloadDecipher are not same");
 		assertTrue(uplinkPayloadProcessor instanceof UplinkPayloadProcessor,
 				"Expected UplinkPayloadProcessor and UplinkPayloadProcessor are not same");
-		assertTrue(payloadCipher instanceof PayloadCipher,
-				"Expected PayloadCipher and PayloadCipher are not same");
+		assertTrue(payloadCipher instanceof PayloadCipher, "Expected PayloadCipher and PayloadCipher are not same");
 		assertTrue(downlinkPayloadProcessor instanceof DownlinkPayloadProcessor,
 				"Expected DownlinkPayloadProcessor and DownlinkPayloadProcessor are not same");
 	}
@@ -237,10 +235,6 @@ public class SouthboundServiceEndPointTest {
 				+ "\"OBDLongTermFuelAdaption\":\"\",\"OBDIntakeManifoldPressure\":\"\",\"OBDEngineRPM\":\"\",\"OBDVehicleSpeed\":\"\","
 				+ "\"OBDIgnitionAdvance\":\"\",\"OBDIntakAirTemperature\":\"\",\"OBDAbsThrottlePosition\":\"\","
 				+ "\"OBDDistanceTravelledMIL\":\"\",\"OBDCommandedEGR\":\"\"}]}";
-	}
-
-	private void waitForDCInitialization() throws InterruptedException {
-		Thread.sleep(1000);
 	}
 
 }

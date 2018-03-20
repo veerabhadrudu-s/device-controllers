@@ -53,9 +53,9 @@ public class GroovyFileEventListener implements FileEventListener {
 	}
 
 	private void initializeFileEventHandlers() {
-		fileEventHandlers.put(ENTRY_CREATE, (fullPath) -> groovyScriptTCPServiceActivator.startTCPService(fullPath));
-		fileEventHandlers.put(ENTRY_MODIFY, (fullPath) -> groovyScriptTCPServiceActivator.restartTCPService(fullPath));
-		fileEventHandlers.put(ENTRY_DELETE, (fullPath) -> groovyScriptTCPServiceActivator.stopTCPService(fullPath));
+		fileEventHandlers.put(ENTRY_CREATE, groovyScriptTCPServiceActivator::startTCPService);
+		fileEventHandlers.put(ENTRY_MODIFY, groovyScriptTCPServiceActivator::restartTCPService);
+		fileEventHandlers.put(ENTRY_DELETE, groovyScriptTCPServiceActivator::stopTCPService);
 	}
 
 	private void executeServiceForEventType(Kind<?> kind, String fullPath) {
@@ -78,7 +78,6 @@ public class GroovyFileEventListener implements FileEventListener {
 		deploymentLoggerService.log(getFileNameFromFullPath(fullPath), toStringExceptionStackTrace(e, getClass()));
 		deploymentLoggerService.log(getFileNameFromFullPath(fullPath), "Failed");
 	}
-	
 
 	private interface GroovyFileEventHandler {
 		void execute(String fullPath) throws Exception;

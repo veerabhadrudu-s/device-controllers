@@ -3,26 +3,22 @@
  */
 package com.hpe.iot.http.gaia.smartwater.v1;
 
+import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
+import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
 import static com.hpe.iot.http.test.constants.TestConstants.GAIA;
 import static com.hpe.iot.http.test.constants.TestConstants.GAIA_MODEL;
 import static com.hpe.iot.http.test.constants.TestConstants.GAIA_VERSION;
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
-import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MvcResult;
 
 import com.google.gson.JsonObject;
+import com.hpe.iot.http.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.http.test.base.HttpPluginTestBaseTemplate;
-import com.hpe.iot.model.DeviceInfo;
 
 /**
  * @author sveera
@@ -37,14 +33,11 @@ public class GaiaSmartWaterTest extends HttpPluginTestBaseTemplate {
 	@DisplayName("test Process DevicePayload For Gaia Script")
 	public void testUplinkNotification() throws Exception {
 		logger.trace("Uplink data used for posting is " + convertArrayOfByteToString(getUplinkNotficationData()));
-		JsonObject expectedResponse = getExpectedSuccessResponse();
-		MvcResult mvcResult = mockMvc.perform(post(formUplinkURL(GAIA, GAIA_MODEL, GAIA_VERSION))
-				.content(getUplinkNotficationData()).accept("application/json")).andExpect(status().isOk()).andReturn();
-		MockHttpServletResponse servletResponse = mvcResult.getResponse();
-		JsonObject actualResponse = jsonParser.parse(servletResponse.getContentAsString()).getAsJsonObject();
-		assertEquals(expectedResponse, actualResponse, "Expected and Actual Responses are not same");
-		DeviceInfo deviceInfo = validateConsumedUplinkMessage(GAIA, GAIA_MODEL, GAIA_VERSION, DEVICE_ID);
-		validatePayload(deviceInfo.getPayload());
+		IOTDevicePayloadHolder iotDevicePayloadHolder = postUplinkMessages(GAIA, GAIA_MODEL, GAIA_VERSION, 1,
+				getUplinkNotficationData());
+		validateConsumedUplinkMessage(GAIA, GAIA_MODEL, GAIA_VERSION, DEVICE_ID,
+				iotDevicePayloadHolder.getIOTDeviceData().get(0));
+		validatePayload(iotDevicePayloadHolder.getIOTDeviceData().get(0).getPayload());
 	}
 
 	private void validatePayload(JsonObject jsonObject) {

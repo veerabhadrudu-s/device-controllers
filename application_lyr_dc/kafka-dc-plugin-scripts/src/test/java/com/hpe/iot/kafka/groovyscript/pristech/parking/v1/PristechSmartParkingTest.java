@@ -9,9 +9,12 @@ import static com.hpe.iot.kafka.test.constants.TestConstants.PRISTECH_VERSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import com.hpe.iot.dc.model.Device;
+import com.hpe.iot.kafka.northbound.sdk.handler.mock.IOTDevicePayloadHolder;
 import com.hpe.iot.kafka.test.base.KafkaDCPluginScriptTestBaseTemplate;
 import com.hpe.iot.model.DeviceInfo;
 
@@ -25,20 +28,24 @@ public class PristechSmartParkingTest extends KafkaDCPluginScriptTestBaseTemplat
 
 	@Test
 	public void testPristechSmartParkingUplinkParkingEvent() throws InterruptedException {
-		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
+		IOTDevicePayloadHolder iotDevicePayloadHolder = tryPublishingUplinkMessage(
+				formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
 				getPristechSmartParkingUplinkParkingEventMsg());
-		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		validateDeviceData(deviceInfo);
-		assertEquals("PARKING_EVENT", deviceInfo.getMessageType(), "Expected and actual Message Type are not same");
+		List<DeviceInfo> devicePayloads = iotDevicePayloadHolder.getIOTDeviceData();
+		validateDeviceData(devicePayloads.get(0));
+		assertEquals("PARKING_EVENT", devicePayloads.get(0).getMessageType(),
+				"Expected and actual Message Type are not same");
 	}
 
 	@Test
 	public void testPristechSmartParkingUplinkHealthCheck() throws InterruptedException {
-		kafkaDevicePublisherService.publishData(formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
+		IOTDevicePayloadHolder iotDevicePayloadHolder = tryPublishingUplinkMessage(
+				formUplinkTopicName(PRISTECH, PRISTECH_MODEL, PRISTECH_VERSION),
 				getPristechSmartParkingUplinkHealthCheckMsg());
-		DeviceInfo deviceInfo = iotDevicePayloadHolder.getIOTDeviceData();
-		validateDeviceData(deviceInfo);
-		assertEquals("PARKING_HEALTH", deviceInfo.getMessageType(), "Expected and actual Message Type are not same");
+		List<DeviceInfo> devicePayloads = iotDevicePayloadHolder.getIOTDeviceData();
+		validateDeviceData(devicePayloads.get(0));
+		assertEquals("PARKING_HEALTH", devicePayloads.get(0).getMessageType(),
+				"Expected and actual Message Type are not same");
 
 	}
 

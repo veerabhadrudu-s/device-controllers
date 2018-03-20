@@ -37,17 +37,19 @@ public class MQTTDCInitializer implements DCInitializer {
 
 	@Override
 	public void startDC() {
-		executorService.submit(() -> {
-			try {
-				jsonPathMetaModelServiceActivator.startAllServices();
-				groovyScriptServiceActivator.startAllServices();
-				mqttSubscriptionService.startService();
-				logger.info("MQTT DC Initialization completed successfully");
-			} catch (Exception e) {
-				logger.error("Failed to start DC services");
-				logExceptionStackTrace(e, getClass());
-			}
-		});
+		executorService.submit(this::startMQTTDC);
+	}
+
+	protected void startMQTTDC() {
+		try {
+			jsonPathMetaModelServiceActivator.startAllServices();
+			groovyScriptServiceActivator.startAllServices();
+			mqttSubscriptionService.startService();
+			logger.info("MQTT DC Initialization completed successfully");
+		} catch (Exception e) {
+			logger.error("Failed to start DC services");
+			logExceptionStackTrace(e, getClass());
+		}
 	}
 
 	@Override
