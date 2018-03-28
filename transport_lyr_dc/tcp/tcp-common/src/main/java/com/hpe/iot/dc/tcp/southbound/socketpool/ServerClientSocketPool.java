@@ -4,7 +4,6 @@
 package com.hpe.iot.dc.tcp.southbound.socketpool;
 
 import java.io.IOException;
-import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 
@@ -15,8 +14,6 @@ import com.hpe.iot.dc.model.Device;
  *
  */
 public interface ServerClientSocketPool extends ClientSocketDeviceReader {
-
-	Selector getClientSocketSelector();
 
 	List<Device> getDevices();
 

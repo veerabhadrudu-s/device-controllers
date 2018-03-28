@@ -49,13 +49,13 @@ class UplinkNotificationMessageConverterTest {
 		DeviceInfo expectedDeviceInfo=createExpectedDeviceInfo();
 		DeviceInfo actualDeviceInfo=uplinkNotificationMessageConverter.createModel(
 				DEVICE_UNDER_TEST,
-				DataParserUtility.createBinaryPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,getClass()));
+				DataParserUtility.createDecimalPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,getClass()));
 		assertEquals(expectedDeviceInfo,actualDeviceInfo,"Expected DeviceInfo and Actual Device Info are not same");
 	}
 
 	private DeviceInfo createExpectedDeviceInfo(){
 		DeviceInfo expectedDeviceInfo=new DeviceInfo(DEVICE_UNDER_TEST, NOTIFICATION,
-				DataParserUtility.createBinaryPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,getClass()));
+				DataParserUtility.createDecimalPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD,getClass()));
 		List<NotificationRecord> notificationRecords=new ArrayList<>();
 		String eventType="Regular Update";
 		GPSInfo gpsInfoOne=new GPSInfo("Wed, 29 Apr 2015", 0, "546895610","252509005", "96", "0", 14, 0);

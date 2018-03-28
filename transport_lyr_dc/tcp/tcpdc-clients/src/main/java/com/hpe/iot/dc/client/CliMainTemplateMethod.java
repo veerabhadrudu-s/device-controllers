@@ -23,8 +23,12 @@ public abstract class CliMainTemplateMethod {
 		System.out.println();
 		System.out.println();
 		System.out.println("Press any Key and Enter to stop the client ..... ");
-		new CliTcpClient().runClient(getClientMessageGenerator(), getClientMessageConsumer());
+		new CliTcpClient().runClient(getSettingsFilePath(), getClientMessageGenerator(), getClientMessageConsumer());
 		System.out.println(" TCP Client program Stopped . Please wait for JVM to Stop.");
+	}
+
+	protected String getSettingsFilePath() {
+		return "tcpClient.properties";
 	}
 
 	protected abstract ClientMessageGenerator getClientMessageGenerator();

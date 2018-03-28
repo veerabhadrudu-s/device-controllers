@@ -20,14 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.tcp.client.device.counter.DeviceIdCounter;
-import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
+import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
 import com.hpe.iot.dc.tcp.client.runner.ClientSocketHandlerRunner;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketEnvironment;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketHandler;
 import com.hpe.iot.dc.tcp.client.settings.ClientSettings;
-import com.hpe.iot.dc.tcp.client.settings.reader.ClientType;
-import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
+import com.hpe.iot.dc.tcp.client.settings.reader.GUIClientSettingsBuilder;
+import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReaderDirector;
 import com.hpe.iot.dc.tcp.client.socket.ClientSocketManager;
 import com.hpe.iot.dc.tcp.client.socket.ClientSocketManagerImpl;
 import com.hpe.iot.dc.tcp.client.writer.ClientSocketWriter;
@@ -40,9 +40,10 @@ public class GuiTcpClient {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void runClient(final ClientMessageGenerator messageGenerator,
+	public void runClient(final String settingsFilePath, final ClientMessageGenerator messageGenerator,
 			final ClientMessageConsumer severToClientMessageGenerator, GUI gui) throws IOException {
-		ClientSettings clientSettings = new SettingsReader().readSettings(ClientType.GUI);
+		ClientSettings clientSettings = new SettingsReaderDirector(new GUIClientSettingsBuilder())
+				.readSettings(settingsFilePath);
 		logger.info("Using client Settings :- " + clientSettings);
 		logger.info("Connecting Clients");
 		ExecutorService executorService = Executors.newFixedThreadPool(clientSettings.getNoOfClientRunners() * 3 + 1);

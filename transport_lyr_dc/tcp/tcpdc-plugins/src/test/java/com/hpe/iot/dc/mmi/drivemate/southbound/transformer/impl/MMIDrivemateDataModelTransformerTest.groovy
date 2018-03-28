@@ -111,7 +111,7 @@ public class MMIDrivemateDataModelTransformerTest {
 		for(String[] dataFrame in dataFrameHex)
 			deviceInfos.add(uplinkNotificationMessageConverter.createModel(
 					DEVICE_UNDER_TEST,
-					DataParserUtility.createBinaryPayloadFromHexaPayload(dataFrame,getClass())));
+					DataParserUtility.createDecimalPayloadFromHexaPayload(dataFrame,getClass())));
 		return deviceInfos;
 	}
 
@@ -119,7 +119,7 @@ public class MMIDrivemateDataModelTransformerTest {
 		List<DeviceInfo> deviceInfos=new ArrayList<>();
 		deviceInfos.add(uplinkNotificationMessageConverter.createModel(
 				DEVICE_UNDER_TEST,
-				DataParserUtility.createBinaryPayloadFromHexaPayload(dataFrameHex,getClass())));
+				DataParserUtility.createDecimalPayloadFromHexaPayload(dataFrameHex,getClass())));
 		return deviceInfos;
 	}
 }

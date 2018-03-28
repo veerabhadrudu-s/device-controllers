@@ -3,7 +3,6 @@ package com.hpe.iot.dc.tcp.southbound.socketpool.impl;
 import static com.handson.iot.dc.util.UtilityLogger.logExceptionStackTrace;
 
 import java.io.IOException;
-import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.Map;
@@ -24,19 +23,8 @@ public class DefaultTCPServerClientSocketPool implements ServerClientSocketPool 
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final Selector myClientSocketSelector;
-	private final Map<Device, SocketChannel> deviceSockets = new ConcurrentHashMap<>();
-	private final Map<SocketChannel, Device> socketToDevice = new ConcurrentHashMap<>();
-
-	public DefaultTCPServerClientSocketPool() throws IOException {
-		super();
-		this.myClientSocketSelector = Selector.open();
-	}
-
-	@Override
-	public Selector getClientSocketSelector() {
-		return myClientSocketSelector;
-	}
+	protected final Map<Device, SocketChannel> deviceSockets = new ConcurrentHashMap<>();
+	protected final Map<SocketChannel, Device> socketToDevice = new ConcurrentHashMap<>();
 
 	@Override
 	public List<Device> getDevices() {
@@ -78,13 +66,11 @@ public class DefaultTCPServerClientSocketPool implements ServerClientSocketPool 
 	public void closeAllClientSockets() {
 		try {
 			logger.info("Closing all active sockets " + deviceSockets.size());
-			myClientSocketSelector.close();
 			for (Map.Entry<Device, SocketChannel> deviceSocket : deviceSockets.entrySet())
-				closeDeviceSocket(deviceSocket.getKey(), deviceSocket.getValue());
+				tryClosingSocket(deviceSocket.getKey(), deviceSocket.getValue());
+		} finally {
 			deviceSockets.clear();
-		} catch (Exception e) {
-			logger.error("Failed to close Server Socket resources ");
-			logExceptionStackTrace(e, getClass());
+			socketToDevice.clear();
 		}
 
 	}
@@ -94,6 +80,14 @@ public class DefaultTCPServerClientSocketPool implements ServerClientSocketPool 
 		if (previousSocketChannel != null && !newSocketChannel.equals(previousSocketChannel)) {
 			socketToDevice.remove(previousSocketChannel);
 			closeDeviceSocket(device, previousSocketChannel);
+		}
+	}
+
+	private void tryClosingSocket(Device key, SocketChannel value) {
+		try {
+			closeDeviceSocket(key, value);
+		} catch (Exception e) {
+			logExceptionStackTrace(e, getClass());
 		}
 	}
 

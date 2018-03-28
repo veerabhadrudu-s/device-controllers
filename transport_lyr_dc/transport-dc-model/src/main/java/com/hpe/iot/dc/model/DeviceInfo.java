@@ -12,14 +12,15 @@ public class DeviceInfo {
 
 	private final Device device;
 	private final String messageType;
-	private final Map<String, DeviceData> deviceData = new HashMap<String, DeviceData>();
 	private final byte[] rawPayload;
+	private final Map<String, DeviceData> deviceData;
 
 	public DeviceInfo(Device device, String messageType, byte[] rawPayload) {
 		super();
 		this.device = device;
 		this.messageType = messageType;
 		this.rawPayload = rawPayload;
+		this.deviceData = new HashMap<>();
 	}
 
 	public Device getDevice() {
@@ -53,7 +54,7 @@ public class DeviceInfo {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((device == null) ? 0 : device.hashCode());
-		result = prime * result + ((deviceData == null) ? 0 : deviceData.hashCode());
+		result = prime * result + (deviceData.hashCode());
 		result = prime * result + ((messageType == null) ? 0 : messageType.hashCode());
 		result = prime * result + Arrays.hashCode(rawPayload);
 		return result;
@@ -71,10 +72,7 @@ public class DeviceInfo {
 				return false;
 		} else if (!device.equals(other.device))
 			return false;
-		if (deviceData == null) {
-			if (other.deviceData != null)
-				return false;
-		} else if (!deviceData.equals(other.deviceData))
+		if (!deviceData.equals(other.deviceData))
 			return false;
 		if (messageType == null) {
 			if (other.messageType != null)

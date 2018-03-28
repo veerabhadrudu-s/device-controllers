@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.mmi.utility;
 
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class TestUtility {
 		byte[] input = new byte[3072];
 		List<byte[]> dataFrames = new ArrayList<>();
 		for (String[] dataFrameString : dataFrameStrings)
-			dataFrames.add(createBinaryPayloadFromHexaPayload(dataFrameString, classtype));
+			dataFrames.add(createDecimalPayloadFromHexaPayload(dataFrameString, classtype));
 		int inputDataFrameIndex = 0;
 		for (byte[] dataFrameBytes : dataFrames)
 			for (int frameByteIndex = 0; frameByteIndex < dataFrameBytes.length; frameByteIndex++) {
@@ -34,7 +34,7 @@ public class TestUtility {
 	public static byte[] createDataWithPaddingBytes(Class<?> classtype, String[] dataFrameString) {
 		byte[] input = new byte[3072];
 		List<byte[]> dataFrames = new ArrayList<>();
-		dataFrames.add(createBinaryPayloadFromHexaPayload(dataFrameString, classtype));
+		dataFrames.add(createDecimalPayloadFromHexaPayload(dataFrameString, classtype));
 		int inputDataFrameIndex = 0;
 		for (byte[] dataFrameBytes : dataFrames)
 			for (int frameByteIndex = 0; frameByteIndex < dataFrameBytes.length; frameByteIndex++) {

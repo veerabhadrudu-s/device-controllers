@@ -3,7 +3,7 @@ package com.hpe.iot.dc.mmi.safemate.southbound.converter.impl;
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.NOTIFICATION_MESSAGE_HEX
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 import org.junit.jupiter.api.BeforeEach
@@ -98,7 +98,7 @@ public class NotificationMessageConverterTest {
 	public void testCreateModel() {
 		TrackerNotification trackerNotification = getExpectedTrackerNotification();
 		DeviceInfo deviceInfo = regularUpdateMessageConverter
-				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(NOTIFICATION_MESSAGE_HEX, getClass()));
+				.createModel(new MMIServerSocketToDeviceModel(),createDecimalPayloadFromHexaPayload(NOTIFICATION_MESSAGE_HEX, getClass()));
 		assertEquals(MANUFACTURER,deviceInfo.getDevice().getManufacturer(),
 				"Expected Manufacturer and Actual Manufacturer are not same");
 		assertEquals(MODEL_ID,deviceInfo.getDevice().getModelId(),
@@ -114,7 +114,7 @@ public class NotificationMessageConverterTest {
 	private TrackerNotification getExpectedTrackerNotification() {
 		List<TrackerInfo> notificationData = new ArrayList<>();
 		TrackerInfo trackerInfo = trackerInfoCreator
-				.constructTrackerInfo(createBinaryPayloadFromHexaPayload(DEVICE_INFO_TEST_DATA, getClass()));
+				.constructTrackerInfo(createDecimalPayloadFromHexaPayload(DEVICE_INFO_TEST_DATA, getClass()));
 		notificationData.add(trackerInfo);
 		return new TrackerNotification(NotificationType.REGULAR_DATA, 1, notificationData);
 	}

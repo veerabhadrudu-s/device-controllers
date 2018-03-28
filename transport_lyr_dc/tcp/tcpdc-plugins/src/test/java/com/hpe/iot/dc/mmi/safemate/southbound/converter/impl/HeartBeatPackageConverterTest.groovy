@@ -4,7 +4,7 @@ import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.HEART_B
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.VERSION
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 import org.junit.jupiter.api.BeforeEach
@@ -40,7 +40,7 @@ public class HeartBeatPackageConverterTest {
 				"Expected Model ID and Actual Model ID are not same");
 		assertEquals(expectedDeviceInfo,
 				heartBeatPackageConverter.createModel(new MMIServerSocketToDeviceModel(),
-				createBinaryPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass()))
+				createDecimalPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass()))
 				,"Expected Device Info and Actual Device Info are not same");
 	}
 
@@ -52,6 +52,6 @@ public class HeartBeatPackageConverterTest {
 
 	private DeviceInfo createExpectedDeviceInfo() {
 		return new DeviceInfo(new DeviceImpl(MANUFACTURER,MODEL_ID,VERSION,"301071500007"), EXPECTED_MESSAGE_TYPE,
-				createBinaryPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass()));
+				createDecimalPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, getClass()));
 	}
 }

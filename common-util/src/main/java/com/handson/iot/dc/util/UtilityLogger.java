@@ -1,10 +1,10 @@
 package com.handson.iot.dc.util;
 
+import static com.handson.iot.dc.util.DataParserUtility.convertToHexValue;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author sveera
@@ -13,41 +13,31 @@ import org.slf4j.LoggerFactory;
 public final class UtilityLogger {
 
 	public static void logRawDataInHexaDecimalFormat(final byte[] input, Class<?> classType) {
-		Logger logger = LoggerFactory.getLogger(classType);
-		String datahexString = "";
-		for (byte rawbyte : input) {
-			datahexString += DataParserUtility.convertToHexValue(rawbyte) + " ";
-		}
-		logger.info("Raw data from input channel in hexa format is " + datahexString);
-	}
-
-	public static void logRawDataInDecimalFormat(final byte[] input, Class<?> classType) {
-		Logger logger = LoggerFactory.getLogger(classType);
-		String dataString = convertArrayOfByteToString(input);
-		logger.info("Raw data from input channel in decimal format is " + dataString);
-	}
-
-	public static String convertArrayOfByteToString(final byte[] input) {
-		String dataString = "";
-		for (byte rawbyte : input) {
-			dataString += rawbyte + " ";
-		}
-		return dataString;
+		getLogger(classType)
+				.info("Raw data from input channel in hexa format is " + convertArrayOfByteToHexString(input));
 	}
 
 	public static String convertArrayOfByteToHexString(final byte[] input) {
 		String datahexString = "";
-		for (byte rawbyte : input) {
-			datahexString += DataParserUtility.convertToHexValue(rawbyte) + " ";
-		}
+		for (byte rawbyte : input)
+			datahexString += convertToHexValue(rawbyte) + " ";
 		return datahexString;
 	}
 
+	public static void logRawDataInDecimalFormat(final byte[] input, Class<?> classType) {
+		getLogger(classType)
+				.info("Raw data from input channel in decimal format is " + convertArrayOfByteToString(input));
+	}
+
+	public static String convertArrayOfByteToString(final byte[] input) {
+		String dataString = "";
+		for (byte rawbyte : input)
+			dataString += rawbyte + " ";
+		return dataString;
+	}
+
 	public static void logExceptionStackTrace(Throwable ex, Class<?> classType) {
-		Logger logger = LoggerFactory.getLogger(classType);
-		StringWriter errors = new StringWriter();
-		ex.printStackTrace(new PrintWriter(errors));
-		logger.error(errors.toString());
+		getLogger(classType).error(exceptionStackToString(ex));
 	}
 
 	public static String exceptionStackToString(Throwable ex) {

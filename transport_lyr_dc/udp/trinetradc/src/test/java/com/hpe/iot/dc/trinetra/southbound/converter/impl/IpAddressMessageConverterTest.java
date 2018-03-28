@@ -48,7 +48,7 @@ public class IpAddressMessageConverterTest {
 	@Test
 	public void testCreateModelForSourceIpAndSourcePortDecoding() {
 		DeviceInfo dataModel = ipAddressMetaModelConverter.createModel(deviceModel,
-				DataParserUtility.createBinaryPayloadFromHexaPayload(IPUPDATE_DATA_FRAME_HEX, this.getClass()));
+				DataParserUtility.createDecimalPayloadFromHexaPayload(IPUPDATE_DATA_FRAME_HEX, this.getClass()));
 		DeviceAddress deviceAddress = (DeviceAddress) dataModel.getDeviceData().get(DEVICE_ADDRESS);
 		assertEquals("100.72.84.192", deviceAddress.getDeviceIp(),
 				"Expected source Ip and Actual source Ip are not same");
@@ -72,7 +72,7 @@ public class IpAddressMessageConverterTest {
 		DeviceInfo dataModel = ipAddressMetaModelConverter.createModel(
 				new UDPDeviceImpl(deviceModel.getManufacturer(), deviceModel.getModelId(), deviceModel.getVersion(),
 						address, DATA_GRAM_PORT),
-				DataParserUtility.createBinaryPayloadFromHexaPayload(IPUPDATE_DATA_FRAME_HEX, this.getClass()));
+				DataParserUtility.createDecimalPayloadFromHexaPayload(IPUPDATE_DATA_FRAME_HEX, this.getClass()));
 		DeviceAddress deviceAddress = (DeviceAddress) dataModel.getDeviceData().get(DEVICE_ADDRESS);
 		assertEquals(DATA_GRAM_IP, deviceAddress.getDeviceIp(), "Expected source Ip and Actual source Ip are not same");
 		assertEquals(Integer.toString(DATA_GRAM_PORT), deviceAddress.getPort(),

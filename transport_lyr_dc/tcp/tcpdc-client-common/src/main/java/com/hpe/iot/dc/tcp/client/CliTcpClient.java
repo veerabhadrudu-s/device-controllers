@@ -21,8 +21,8 @@ import com.hpe.iot.dc.tcp.client.runner.ClientSocketHandlerRunner;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketEnvironment;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketHandler;
 import com.hpe.iot.dc.tcp.client.settings.ClientSettings;
-import com.hpe.iot.dc.tcp.client.settings.reader.ClientType;
-import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
+import com.hpe.iot.dc.tcp.client.settings.reader.GUIClientSettingsBuilder;
+import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReaderDirector;
 import com.hpe.iot.dc.tcp.client.socket.ClientSocketManagerImpl;
 
 /**
@@ -33,13 +33,15 @@ public class CliTcpClient {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void runClient(final ClientMessageGenerator messageGenerator) throws IOException {
-		runClient(messageGenerator, null);
+	public void runClient(final String settingsFilePath, final ClientMessageGenerator messageGenerator)
+			throws IOException {
+		runClient(settingsFilePath, messageGenerator, null);
 	}
 
-	public void runClient(final ClientMessageGenerator messageGenerator,
+	public void runClient(String settingsFilePath, final ClientMessageGenerator messageGenerator,
 			final ClientMessageConsumer severToClientMessageGenerator) throws IOException {
-		ClientSettings clientSettings = new SettingsReader().readSettings(ClientType.CLI);
+		ClientSettings clientSettings = new SettingsReaderDirector(new GUIClientSettingsBuilder())
+				.readSettings(settingsFilePath);
 		logger.info("Using client Settings :- " + clientSettings);
 		logger.info("Connecting Clients");
 		ExecutorService executorService = Executors.newFixedThreadPool(clientSettings.getNoOfClientRunners() * 3 + 1);

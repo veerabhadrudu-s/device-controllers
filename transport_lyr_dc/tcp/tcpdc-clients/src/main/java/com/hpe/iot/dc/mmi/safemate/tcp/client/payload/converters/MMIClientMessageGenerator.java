@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters;
 
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.copyOfRange;
 
@@ -114,19 +114,19 @@ public class MMIClientMessageGenerator implements ClientMessageGenerator {
 		switch (messageType) {
 		case IP_CONNECT_MSG_TYPE:
 			clientDeviceData = new ClientDeviceData(deviceId,
-					constructDeviceMessage(createBinaryPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, getClass()),
+					constructDeviceMessage(createDecimalPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, getClass()),
 							Long.toString(deviceId), IP_CONNECT_MSG_TYPE),
 					messageType);
 			break;
 		case NOTIF_MSG_TYPE:
 			clientDeviceData = new ClientDeviceData(deviceId,
-					constructDeviceMessage(createBinaryPayloadFromHexaPayload(NOTIFICATION_MESSAGE_HEX, getClass()),
+					constructDeviceMessage(createDecimalPayloadFromHexaPayload(NOTIFICATION_MESSAGE_HEX, getClass()),
 							Long.toString(deviceId), NOTIF_MSG_TYPE),
 					messageType);
 			break;
 		case SOS_MSG_TYPE:
 			clientDeviceData = new ClientDeviceData(deviceId,
-					constructDeviceMessage(createBinaryPayloadFromHexaPayload(SOS_MESSAGE_HEX, getClass()),
+					constructDeviceMessage(createDecimalPayloadFromHexaPayload(SOS_MESSAGE_HEX, getClass()),
 							Long.toString(deviceId), SOS_MSG_TYPE),
 					messageType);
 			break;

@@ -166,15 +166,15 @@ public class StandardMessageConverterTest {
 	}
 
 	private byte[] getIgnitionOnMessage() {
-		return DataParserUtility.createBinaryPayloadFromHexaPayload(IGNITION_ON_DATA, this.getClass());
+		return DataParserUtility.createDecimalPayloadFromHexaPayload(IGNITION_ON_DATA, this.getClass());
 	}
 
 	private byte[] getIgnitionOFFMessage() {
-		return DataParserUtility.createBinaryPayloadFromHexaPayload(IGNITION_OFF_DATA, this.getClass());
+		return DataParserUtility.createDecimalPayloadFromHexaPayload(IGNITION_OFF_DATA, this.getClass());
 	}
 
 	private byte[] getStandardMessage(String[] STANDARD_MSG_DATA) {
-		return DataParserUtility.createBinaryPayloadFromHexaPayload(STANDARD_MSG_DATA, this.getClass());
+		return DataParserUtility.createDecimalPayloadFromHexaPayload(STANDARD_MSG_DATA, this.getClass());
 	}
 
 }

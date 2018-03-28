@@ -2,7 +2,7 @@ package com.hpe.iot.dc.mmi.safemate.southbound.converter.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.TrackerStatus.AlarmStatus.OFF;
 import static com.hpe.iot.dc.mmi.safemate.TrackerStatus.AlarmStatus.ON;
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 import org.junit.jupiter.api.BeforeEach
@@ -87,7 +87,7 @@ public class TrackerInfoCreatorTest {
 	}
 
 	private byte[] getTestData() {
-		return createBinaryPayloadFromHexaPayload(DEVICE_INFO_TEST_DATA, getClass());
+		return createDecimalPayloadFromHexaPayload(DEVICE_INFO_TEST_DATA, getClass());
 	}
 
 	private TrackerInfo getExpectedTrackerInfo() {

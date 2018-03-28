@@ -15,7 +15,6 @@ import com.hpe.iot.dc.mmi.safemate.tcp.client.payload.converters.MMIClientMessag
 import com.hpe.iot.dc.tcp.client.CliTcpClient;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageConsumer;
 import com.hpe.iot.dc.tcp.client.payload.converter.ClientMessageGenerator;
-import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReader;
 
 /**
  * @author sveera
@@ -31,15 +30,14 @@ public class MMIDCPluginTestClient {
 	public void setUp() {
 		clientToServerMessageGenerator = new MMIClientMessageGenerator(new MMICRCAlgorithm());
 		serverToClientMessageGenerator = new MMIClientMessageConsumer();
-		SettingsReader.TCP_CLIENT_PROPERTIES = "src" + File.separator + "test" + File.separator + "resources"
-				+ File.separator + "tcpClient.properties";
 	}
 
 	@Disabled
 	@Test
 	public void testAllTCPDCPluginsWithClientsConnected() throws IOException {
 		logger.info("Running TCPClient ");
-		new CliTcpClient().runClient(clientToServerMessageGenerator, serverToClientMessageGenerator);
+		new CliTcpClient().runClient("src" + File.separator + "test" + File.separator + "resources" + File.separator
+				+ "tcpClient.properties", clientToServerMessageGenerator, serverToClientMessageGenerator);
 	}
 
 }

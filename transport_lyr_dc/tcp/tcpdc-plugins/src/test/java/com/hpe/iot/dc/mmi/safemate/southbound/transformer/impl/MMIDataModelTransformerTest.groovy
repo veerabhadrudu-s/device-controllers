@@ -3,7 +3,7 @@ package com.hpe.iot.dc.mmi.safemate.southbound.transformer.impl;
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.IPCONNECT_DATA_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.NOTIFICATION_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.utility.TestUtility.createDataWithPaddingBytes
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertSame
@@ -156,7 +156,7 @@ public class MMIDataModelTransformerTest {
 			UplinkDeviceDataConverter metaModelConverter = metaModelConverterFactory
 					.getModelConverter(knownMessageTypeFrame.getMessageType());
 			DeviceInfo dataModel = metaModelConverter
-					.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(knownMessageTypeFrame.getDataFrameHex(),this.getClass()));
+					.createModel(new MMIServerSocketToDeviceModel(),createDecimalPayloadFromHexaPayload(knownMessageTypeFrame.getDataFrameHex(),this.getClass()));
 			expectedDataFrames.add(dataModel);
 		}
 		return expectedDataFrames;

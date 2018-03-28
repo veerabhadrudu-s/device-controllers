@@ -23,8 +23,13 @@ public abstract class GuiMainTemplateMethod {
 				+ File.separator + "tcpClient.log");
 		System.out.println();
 		System.out.println();
-		new GuiTcpClient().runClient(getClientMessageGenerator(), getClientMessageConsumer(), getGUI());
+		new GuiTcpClient().runClient(getSettingsFilePath(), getClientMessageGenerator(), getClientMessageConsumer(),
+				getGUI());
 		System.out.println(" TCP Client program Stopped . Please wait for JVM to Stop.");
+	}
+
+	protected String getSettingsFilePath() {
+		return "tcpClient.properties";
 	}
 
 	protected abstract ClientMessageGenerator getClientMessageGenerator();

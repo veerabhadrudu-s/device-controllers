@@ -1,7 +1,7 @@
 package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.HEART_BEAT_DATA_MESSAGE_HEX
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.Mockito.when;
@@ -54,7 +54,7 @@ public class HeartBeatMessageServcieTest {
 	public void testExecuteService() throws IOException {
 		HeartBeatPackageConverter heartBeatPackageConverter = new HeartBeatPackageConverter(mmicrcAlgorithm);
 		DeviceInfo deviceInfo = heartBeatPackageConverter
-				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, this.getClass()));
+				.createModel(new MMIServerSocketToDeviceModel(),createDecimalPayloadFromHexaPayload(HEART_BEAT_DATA_MESSAGE_HEX, this.getClass()));
 		tcpServerClientSocketPool.addSocketChannel(deviceInfo.getDevice(), socketChannel);
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = heartBeatMessageServcie.executeService(deviceInfo);
 		assertNotNull(deviceDataDeliveryStatus,"Failed to execute " + this.getClass().getName());

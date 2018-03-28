@@ -84,7 +84,7 @@ public class NotificationMessageServiceTest {
 	public void testExecuteService() {
 		UplinkNotificationMessageConverter notificationMessageConverter = new UplinkNotificationMessageConverter(new EventIdToNameMapper());
 		DeviceInfo deviceInfo = notificationMessageConverter
-				.createModel(DEVICE_UNDER_TEST,DataParserUtility.createBinaryPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD, getClass()));
+				.createModel(DEVICE_UNDER_TEST,DataParserUtility.createDecimalPayloadFromHexaPayload(MMIDrivemateTestDataCollection.NOTIFICATION_PAYLOAD, getClass()));
 		tcpServerClientSocketPool.addSocketChannel(deviceInfo.getDevice(), socketChannel);
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = notificationMessageService.executeService(deviceInfo);
 		assertNotNull(deviceDataDeliveryStatus,"Failed to execute NotificationMessageService");

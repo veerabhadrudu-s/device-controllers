@@ -3,7 +3,7 @@
  */
 package com.hpe.iot.http.gaia.smartwater.v1;
 
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload;
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload;
 import static com.handson.iot.dc.util.UtilityLogger.convertArrayOfByteToString;
 import static com.hpe.iot.http.test.constants.TestConstants.GAIA;
 import static com.hpe.iot.http.test.constants.TestConstants.GAIA_MODEL;
@@ -54,7 +54,7 @@ public class GaiaSmartWaterTest extends HttpPluginTestBaseTemplate {
 	private byte[] getUplinkNotficationData() {
 		String[] uplinkBinary26ByteData = new String[] { "00", "6A", "1A", "AA", "A1", "00", "00", "28", "00", "00",
 				"13", "95", "00", "00", "00", "04", "00", "00", "00", "00", "00", "00", "00", "04", "00", "00" };
-		return createBinaryPayloadFromHexaPayload(uplinkBinary26ByteData, getClass());
+		return createDecimalPayloadFromHexaPayload(uplinkBinary26ByteData, getClass());
 	}
 
 }

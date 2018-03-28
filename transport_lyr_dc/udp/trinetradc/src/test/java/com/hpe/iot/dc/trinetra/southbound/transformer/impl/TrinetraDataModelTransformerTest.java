@@ -124,7 +124,7 @@ public class TrinetraDataModelTransformerTest {
 			UplinkDeviceDataConverter metaModelConverter = metaModelConverterFactory
 					.getModelConverter(knownMessageTypeFrame.getMessageType());
 			DeviceInfo dataModel = metaModelConverter.createModel(deviceModel, DataParserUtility
-					.createBinaryPayloadFromHexaPayload(knownMessageTypeFrame.getDataFrameHex(), this.getClass()));
+					.createDecimalPayloadFromHexaPayload(knownMessageTypeFrame.getDataFrameHex(), this.getClass()));
 			expectedDataFrames.add(dataModel);
 		}
 		return expectedDataFrames;

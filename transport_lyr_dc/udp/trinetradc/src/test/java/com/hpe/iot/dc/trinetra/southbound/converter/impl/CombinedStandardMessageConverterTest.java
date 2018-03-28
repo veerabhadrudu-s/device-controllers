@@ -69,7 +69,7 @@ public class CombinedStandardMessageConverterTest {
 	}
 
 	private byte[] getCombinedStandardMessage() {
-		return DataParserUtility.createBinaryPayloadFromHexaPayload(COMBIND_STANDARD_MSG_DATA, this.getClass());
+		return DataParserUtility.createDecimalPayloadFromHexaPayload(COMBIND_STANDARD_MSG_DATA, this.getClass());
 	}
 
 }

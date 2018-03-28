@@ -6,7 +6,7 @@ import static com.hpe.iot.dc.mmi.safemate.TrackerStatus.AlarmStatus.OFF;
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.IPCONNECT_DATA_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MANUFACTURER
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.MODEL_ID
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 import org.junit.jupiter.api.BeforeEach
@@ -47,7 +47,7 @@ public class IPConnectMessageConverterTest {
 	@Test
 	public void testCreateModeForIPConnectMessageType() {
 		DeviceInfo dataModel = ipAddressMetaModelConverter
-				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, this.getClass()));
+				.createModel(new MMIServerSocketToDeviceModel(),createDecimalPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, this.getClass()));
 		assertEquals(MANUFACTURER,dataModel.getDevice().getManufacturer(),
 				"Expected Manufacturer and Actual Manufacturer are not same");
 		assertEquals(MODEL_ID,dataModel.getDevice().getModelId(),

@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.TCPServerSocketReader;
-import com.hpe.iot.dc.tcp.southbound.service.outflow.TCPServerSocketWriter;
-import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool;
 
 /**
  * @author sveera
@@ -26,25 +24,19 @@ import com.hpe.iot.dc.tcp.southbound.socketpool.ServerClientSocketPool;
 public class TCPServerSocketService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
 	private final ServerSocketListener serverSocketListener;
 	private final ManagedExecutorService managedExecutorService;
 	private final TCPServerSocketReader tcpServerSocketReader;
-	private final TCPServerSocketWriter tcpServerSocketWriter;
-	private final ServerClientSocketPool tcpServerClientSocketPool;
 	private final ServerSocketToDeviceModel serverSocketToDeviceModel;
 
 	public TCPServerSocketService(ServerSocketChannel serverSocketChannel,
 			ManagedExecutorService managedExecutorService, TCPServerSocketReader tcpServerSocketReader,
-			TCPServerSocketWriter tcpServerSocketWriter, ServerClientSocketPool tcpServerClientSocketPool,
 			ServerSocketToDeviceModel serverSocketToDeviceModel) throws IOException {
 		super();
 		this.managedExecutorService = managedExecutorService;
 		this.tcpServerSocketReader = tcpServerSocketReader;
-		this.tcpServerSocketWriter = tcpServerSocketWriter;
-		this.tcpServerClientSocketPool = tcpServerClientSocketPool;
-		this.serverSocketListener = new ServerSocketListener(serverSocketChannel);
 		this.serverSocketToDeviceModel = serverSocketToDeviceModel;
+		this.serverSocketListener = new ServerSocketListener(serverSocketChannel);
 	}
 
 	public void startTCPServerSocketService() {
@@ -54,11 +46,10 @@ public class TCPServerSocketService {
 
 	public void stopTCPServerSocketService() {
 		tcpServerSocketReader.stopClientCommunication();
-		tcpServerClientSocketPool.closeAllClientSockets();
 		serverSocketListener.stopPortListening();
 	}
 
-	private class ServerSocketListener implements Runnable {
+	protected class ServerSocketListener implements Runnable {
 
 		// private static final int POLLING_PERIOD_FOR_NEW_CONNECTIONS = 5000;
 
@@ -71,15 +62,15 @@ public class TCPServerSocketService {
 			super();
 			this.isPortListening = true;
 			this.serverSocketChannel = serverSocketChannel;
-			myServerSocketSelector = Selector.open();
-			serverSocketChannel.register(myServerSocketSelector, SelectionKey.OP_ACCEPT);
+			this.myServerSocketSelector = Selector.open();
+			this.serverSocketChannel.register(myServerSocketSelector, SelectionKey.OP_ACCEPT);
 		}
 
 		public void run() {
 			logger.debug("TCPServerSocketService started to listen client Sockets on " + serverSocketToDeviceModel);
-			while (isPortListening) {
+			do
 				connectClientSockets();
-			}
+			while (isPortListening);
 		}
 
 		private void connectClientSockets() {

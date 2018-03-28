@@ -1,7 +1,7 @@
 package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.IPCONNECT_DATA_MESSAGE_HEX
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.MockitoAnnotations.initMocks
@@ -69,7 +69,7 @@ public class IPConnectMessageServiceTest {
 		IPConnectMessageConverter ipAddressMetaModelConverter = new IPConnectMessageConverter(mmicrcAlgorithm,
 				trackerInfoCreator);
 		DeviceInfo deviceInfo = ipAddressMetaModelConverter.createModel(new MMIServerSocketToDeviceModel(),
-				createBinaryPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, IPConnectMessageServiceTest.class));
+				createDecimalPayloadFromHexaPayload(IPCONNECT_DATA_MESSAGE_HEX, IPConnectMessageServiceTest.class));
 		tcpServerClientSocketPool.addSocketChannel(deviceInfo.getDevice(), socketChannel);
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = ipConnectMessageService.executeService(deviceInfo);
 		assertNotNull(deviceDataDeliveryStatus,"Failed to execute IPConnectMessageService");

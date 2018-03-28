@@ -2,7 +2,7 @@ package com.hpe.iot.dc.mmi.safemate.southbound.service.inflow.impl;
 
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.ALARM_MESSAGE_HEX
 import static com.hpe.iot.dc.mmi.safemate.testdata.MMITestDataCollection.SAFEMATE_DEVICE_MODEL
-import static com.handson.iot.dc.util.DataParserUtility.createBinaryPayloadFromHexaPayload
+import static com.handson.iot.dc.util.DataParserUtility.createDecimalPayloadFromHexaPayload
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -64,7 +64,7 @@ public class AlarmMessageServiceTest {
 	public void testExecuteService() {
 		AlarmMessageConverter alarmMessageConverter = new AlarmMessageConverter(mmicrcAlgorithm, trackerInfoCreator);
 		DeviceInfo deviceInfo = alarmMessageConverter
-				.createModel(new MMIServerSocketToDeviceModel(),createBinaryPayloadFromHexaPayload(ALARM_MESSAGE_HEX, getClass()));
+				.createModel(new MMIServerSocketToDeviceModel(),createDecimalPayloadFromHexaPayload(ALARM_MESSAGE_HEX, getClass()));
 		DeviceDataDeliveryStatus deviceDataDeliveryStatus = alarmMessageService.executeService(deviceInfo);
 		assertNotNull(deviceDataDeliveryStatus,"Failed to execute NotificationMessageService");
 	}

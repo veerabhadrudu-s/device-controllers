@@ -3,13 +3,15 @@ package com.handson.iot.dc.util;
 import static com.handson.iot.dc.util.UtilityLogger.logRawDataInDecimalFormat;
 import static java.lang.Math.pow;
 import static java.util.Arrays.copyOf;
+import static java.util.Arrays.copyOfRange;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author sveera
@@ -38,12 +40,16 @@ public final class DataParserUtility {
 		return new String(encodeHex(bytes));
 	}
 
-	public static char[] encodeHex(final byte[] data) {
-		return encodeHex(data, true);
+	public static char[] encodeHex(final byte... data) {
+		return encodeToUpperCaseHexa(data);
 	}
 
-	public static char[] encodeHex(final byte[] data, final boolean toLowerCase) {
-		return encodeHex(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
+	public static char[] encodeToUpperCaseHexa(final byte... data) {
+		return encodeHex(data, DIGITS_UPPER);
+	}
+
+	public static char[] encodeToLowerCaseHexa(final byte... data) {
+		return encodeHex(data, DIGITS_LOWER);
 	}
 
 	protected static char[] encodeHex(final byte[] data, final char[] toDigits) {
@@ -63,11 +69,9 @@ public final class DataParserUtility {
 
 	public static List<Integer> findAllClosingMessageByteIndexes(byte[] input, byte[] mesgClosingBytes) {
 		List<Integer> closingByteIndexs = new ArrayList<>();
-		for (int byteIndex = 0; byteIndex < input.length; byteIndex++) {
-			if (isClosingFrameByte(input, byteIndex, mesgClosingBytes)) {
-				closingByteIndexs.add(byteIndex + (mesgClosingBytes.length - 1));
-			}
-		}
+		for (int byteIndex = 0; byteIndex < input.length; byteIndex++)
+			if (isClosingFrameByte(input, byteIndex, mesgClosingBytes))
+				closingByteIndexs.add(byteIndex += mesgClosingBytes.length - 1);
 		return closingByteIndexs;
 	}
 
@@ -84,21 +88,20 @@ public final class DataParserUtility {
 		return sequanceBytes.length == 0 ? false : true;
 	}
 
-	public static int findIndexOfEOFMessage(byte[] input) {
-		int eofByteIndex = input.length;
+	public static byte[] truncateEmptyBytes(byte... input) {
+		int eofMessageByteIndex = findIndexOfEOFMessage(input);
+		return copyOf(input, eofMessageByteIndex + 1);
+	}
+
+	public static int findIndexOfEOFMessage(byte... input) {
+		int eofByteIndex = -1;
 		for (int byteIndex = input.length - 1; byteIndex >= 0; byteIndex--) {
-			if (input[byteIndex] == 0) {
+			if (input[byteIndex] == 0)
 				continue;
-			}
 			eofByteIndex = byteIndex;
 			break;
 		}
 		return eofByteIndex;
-	}
-
-	public static byte[] truncateEmptyBytes(byte[] input) {
-		int eofMessageByteIndex = findIndexOfEOFMessage(input);
-		return copyOf(input, eofMessageByteIndex + 1);
 	}
 
 	public static String calculateUnsignedDecimalValFromSignedBytes(byte... input) {
@@ -118,7 +121,6 @@ public final class DataParserUtility {
 			inputArray[i] = inputArray[inputArray.length - 1 - i];
 			inputArray[inputArray.length - 1 - i] = temp;
 		}
-
 	}
 
 	public static boolean checkBitValue(byte byteValue, int index) {
@@ -132,7 +134,7 @@ public final class DataParserUtility {
 			throw new InvalidIndexInByteException();
 	}
 
-	public static byte[] createBinaryPayloadFromHexaPayload(String[] hexaPayload, Class<?> classType) {
+	public static byte[] createDecimalPayloadFromHexaPayload(String[] hexaPayload, Class<?> classType) {
 		byte[] decimalBytePayload = new byte[hexaPayload.length];
 
 		for (int byteIndex = 0; byteIndex < decimalBytePayload.length; byteIndex++) {
@@ -149,12 +151,17 @@ public final class DataParserUtility {
 		int chunks = arrayToSplit.length / chunkSize + (rest > 0 ? 1 : 0);
 		byte[][] arrays = new byte[chunks][];
 		for (int i = 0; i < (rest > 0 ? chunks - 1 : chunks); i++)
-			arrays[i] = Arrays.copyOfRange(arrayToSplit, i * chunkSize, i * chunkSize + chunkSize);
+			arrays[i] = copyOfRange(arrayToSplit, i * chunkSize, i * chunkSize + chunkSize);
 		if (rest > 0)
-			arrays[chunks - 1] = Arrays.copyOfRange(arrayToSplit, (chunks - 1) * chunkSize,
-					(chunks - 1) * chunkSize + rest);
+			arrays[chunks - 1] = copyOfRange(arrayToSplit, (chunks - 1) * chunkSize, (chunks - 1) * chunkSize + rest);
 
 		return arrays;
+	}
+
+	public static float convertHexaToFloatPoint(byte... bytes) {
+		String hexaRepOfFloatValue = convertToHexValue(bytes);
+		Long longValue = Long.parseLong(hexaRepOfFloatValue, 16);
+		return Float.intBitsToFloat(longValue.intValue());
 	}
 
 	public static byte[] getByteArrayValue(long value, int noOfBytesExpected) {
@@ -173,14 +180,8 @@ public final class DataParserUtility {
 			ByteOrder byteOrderType) {
 		if (isNotValidNumericalDataTypeSize(noOfBytesExpected))
 			throw new RuntimeException("Invalid Numerical DataType Provided");
-		if (noOfBytesExpected == 1)
-			return getByteArrayValueForByte((byte) value, noOfBytesExpected, byteOrderType);
-		else if (noOfBytesExpected == 2)
-			return getByteArrayValueForShort((short) value, noOfBytesExpected, byteOrderType);
-		else if (noOfBytesExpected == 4)
-			return getByteArrayValueForInt((int) value, noOfBytesExpected, byteOrderType);
-		else
-			return getByteArrayValueForLong(value, noOfBytesExpected, byteOrderType);
+		return convertToByteArrayValue(value, noOfBytesExpected, byteOrderType,
+				BUFFER_METHOD_INVOKER_FACTORY.get(noOfBytesExpected));
 	}
 
 	private static boolean isNotValidNumericalDataTypeSize(int noOfBytesExpected) {
@@ -189,27 +190,10 @@ public final class DataParserUtility {
 				: false;
 	}
 
-	private static byte[] getByteArrayValueForByte(byte byteValue, int noOfBytesExpected, ByteOrder byteOrderType) {
+	private static byte[] convertToByteArrayValue(Number numericValue, int noOfBytesExpected, ByteOrder byteOrderType,
+			BufferMethodInvoker bufferMethodInvoker) {
 		ByteBuffer b = constructByteBuffer(noOfBytesExpected, byteOrderType);
-		b.put(byteValue);
-		return b.array();
-	}
-
-	private static byte[] getByteArrayValueForShort(short shortValue, int noOfBytesExpected, ByteOrder byteOrderType) {
-		ByteBuffer b = constructByteBuffer(noOfBytesExpected, byteOrderType);
-		b.putShort(shortValue);
-		return b.array();
-	}
-
-	private static byte[] getByteArrayValueForInt(int intValue, int noOfBytesExpected, ByteOrder byteOrderType) {
-		ByteBuffer b = constructByteBuffer(noOfBytesExpected, byteOrderType);
-		b.putInt(intValue);
-		return b.array();
-	}
-
-	private static byte[] getByteArrayValueForLong(long longValue, int noOfBytesExpected, ByteOrder byteOrderType) {
-		ByteBuffer b = constructByteBuffer(noOfBytesExpected, byteOrderType);
-		b.putLong(longValue);
+		bufferMethodInvoker.invokeBufferMethod(b, numericValue);
 		return b.array();
 	}
 
@@ -219,10 +203,16 @@ public final class DataParserUtility {
 		return b;
 	}
 
-	public static float convertHexaToFloatPoint(byte... bytes) {
-		String hexaRepOfFloatValue = convertToHexValue(bytes);
-		Long longValue = Long.parseLong(hexaRepOfFloatValue, 16);
-		return Float.intBitsToFloat(longValue.intValue());
+	private interface BufferMethodInvoker {
+		void invokeBufferMethod(ByteBuffer byteBuffer, Number numericValue);
+	}
+
+	private static Map<Integer, BufferMethodInvoker> BUFFER_METHOD_INVOKER_FACTORY = new ConcurrentHashMap<>();
+	static {
+		BUFFER_METHOD_INVOKER_FACTORY.put(1, (buffer, numeric) -> buffer.put(numeric.byteValue()));
+		BUFFER_METHOD_INVOKER_FACTORY.put(2, (buffer, numeric) -> buffer.putShort(numeric.shortValue()));
+		BUFFER_METHOD_INVOKER_FACTORY.put(4, (buffer, numeric) -> buffer.putInt(numeric.intValue()));
+		BUFFER_METHOD_INVOKER_FACTORY.put(8, (buffer, numeric) -> buffer.putLong(numeric.longValue()));
 	}
 
 }

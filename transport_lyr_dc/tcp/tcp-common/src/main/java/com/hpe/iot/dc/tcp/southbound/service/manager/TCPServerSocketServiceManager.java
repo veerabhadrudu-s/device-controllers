@@ -19,6 +19,7 @@ import com.hpe.iot.dc.tcp.southbound.model.ServerSocketToDeviceModel;
 import com.hpe.iot.dc.tcp.southbound.service.impl.TCPServerSocketService;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.TCPDataProcessingService;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.TCPServerSocketReader;
+import com.hpe.iot.dc.tcp.southbound.service.inflow.TCPServerSocketReaderImpl;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.task.DeviceDataProcessingTask;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.DeviceDataProcessingTaskFactory;
 import com.hpe.iot.dc.tcp.southbound.service.inflow.task.factory.DeviceDataProcessingTaskFactoryInput;
@@ -72,11 +73,10 @@ public class TCPServerSocketServiceManager {
 						serverSocketToDeviceModel, tcpServerClientSocketPool, dcComponentModel));
 		TCPDataProcessingService tcpDataProcessingService = new TCPDataProcessingService(deviceDataProcessingTask,
 				managedExecutorService);
-		TCPServerSocketReader tcpServerSocketReader = new TCPServerSocketReader(managedExecutorService,
+		TCPServerSocketReader tcpServerSocketReader = new TCPServerSocketReaderImpl(managedExecutorService,
 				tcpServerClientSocketPool, tcpDataProcessingService, serverSocketToDeviceModel);
 		TCPServerSocketService newTCPServerSocketService = new TCPServerSocketService(serverSocketChannel,
-				managedExecutorService, tcpServerSocketReader, tcpServerSocketWriter, tcpServerClientSocketPool,
-				serverSocketToDeviceModel);
+				managedExecutorService, tcpServerSocketReader, serverSocketToDeviceModel);
 		newTCPServerSocketService.startTCPServerSocketService();
 		tcpServerSocketServices.put(serverSocketToDeviceModel, newTCPServerSocketService);
 		logger.info("Created new TCPServerSocketService for Server socket Model " + serverSocketToDeviceModel);
