@@ -5,6 +5,7 @@
 	<artifactId>device-controllers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<!-- Another Comment-->
 	<modules>
 		<module>websocket-logger</module>
 		<module>device-model</module>
