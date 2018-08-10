@@ -80,6 +80,7 @@
 		<dependency>
 			<groupId>m2m-common</groupId>
 			<artifactId>m2m-common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Server Environment -->
