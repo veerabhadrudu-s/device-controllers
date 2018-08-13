@@ -9,6 +9,9 @@
 	</parent>
 	<groupId>m2m-common</groupId>
 	<artifactId>m2m-common</artifactId>
+	<properties>
+		<sonar.skip>true</sonar.skip>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
