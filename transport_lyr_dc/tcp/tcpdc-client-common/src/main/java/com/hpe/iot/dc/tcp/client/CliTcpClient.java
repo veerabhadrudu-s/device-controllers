@@ -21,7 +21,7 @@ import com.hpe.iot.dc.tcp.client.runner.ClientSocketHandlerRunner;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketEnvironment;
 import com.hpe.iot.dc.tcp.client.runner.handler.ClientSocketHandler;
 import com.hpe.iot.dc.tcp.client.settings.ClientSettings;
-import com.hpe.iot.dc.tcp.client.settings.reader.GUIClientSettingsBuilder;
+import com.hpe.iot.dc.tcp.client.settings.reader.CLIClientSettingsBuilder;
 import com.hpe.iot.dc.tcp.client.settings.reader.SettingsReaderDirector;
 import com.hpe.iot.dc.tcp.client.socket.ClientSocketManagerImpl;
 
@@ -40,7 +40,7 @@ public class CliTcpClient {
 
 	public void runClient(String settingsFilePath, final ClientMessageGenerator messageGenerator,
 			final ClientMessageConsumer severToClientMessageGenerator) throws IOException {
-		ClientSettings clientSettings = new SettingsReaderDirector(new GUIClientSettingsBuilder())
+		ClientSettings clientSettings = new SettingsReaderDirector(new CLIClientSettingsBuilder())
 				.readSettings(settingsFilePath);
 		logger.info("Using client Settings :- " + clientSettings);
 		logger.info("Connecting Clients");
