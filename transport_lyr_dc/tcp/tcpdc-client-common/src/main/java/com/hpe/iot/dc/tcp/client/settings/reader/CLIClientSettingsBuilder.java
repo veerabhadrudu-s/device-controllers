@@ -15,15 +15,17 @@ public class CLIClientSettingsBuilder extends AbstractClientSettingsBuilder {
 
 	@Override
 	public ClientSettingsBuilder noOfClientRunners(String noOfClientRunners) {
-		if (noOfClientRunners == null || noOfClientRunners.trim().isEmpty())
-			this.noOfClientRunners = getIntegerValue("noOfClientRunners", noOfClientRunners);
+		this.noOfClientRunners = noOfClientRunners == null || noOfClientRunners.trim().isEmpty()
+				? this.noOfClientRunners
+				: getIntegerValue("noOfClientRunners", noOfClientRunners);
 		return this;
 	}
 
 	@Override
 	public ClientSettingsBuilder noOfClientsPerRunner(String noOfClientsPerRunner) {
-		if (noOfClientsPerRunner == null || noOfClientsPerRunner.trim().isEmpty())
-			this.noOfClientsPerRunner = getIntegerValue("noOfClientsPerRunner", noOfClientsPerRunner);
+		this.noOfClientsPerRunner = noOfClientsPerRunner == null || noOfClientsPerRunner.trim().isEmpty()
+				? this.noOfClientsPerRunner
+				: getIntegerValue("noOfClientsPerRunner", noOfClientsPerRunner);
 		return this;
 	}
 
