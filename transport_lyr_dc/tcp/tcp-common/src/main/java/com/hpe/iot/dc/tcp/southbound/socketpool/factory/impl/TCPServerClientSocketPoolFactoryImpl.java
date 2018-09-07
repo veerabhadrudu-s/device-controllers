@@ -45,7 +45,7 @@ public class TCPServerClientSocketPoolFactoryImpl implements TCPServerClientSock
 
 	@Override
 	public Map<ServerSocketToDeviceModel, ServerClientSocketPool> getDeviceModelToSocketPool() {
-		return deviceModelToSocketPool;
+		return new ConcurrentHashMap<>(deviceModelToSocketPool);
 	}
 
 }
