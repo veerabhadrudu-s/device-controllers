@@ -19,7 +19,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<org.springframework.version>5.0.0.RELEASE</org.springframework.version>
-		<jackson.springframework.dependency>2.9.1</jackson.springframework.dependency>
+		<jackson.springframework.dependency>2.9.7</jackson.springframework.dependency>
 		<groovy.version>2.5.0-beta-2</groovy.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<log4j.version>2.7</log4j.version>
@@ -31,7 +31,7 @@
 		<junit.jupiter.version>5.0.0</junit.jupiter.version>
 		<junit.platform.version>1.0.0</junit.platform.version>
 		<websocket.jsr.version>1.1</websocket.jsr.version>
-		<undertow.version>1.2.9.Final</undertow.version>
+		<undertow.version>2.0.15.Final</undertow.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

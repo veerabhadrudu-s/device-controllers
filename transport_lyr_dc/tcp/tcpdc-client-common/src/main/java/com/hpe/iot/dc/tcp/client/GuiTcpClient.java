@@ -44,7 +44,7 @@ public class GuiTcpClient {
 			final ClientMessageConsumer severToClientMessageGenerator, GUI gui) throws IOException {
 		ClientSettings clientSettings = new SettingsReaderDirector(new GUIClientSettingsBuilder())
 				.readSettings(settingsFilePath);
-		logger.info("Using client Settings :- " + clientSettings);
+		logger.info("Using client Settings :- {}", clientSettings);
 		logger.info("Connecting Clients");
 		ExecutorService executorService = Executors.newFixedThreadPool(clientSettings.getNoOfClientRunners() * 3 + 1);
 		ClientEnvironment clientEnvironment = connectClientForPluginScript(executorService, clientSettings,
@@ -59,7 +59,7 @@ public class GuiTcpClient {
 
 	protected ClientEnvironment connectClientForPluginScript(final ExecutorService executorService,
 			final ClientSettings clientSettings, final ClientMessageGenerator severToClientMessageGenerator,
-			ClientMessageConsumer clientToServerMessageGenerator) throws IOException {
+			ClientMessageConsumer clientToServerMessageGenerator) {
 		final DeviceIdCounter deviceIdCounter = new DeviceIdCounter(clientSettings.getStaringDeviceId(),
 				clientSettings.getClientRunnerSettings().getNoOfClients() * clientSettings.getNoOfClientRunners());
 		ClientSocketManagerImpl clientSocketManagerImpl = new ClientSocketManagerImpl(
@@ -77,11 +77,11 @@ public class GuiTcpClient {
 		Set<JButton> allButtons = buttonConfigurations.keySet();
 		enableleAllButtons(allButtons, false);
 		executorService.submit(() -> {
-			while (clientEnvironment.getClientSocketManager().getHandshakedClients().size() == 0)
+			while (clientEnvironment.getClientSocketManager().getHandshakedClients().isEmpty())
 				;
 			for (Map.Entry<JButton, String> buttonConfiguration : buttonConfigurations.entrySet()) {
 				JButton actionButton = buttonConfiguration.getKey();
-				actionButton.addActionListener((actionEvent) -> {
+				actionButton.addActionListener(actionEvent -> {
 					ClientSocketWriter clientSocketWriter = clientEnvironment.getClientSocketEnvironment()
 							.getClientSocketWriter();
 					try {
