@@ -22,7 +22,7 @@
 		<jackson.springframework.dependency>2.9.10.3</jackson.springframework.dependency>
 		<groovy.version>2.5.0-beta-2</groovy.version>
 		<slf4j.version>1.7.25</slf4j.version>
-		<log4j.version>2.7</log4j.version>
+		<log4j.version>2.14.1</log4j.version>
 		<kafka.version>0.10.2.1</kafka.version>
 		<activemq.version>5.14.5</activemq.version>
 		<junit.version>4.12</junit.version>
